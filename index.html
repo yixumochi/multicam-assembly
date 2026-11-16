@@ -3534,7 +3534,7 @@ function openPairPop(edge) {
   const close = document.createElement('button')
   close.type = 'button'
   close.textContent = 'Close'
-  close.onclick = () => { clearDetail(); render() }
+  close.onclick = event => { event.stopPropagation(); clearDetail(); closePairPop(); render() }
   head.append(title, close)
   const cases = document.createElement('div')
   cases.className = 'pair-cases'
@@ -3550,12 +3550,13 @@ function renderInspector(edges){
     const waiting = state.selectedNode === null && !state.selectedEdge
     root.classList.toggle('is-empty', waiting)
     if (waiting) {
+      closePairPop()
       root.replaceChildren()
       return
     }
     if (state.selectedEdge) {
       const edge = state.selectedEdge
-      loadRest(() => openPairPop(edge))
+      loadRest(() => { if (state.selectedEdge === edge) openPairPop(edge) })
       const note = document.createElement('p')
       note.className = 'small-note'
       note.textContent = 'The pair is open over the page. Close it to return to this action.'
