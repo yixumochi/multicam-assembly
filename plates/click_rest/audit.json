@@ -1,0 +1,2058 @@
+{
+  "kept": [
+    {
+      "name": "Handle joint occluded",
+      "home": "V01",
+      "frames": [
+        {
+          "mark": "a",
+          "member": true,
+          "robot": false,
+          "human": true,
+          "pass": true
+        },
+        {
+          "mark": "b",
+          "member": true,
+          "robot": false,
+          "human": true,
+          "pass": true
+        },
+        {
+          "mark": "c",
+          "member": true,
+          "robot": false,
+          "human": true,
+          "pass": true
+        }
+      ]
+    },
+    {
+      "name": "Handle member",
+      "home": "V01",
+      "frames": [
+        {
+          "mark": "a",
+          "member": true,
+          "robot": false,
+          "human": true,
+          "pass": true
+        },
+        {
+          "mark": "b",
+          "member": true,
+          "robot": false,
+          "human": true,
+          "pass": true
+        },
+        {
+          "mark": "c",
+          "member": true,
+          "robot": false,
+          "human": true,
+          "pass": true
+        }
+      ]
+    },
+    {
+      "name": "Lift upper member",
+      "home": "V01",
+      "frames": [
+        {
+          "mark": "a",
+          "member": true,
+          "robot": false,
+          "human": true,
+          "pass": true
+        },
+        {
+          "mark": "b",
+          "member": true,
+          "robot": false,
+          "human": true,
+          "pass": true
+        },
+        {
+          "mark": "c",
+          "member": true,
+          "robot": false,
+          "human": true,
+          "pass": true
+        }
+      ]
+    },
+    {
+      "name": "Mallet at joint",
+      "home": "V01",
+      "frames": [
+        {
+          "mark": "a",
+          "member": true,
+          "robot": false,
+          "human": true,
+          "pass": true
+        },
+        {
+          "mark": "b",
+          "member": true,
+          "robot": false,
+          "human": true,
+          "pass": true
+        },
+        {
+          "mark": "c",
+          "member": true,
+          "robot": false,
+          "human": true,
+          "pass": true
+        }
+      ]
+    },
+    {
+      "name": "Position inclined member",
+      "home": "V01",
+      "frames": [
+        {
+          "mark": "a",
+          "member": true,
+          "robot": false,
+          "human": true,
+          "pass": true
+        },
+        {
+          "mark": "b",
+          "member": true,
+          "robot": false,
+          "human": true,
+          "pass": true
+        },
+        {
+          "mark": "c",
+          "member": true,
+          "robot": false,
+          "human": true,
+          "pass": true
+        }
+      ]
+    },
+    {
+      "name": "Hold panel edge",
+      "home": "V06",
+      "frames": [
+        {
+          "mark": "a",
+          "member": true,
+          "robot": false,
+          "human": true,
+          "pass": true
+        },
+        {
+          "mark": "b",
+          "member": true,
+          "robot": false,
+          "human": true,
+          "pass": true
+        },
+        {
+          "mark": "c",
+          "member": true,
+          "robot": false,
+          "human": true,
+          "pass": true
+        }
+      ]
+    },
+    {
+      "name": "Lift and move held panel",
+      "home": "V06",
+      "frames": [
+        {
+          "mark": "a",
+          "member": true,
+          "robot": false,
+          "human": true,
+          "pass": true
+        },
+        {
+          "mark": "b",
+          "member": true,
+          "robot": false,
+          "human": true,
+          "pass": true
+        },
+        {
+          "mark": "c",
+          "member": true,
+          "robot": false,
+          "human": true,
+          "pass": true
+        }
+      ]
+    },
+    {
+      "name": "Move and tilt held panel",
+      "home": "V06",
+      "frames": [
+        {
+          "mark": "a",
+          "member": true,
+          "robot": false,
+          "human": true,
+          "pass": true
+        },
+        {
+          "mark": "b",
+          "member": true,
+          "robot": false,
+          "human": true,
+          "pass": true
+        },
+        {
+          "mark": "c",
+          "member": true,
+          "robot": false,
+          "human": true,
+          "pass": true
+        }
+      ]
+    },
+    {
+      "name": "Move body into panel assembly",
+      "home": "V06",
+      "frames": [
+        {
+          "mark": "a",
+          "member": true,
+          "robot": false,
+          "human": true,
+          "pass": true
+        },
+        {
+          "mark": "b",
+          "member": true,
+          "robot": false,
+          "human": true,
+          "pass": true
+        },
+        {
+          "mark": "c",
+          "member": true,
+          "robot": false,
+          "human": true,
+          "pass": true
+        }
+      ]
+    },
+    {
+      "name": "Position held panel",
+      "home": "V06",
+      "frames": [
+        {
+          "mark": "a",
+          "member": true,
+          "robot": false,
+          "human": true,
+          "pass": true
+        },
+        {
+          "mark": "b",
+          "member": true,
+          "robot": false,
+          "human": true,
+          "pass": true
+        },
+        {
+          "mark": "c",
+          "member": true,
+          "robot": false,
+          "human": true,
+          "pass": true
+        }
+      ]
+    },
+    {
+      "name": "Reposition around assembly",
+      "home": "V06",
+      "frames": [
+        {
+          "mark": "a",
+          "member": true,
+          "robot": false,
+          "human": true,
+          "pass": true
+        },
+        {
+          "mark": "b",
+          "member": true,
+          "robot": false,
+          "human": true,
+          "pass": true
+        },
+        {
+          "mark": "c",
+          "member": true,
+          "robot": false,
+          "human": true,
+          "pass": true
+        }
+      ]
+    },
+    {
+      "name": "Assist at upper joint",
+      "home": "V07",
+      "frames": [
+        {
+          "mark": "a",
+          "member": true,
+          "robot": false,
+          "human": true,
+          "pass": true
+        },
+        {
+          "mark": "b",
+          "member": true,
+          "robot": false,
+          "human": true,
+          "pass": true
+        },
+        {
+          "mark": "c",
+          "member": true,
+          "robot": false,
+          "human": true,
+          "pass": true
+        }
+      ]
+    },
+    {
+      "name": "Hold panel group",
+      "home": "V07",
+      "frames": [
+        {
+          "mark": "a",
+          "member": true,
+          "robot": false,
+          "human": true,
+          "pass": true
+        },
+        {
+          "mark": "b",
+          "member": true,
+          "robot": false,
+          "human": true,
+          "pass": true
+        },
+        {
+          "mark": "c",
+          "member": true,
+          "robot": false,
+          "human": true,
+          "pass": true
+        }
+      ]
+    },
+    {
+      "name": "Machine timber plate",
+      "home": "V07",
+      "frames": [
+        {
+          "mark": "a",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        },
+        {
+          "mark": "b",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        },
+        {
+          "mark": "c",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        }
+      ]
+    },
+    {
+      "name": "Retract machining tool",
+      "home": "V07",
+      "frames": [
+        {
+          "mark": "a",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        },
+        {
+          "mark": "b",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        },
+        {
+          "mark": "c",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        }
+      ]
+    },
+    {
+      "name": "Hold and mallet work",
+      "home": "V20",
+      "frames": [
+        {
+          "mark": "a",
+          "member": true,
+          "robot": false,
+          "human": true,
+          "pass": true
+        },
+        {
+          "mark": "b",
+          "member": true,
+          "robot": false,
+          "human": true,
+          "pass": true
+        },
+        {
+          "mark": "c",
+          "member": true,
+          "robot": false,
+          "human": true,
+          "pass": true
+        }
+      ]
+    },
+    {
+      "name": "Lowering toward the assembly",
+      "home": "V20",
+      "frames": [
+        {
+          "mark": "a",
+          "member": true,
+          "robot": false,
+          "human": true,
+          "pass": true
+        },
+        {
+          "mark": "b",
+          "member": true,
+          "robot": false,
+          "human": true,
+          "pass": true
+        },
+        {
+          "mark": "c",
+          "member": true,
+          "robot": false,
+          "human": true,
+          "pass": true
+        }
+      ]
+    },
+    {
+      "name": "Plate approach and positioning",
+      "home": "V20",
+      "frames": [
+        {
+          "mark": "a",
+          "member": true,
+          "robot": false,
+          "human": true,
+          "pass": true
+        },
+        {
+          "mark": "b",
+          "member": true,
+          "robot": false,
+          "human": true,
+          "pass": true
+        },
+        {
+          "mark": "c",
+          "member": true,
+          "robot": false,
+          "human": true,
+          "pass": true
+        }
+      ]
+    },
+    {
+      "name": "Reach to upper edge",
+      "home": "V20",
+      "frames": [
+        {
+          "mark": "a",
+          "member": true,
+          "robot": false,
+          "human": true,
+          "pass": true
+        },
+        {
+          "mark": "b",
+          "member": true,
+          "robot": false,
+          "human": true,
+          "pass": true
+        },
+        {
+          "mark": "c",
+          "member": true,
+          "robot": false,
+          "human": true,
+          "pass": true
+        }
+      ]
+    },
+    {
+      "name": "Adjust gripper configuration",
+      "home": "V04",
+      "frames": [
+        {
+          "mark": "a",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        },
+        {
+          "mark": "b",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        },
+        {
+          "mark": "c",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        }
+      ]
+    },
+    {
+      "name": "Approach local joint",
+      "home": "V04",
+      "frames": [
+        {
+          "mark": "a",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        },
+        {
+          "mark": "b",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        },
+        {
+          "mark": "c",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        }
+      ]
+    },
+    {
+      "name": "Hold member during approach",
+      "home": "V04",
+      "frames": [
+        {
+          "mark": "a",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        },
+        {
+          "mark": "b",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        },
+        {
+          "mark": "c",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        }
+      ]
+    },
+    {
+      "name": "Hold upper beam during positioning",
+      "home": "V04",
+      "frames": [
+        {
+          "mark": "a",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        },
+        {
+          "mark": "b",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        },
+        {
+          "mark": "c",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        }
+      ]
+    },
+    {
+      "name": "Hold upper member",
+      "home": "V04",
+      "frames": [
+        {
+          "mark": "a",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        },
+        {
+          "mark": "b",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        },
+        {
+          "mark": "c",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        }
+      ]
+    },
+    {
+      "name": "Machine timber end detail",
+      "home": "V04",
+      "frames": [
+        {
+          "mark": "a",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        },
+        {
+          "mark": "b",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        },
+        {
+          "mark": "c",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        }
+      ]
+    },
+    {
+      "name": "Machine timber surface",
+      "home": "V04",
+      "frames": [
+        {
+          "mark": "a",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        },
+        {
+          "mark": "b",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        },
+        {
+          "mark": "c",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        }
+      ]
+    },
+    {
+      "name": "Maintain gripper at upper beam",
+      "home": "V04",
+      "frames": [
+        {
+          "mark": "a",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        },
+        {
+          "mark": "b",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        },
+        {
+          "mark": "c",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        }
+      ]
+    },
+    {
+      "name": "Manual reach at upper member",
+      "home": "V04",
+      "frames": [
+        {
+          "mark": "a",
+          "member": true,
+          "robot": false,
+          "human": true,
+          "pass": true
+        },
+        {
+          "mark": "b",
+          "member": true,
+          "robot": false,
+          "human": true,
+          "pass": true
+        },
+        {
+          "mark": "c",
+          "member": true,
+          "robot": false,
+          "human": true,
+          "pass": true
+        }
+      ]
+    },
+    {
+      "name": "Position diagonal timber",
+      "home": "V04",
+      "frames": [
+        {
+          "mark": "a",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        },
+        {
+          "mark": "b",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        },
+        {
+          "mark": "c",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        }
+      ]
+    },
+    {
+      "name": "Transport and rotate timber",
+      "home": "V04",
+      "frames": [
+        {
+          "mark": "a",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        },
+        {
+          "mark": "b",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        },
+        {
+          "mark": "c",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        }
+      ]
+    },
+    {
+      "name": "Drill timber",
+      "home": "V21",
+      "frames": [
+        {
+          "mark": "a",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        },
+        {
+          "mark": "b",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        },
+        {
+          "mark": "c",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        }
+      ]
+    },
+    {
+      "name": "Handle partly occluded joint",
+      "home": "V21",
+      "frames": [
+        {
+          "mark": "a",
+          "member": true,
+          "robot": false,
+          "human": true,
+          "pass": true
+        },
+        {
+          "mark": "b",
+          "member": true,
+          "robot": false,
+          "human": true,
+          "pass": true
+        },
+        {
+          "mark": "c",
+          "member": true,
+          "robot": false,
+          "human": true,
+          "pass": true
+        }
+      ]
+    },
+    {
+      "name": "Hold timber near assembly",
+      "home": "V21",
+      "frames": [
+        {
+          "mark": "a",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        },
+        {
+          "mark": "b",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        },
+        {
+          "mark": "c",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        }
+      ]
+    },
+    {
+      "name": "Orient held timber",
+      "home": "V21",
+      "frames": [
+        {
+          "mark": "a",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        },
+        {
+          "mark": "b",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        },
+        {
+          "mark": "c",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        }
+      ]
+    },
+    {
+      "name": "Pick and lift timber",
+      "home": "V21",
+      "frames": [
+        {
+          "mark": "a",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        },
+        {
+          "mark": "b",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        },
+        {
+          "mark": "c",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        }
+      ]
+    },
+    {
+      "name": "Reposition adjacent plates",
+      "home": "V22",
+      "frames": [
+        {
+          "mark": "a",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        },
+        {
+          "mark": "b",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        },
+        {
+          "mark": "c",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        }
+      ]
+    },
+    {
+      "name": "Work plate edge with hand tool",
+      "home": "V22",
+      "frames": [
+        {
+          "mark": "a",
+          "member": true,
+          "robot": false,
+          "human": true,
+          "pass": true
+        },
+        {
+          "mark": "b",
+          "member": true,
+          "robot": false,
+          "human": true,
+          "pass": true
+        },
+        {
+          "mark": "c",
+          "member": true,
+          "robot": false,
+          "human": true,
+          "pass": true
+        }
+      ]
+    },
+    {
+      "name": "Nail top plate",
+      "home": "V26",
+      "frames": [
+        {
+          "mark": "a",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        },
+        {
+          "mark": "b",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        },
+        {
+          "mark": "c",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        }
+      ]
+    },
+    {
+      "name": "Position nailing tool at top plate",
+      "home": "V26",
+      "frames": [
+        {
+          "mark": "a",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        },
+        {
+          "mark": "b",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        },
+        {
+          "mark": "c",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        }
+      ]
+    },
+    {
+      "name": "Close timber joint with clamps",
+      "home": "V28",
+      "frames": [
+        {
+          "mark": "a",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        },
+        {
+          "mark": "b",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        },
+        {
+          "mark": "c",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        }
+      ]
+    },
+    {
+      "name": "Guide timber into clamp jaw",
+      "home": "V28",
+      "frames": [
+        {
+          "mark": "a",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        },
+        {
+          "mark": "b",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        },
+        {
+          "mark": "c",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        }
+      ]
+    },
+    {
+      "name": "Hold timber at joint",
+      "home": "V28",
+      "frames": [
+        {
+          "mark": "a",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        },
+        {
+          "mark": "b",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        },
+        {
+          "mark": "c",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        }
+      ]
+    },
+    {
+      "name": "Hold timber during test",
+      "home": "V28",
+      "frames": [
+        {
+          "mark": "a",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        },
+        {
+          "mark": "b",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        },
+        {
+          "mark": "c",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        }
+      ]
+    },
+    {
+      "name": "Transport held timber",
+      "home": "V28",
+      "frames": [
+        {
+          "mark": "a",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        },
+        {
+          "mark": "b",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        },
+        {
+          "mark": "c",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        }
+      ]
+    },
+    {
+      "name": "Approach joint",
+      "home": "V30",
+      "frames": [
+        {
+          "mark": "a",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        },
+        {
+          "mark": "b",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        },
+        {
+          "mark": "c",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        }
+      ]
+    },
+    {
+      "name": "Insert joint",
+      "home": "V30",
+      "frames": [
+        {
+          "mark": "a",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        },
+        {
+          "mark": "b",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        },
+        {
+          "mark": "c",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        }
+      ]
+    }
+  ],
+  "dropped": [
+    {
+      "name": "Handle joint",
+      "home": "V01",
+      "frames": [
+        {
+          "mark": "a",
+          "member": true,
+          "robot": false,
+          "human": true,
+          "pass": true
+        },
+        {
+          "mark": "b",
+          "member": true,
+          "robot": false,
+          "human": true,
+          "pass": true
+        },
+        {
+          "mark": "c",
+          "member": true,
+          "robot": false,
+          "human": false,
+          "pass": false
+        }
+      ]
+    },
+    {
+      "name": "Lower into joint",
+      "home": "V01",
+      "frames": [
+        {
+          "mark": "a",
+          "member": true,
+          "robot": false,
+          "human": false,
+          "pass": false
+        },
+        {
+          "mark": "b",
+          "member": true,
+          "robot": false,
+          "human": false,
+          "pass": false
+        },
+        {
+          "mark": "c",
+          "member": true,
+          "robot": false,
+          "human": false,
+          "pass": false
+        }
+      ]
+    },
+    {
+      "name": "Manual work at lower joint",
+      "home": "V01",
+      "frames": [
+        {
+          "mark": "a",
+          "member": true,
+          "robot": false,
+          "human": true,
+          "pass": true
+        },
+        {
+          "mark": "b",
+          "member": false,
+          "robot": false,
+          "human": true,
+          "pass": false
+        },
+        {
+          "mark": "c",
+          "member": false,
+          "robot": false,
+          "human": true,
+          "pass": false
+        }
+      ]
+    },
+    {
+      "name": "Reach upper joint",
+      "home": "V01",
+      "frames": [
+        {
+          "mark": "a",
+          "member": false,
+          "robot": false,
+          "human": false,
+          "pass": false
+        },
+        {
+          "mark": "b",
+          "member": false,
+          "robot": false,
+          "human": false,
+          "pass": false
+        },
+        {
+          "mark": "c",
+          "member": false,
+          "robot": false,
+          "human": false,
+          "pass": false
+        }
+      ]
+    },
+    {
+      "name": "Carry local panel material",
+      "home": "V07",
+      "frames": [
+        {
+          "mark": "a",
+          "member": true,
+          "robot": false,
+          "human": true,
+          "pass": true
+        },
+        {
+          "mark": "b",
+          "member": false,
+          "robot": false,
+          "human": false,
+          "pass": false
+        },
+        {
+          "mark": "c",
+          "member": false,
+          "robot": false,
+          "human": false,
+          "pass": false
+        }
+      ]
+    },
+    {
+      "name": "Lift and reorient panel group",
+      "home": "V07",
+      "frames": [
+        {
+          "mark": "a",
+          "member": true,
+          "robot": false,
+          "human": false,
+          "pass": false
+        },
+        {
+          "mark": "b",
+          "member": true,
+          "robot": false,
+          "human": true,
+          "pass": true
+        },
+        {
+          "mark": "c",
+          "member": true,
+          "robot": false,
+          "human": true,
+          "pass": true
+        }
+      ]
+    },
+    {
+      "name": "Reach joint area",
+      "home": "V07",
+      "frames": [
+        {
+          "mark": "a",
+          "member": false,
+          "robot": false,
+          "human": false,
+          "pass": false
+        },
+        {
+          "mark": "b",
+          "member": false,
+          "robot": false,
+          "human": false,
+          "pass": false
+        },
+        {
+          "mark": "c",
+          "member": false,
+          "robot": false,
+          "human": false,
+          "pass": false
+        }
+      ]
+    },
+    {
+      "name": "Saw timber",
+      "home": "V04",
+      "frames": [
+        {
+          "mark": "a",
+          "member": true,
+          "robot": false,
+          "human": false,
+          "pass": false
+        },
+        {
+          "mark": "b",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        },
+        {
+          "mark": "c",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        }
+      ]
+    },
+    {
+      "name": "Adjust timber at base",
+      "home": "V21",
+      "frames": [
+        {
+          "mark": "a",
+          "member": true,
+          "robot": false,
+          "human": true,
+          "pass": true
+        },
+        {
+          "mark": "b",
+          "member": true,
+          "robot": false,
+          "human": true,
+          "pass": true
+        },
+        {
+          "mark": "c",
+          "member": false,
+          "robot": false,
+          "human": false,
+          "pass": false
+        }
+      ]
+    },
+    {
+      "name": "Carry assembled panel",
+      "home": "V21",
+      "frames": [
+        {
+          "mark": "a",
+          "member": false,
+          "robot": false,
+          "human": false,
+          "pass": false
+        },
+        {
+          "mark": "b",
+          "member": false,
+          "robot": false,
+          "human": false,
+          "pass": false
+        },
+        {
+          "mark": "c",
+          "member": false,
+          "robot": false,
+          "human": false,
+          "pass": false
+        }
+      ]
+    },
+    {
+      "name": "Change gripper configuration",
+      "home": "V21",
+      "frames": [
+        {
+          "mark": "a",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        },
+        {
+          "mark": "b",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        },
+        {
+          "mark": "c",
+          "member": false,
+          "robot": false,
+          "human": false,
+          "pass": false
+        }
+      ]
+    },
+    {
+      "name": "Handle dowel at joint",
+      "home": "V21",
+      "frames": [
+        {
+          "mark": "a",
+          "member": false,
+          "robot": false,
+          "human": false,
+          "pass": false
+        },
+        {
+          "mark": "b",
+          "member": false,
+          "robot": false,
+          "human": false,
+          "pass": false
+        },
+        {
+          "mark": "c",
+          "member": false,
+          "robot": false,
+          "human": false,
+          "pass": false
+        }
+      ]
+    },
+    {
+      "name": "Hold timber in parallel",
+      "home": "V21",
+      "frames": [
+        {
+          "mark": "a",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        },
+        {
+          "mark": "b",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        },
+        {
+          "mark": "c",
+          "member": false,
+          "robot": false,
+          "human": false,
+          "pass": false
+        }
+      ]
+    },
+    {
+      "name": "Move panel near adjacent panel",
+      "home": "V21",
+      "frames": [
+        {
+          "mark": "a",
+          "member": false,
+          "robot": false,
+          "human": false,
+          "pass": false
+        },
+        {
+          "mark": "b",
+          "member": false,
+          "robot": false,
+          "human": false,
+          "pass": false
+        },
+        {
+          "mark": "c",
+          "member": false,
+          "robot": false,
+          "human": false,
+          "pass": false
+        }
+      ]
+    },
+    {
+      "name": "Move tool above held timber",
+      "home": "V21",
+      "frames": [
+        {
+          "mark": "a",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        },
+        {
+          "mark": "b",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        },
+        {
+          "mark": "c",
+          "member": false,
+          "robot": false,
+          "human": false,
+          "pass": false
+        }
+      ]
+    },
+    {
+      "name": "Move tool near timber",
+      "home": "V21",
+      "frames": [
+        {
+          "mark": "a",
+          "member": false,
+          "robot": false,
+          "human": false,
+          "pass": false
+        },
+        {
+          "mark": "b",
+          "member": false,
+          "robot": false,
+          "human": false,
+          "pass": false
+        },
+        {
+          "mark": "c",
+          "member": false,
+          "robot": false,
+          "human": false,
+          "pass": false
+        }
+      ]
+    },
+    {
+      "name": "Position timber at joint",
+      "home": "V21",
+      "frames": [
+        {
+          "mark": "a",
+          "member": false,
+          "robot": false,
+          "human": false,
+          "pass": false
+        },
+        {
+          "mark": "b",
+          "member": false,
+          "robot": false,
+          "human": false,
+          "pass": false
+        },
+        {
+          "mark": "c",
+          "member": false,
+          "robot": false,
+          "human": false,
+          "pass": false
+        }
+      ]
+    },
+    {
+      "name": "Prepare to lift panel",
+      "home": "V21",
+      "frames": [
+        {
+          "mark": "a",
+          "member": false,
+          "robot": false,
+          "human": false,
+          "pass": false
+        },
+        {
+          "mark": "b",
+          "member": false,
+          "robot": false,
+          "human": false,
+          "pass": false
+        },
+        {
+          "mark": "c",
+          "member": false,
+          "robot": false,
+          "human": false,
+          "pass": false
+        }
+      ]
+    },
+    {
+      "name": "Touch or inspect joint",
+      "home": "V21",
+      "frames": [
+        {
+          "mark": "a",
+          "member": false,
+          "robot": false,
+          "human": false,
+          "pass": false
+        },
+        {
+          "mark": "b",
+          "member": false,
+          "robot": false,
+          "human": false,
+          "pass": false
+        },
+        {
+          "mark": "c",
+          "member": false,
+          "robot": false,
+          "human": false,
+          "pass": false
+        }
+      ]
+    },
+    {
+      "name": "Move foreground plate through view",
+      "home": "V22",
+      "frames": [
+        {
+          "mark": "a",
+          "member": false,
+          "robot": false,
+          "human": false,
+          "pass": false
+        },
+        {
+          "mark": "b",
+          "member": false,
+          "robot": false,
+          "human": false,
+          "pass": false
+        },
+        {
+          "mark": "c",
+          "member": false,
+          "robot": false,
+          "human": false,
+          "pass": false
+        }
+      ]
+    },
+    {
+      "name": "Reposition robot-held plate",
+      "home": "V22",
+      "frames": [
+        {
+          "mark": "a",
+          "member": false,
+          "robot": false,
+          "human": false,
+          "pass": false
+        },
+        {
+          "mark": "b",
+          "member": false,
+          "robot": false,
+          "human": false,
+          "pass": false
+        },
+        {
+          "mark": "c",
+          "member": false,
+          "robot": false,
+          "human": false,
+          "pass": false
+        }
+      ]
+    },
+    {
+      "name": "Support plate on timber blocks",
+      "home": "V22",
+      "frames": [
+        {
+          "mark": "a",
+          "member": false,
+          "robot": false,
+          "human": true,
+          "pass": false
+        },
+        {
+          "mark": "b",
+          "member": false,
+          "robot": false,
+          "human": true,
+          "pass": false
+        },
+        {
+          "mark": "c",
+          "member": true,
+          "robot": false,
+          "human": false,
+          "pass": false
+        }
+      ]
+    },
+    {
+      "name": "Hold edge beam",
+      "home": "V26",
+      "frames": [
+        {
+          "mark": "a",
+          "member": false,
+          "robot": false,
+          "human": false,
+          "pass": false
+        },
+        {
+          "mark": "b",
+          "member": false,
+          "robot": false,
+          "human": false,
+          "pass": false
+        },
+        {
+          "mark": "c",
+          "member": false,
+          "robot": false,
+          "human": false,
+          "pass": false
+        }
+      ]
+    },
+    {
+      "name": "Place top plate",
+      "home": "V26",
+      "frames": [
+        {
+          "mark": "a",
+          "member": false,
+          "robot": false,
+          "human": false,
+          "pass": false
+        },
+        {
+          "mark": "b",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        },
+        {
+          "mark": "c",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        }
+      ]
+    },
+    {
+      "name": "Position gripper at edge beam",
+      "home": "V26",
+      "frames": [
+        {
+          "mark": "a",
+          "member": true,
+          "robot": false,
+          "human": false,
+          "pass": false
+        },
+        {
+          "mark": "b",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        },
+        {
+          "mark": "c",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        }
+      ]
+    },
+    {
+      "name": "Reposition gripper",
+      "home": "V26",
+      "frames": [
+        {
+          "mark": "a",
+          "member": false,
+          "robot": true,
+          "human": false,
+          "pass": false
+        },
+        {
+          "mark": "b",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        },
+        {
+          "mark": "c",
+          "member": true,
+          "robot": true,
+          "human": false,
+          "pass": true
+        }
+      ]
+    },
+    {
+      "name": "Withdraw gripper",
+      "home": "V26",
+      "frames": [
+        {
+          "mark": "a",
+          "member": false,
+          "robot": false,
+          "human": false,
+          "pass": false
+        },
+        {
+          "mark": "b",
+          "member": false,
+          "robot": false,
+          "human": false,
+          "pass": false
+        },
+        {
+          "mark": "c",
+          "member": false,
+          "robot": false,
+          "human": false,
+          "pass": false
+        }
+      ]
+    },
+    {
+      "name": "Align timber at clamp",
+      "home": "V28",
+      "frames": [
+        {
+          "mark": "a",
+          "member": false,
+          "robot": false,
+          "human": false,
+          "pass": false
+        },
+        {
+          "mark": "b",
+          "member": false,
+          "robot": false,
+          "human": false,
+          "pass": false
+        },
+        {
+          "mark": "c",
+          "member": false,
+          "robot": false,
+          "human": false,
+          "pass": false
+        }
+      ]
+    },
+    {
+      "name": "Handle clamp at timber joint",
+      "home": "V28",
+      "frames": [
+        {
+          "mark": "a",
+          "member": true,
+          "robot": false,
+          "human": true,
+          "pass": true
+        },
+        {
+          "mark": "b",
+          "member": true,
+          "robot": false,
+          "human": true,
+          "pass": true
+        },
+        {
+          "mark": "c",
+          "member": false,
+          "robot": false,
+          "human": false,
+          "pass": false
+        }
+      ]
+    },
+    {
+      "name": "Load timber into robot gripper",
+      "home": "V28",
+      "frames": [
+        {
+          "mark": "a",
+          "member": false,
+          "robot": false,
+          "human": false,
+          "pass": false
+        },
+        {
+          "mark": "b",
+          "member": true,
+          "robot": true,
+          "human": true,
+          "pass": true
+        },
+        {
+          "mark": "c",
+          "member": true,
+          "robot": false,
+          "human": true,
+          "pass": true
+        }
+      ]
+    }
+  ]
+}

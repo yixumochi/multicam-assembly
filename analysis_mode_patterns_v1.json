@@ -1,0 +1,206 @@
+{
+  "source": "analysis_numbers_v1.json",
+  "sha256": "b34bd1be17b0546ddfdf7653ab56d1cd2abf3ab16f1ed591663c1416bd359f26",
+  "method": "Equal-weight case medians and observed min–max. Role area / activity union, calculated within each case; overlapping roles do not sum to 100%.",
+  "modes": [
+    {
+      "mode": "human-led",
+      "title": "Human-led",
+      "cases": [
+        "V01",
+        "V06",
+        "V07",
+        "V11",
+        "V20"
+      ],
+      "ratio": {
+        "median": 2.44,
+        "minimum": 1.689,
+        "maximum": 11.856,
+        "n": 5
+      },
+      "roles": {
+        "human": {
+          "median": 32.542876602067984,
+          "minimum": 13.51872747788738,
+          "maximum": 35.48833130986105,
+          "n": 5
+        },
+        "machine": {
+          "median": 0.0,
+          "minimum": 0.0,
+          "maximum": 0.0,
+          "n": 5
+        },
+        "part": {
+          "median": 89.37753531962514,
+          "minimum": 83.68522072936659,
+          "maximum": 99.49040876496923,
+          "n": 5
+        }
+      },
+      "groups": [
+        {
+          "name": "Lower human coverage",
+          "cases": [
+            "V11"
+          ],
+          "status": "exploratory",
+          "rule": "Largest adjacent gap in Human area / activity area; cut = 21.330632%. Descriptive split of these five records only."
+        },
+        {
+          "name": "Higher human coverage",
+          "cases": [
+            "V07",
+            "V06",
+            "V20",
+            "V01"
+          ],
+          "status": "exploratory",
+          "rule": "Largest adjacent gap in Human area / activity area; cut = 21.330632%. Descriptive split of these five records only."
+        }
+      ],
+      "layout_offset_cases": [
+        "V06",
+        "V07",
+        "V11",
+        "V20"
+      ],
+      "no_offset_cases": [
+        "V01"
+      ]
+    },
+    {
+      "mode": "human-robot",
+      "title": "Human–robot",
+      "cases": [
+        "V04",
+        "V21",
+        "V23",
+        "V27",
+        "V29"
+      ],
+      "ratio": {
+        "median": 6.825,
+        "minimum": 1.114,
+        "maximum": 11.219,
+        "n": 5
+      },
+      "roles": {
+        "human": {
+          "median": 11.895522388059701,
+          "minimum": 10.749554095793275,
+          "maximum": 58.06514721705957,
+          "n": 5
+        },
+        "machine": {
+          "median": 44.59324930971656,
+          "minimum": 14.051648244155336,
+          "maximum": 63.14698720273561,
+          "n": 5
+        },
+        "part": {
+          "median": 72.99253731343283,
+          "minimum": 46.028563044116204,
+          "maximum": 83.95161441800184,
+          "n": 5
+        }
+      },
+      "groups": [
+        {
+          "name": "Parts cover more",
+          "cases": [
+            "V04",
+            "V21",
+            "V23",
+            "V29"
+          ],
+          "status": "descriptive",
+          "rule": "Largest of the three saved role covered areas. No claim of spatial containment."
+        },
+        {
+          "name": "Human covers more",
+          "cases": [
+            "V27"
+          ],
+          "status": "descriptive",
+          "rule": "Largest of the three saved role covered areas. No claim of spatial containment."
+        }
+      ],
+      "layout_offset_cases": [],
+      "no_offset_cases": [
+        "V04",
+        "V21",
+        "V23",
+        "V27",
+        "V29"
+      ]
+    },
+    {
+      "mode": "robotic-assembly",
+      "title": "Robotic assembly",
+      "cases": [
+        "V22",
+        "V24",
+        "V26",
+        "V28",
+        "V30"
+      ],
+      "ratio": {
+        "median": 3.208,
+        "minimum": 1.072,
+        "maximum": 45.675,
+        "n": 5
+      },
+      "roles": {
+        "human": {
+          "median": 0.0,
+          "minimum": 0.0,
+          "maximum": 0.0,
+          "n": 5
+        },
+        "machine": {
+          "median": 57.773672055427255,
+          "minimum": 43.05147367537156,
+          "maximum": 67.63844125402872,
+          "n": 5
+        },
+        "part": {
+          "median": 74.83152651626135,
+          "minimum": 44.98138918680209,
+          "maximum": 90.02435133092618,
+          "n": 5
+        }
+      },
+      "groups": [
+        {
+          "name": "Parts cover more",
+          "cases": [
+            "V22",
+            "V24",
+            "V28",
+            "V30"
+          ],
+          "status": "descriptive",
+          "rule": "Largest of the three saved role covered areas. No claim of spatial containment."
+        },
+        {
+          "name": "Machine covers more",
+          "cases": [
+            "V26"
+          ],
+          "status": "descriptive",
+          "rule": "Largest of the three saved role covered areas. No claim of spatial containment."
+        }
+      ],
+      "layout_offset_cases": [],
+      "no_offset_cases": [
+        "V22",
+        "V24",
+        "V26",
+        "V28",
+        "V30"
+      ]
+    }
+  ]
+}

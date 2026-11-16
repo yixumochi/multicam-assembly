@@ -1,0 +1,102 @@
+[
+  {
+    "home": "V26",
+    "name": "Nail top plate",
+    "plot": "01_V26_Nail_top_plate_plot.png",
+    "H": 248.4,
+    "span": [
+      0.73,
+      0.97
+    ],
+    "g": {
+      "a": "0.53",
+      "b": "0.00",
+      "c": "0.35"
+    },
+    "edge": {
+      "a": false,
+      "b": false,
+      "c": false
+    }
+  },
+  {
+    "home": "V07",
+    "name": "Retract machining tool",
+    "plot": "02_V07_Retract_machining_tool_plot.png",
+    "H": 123.4,
+    "span": [
+      2.98,
+      2.63
+    ],
+    "g": {
+      "a": "0.11",
+      "b": "0.00",
+      "c": "0.43"
+    },
+    "edge": {
+      "a": false,
+      "b": false,
+      "c": false
+    }
+  },
+  {
+    "home": "V01",
+    "name": "Mallet at joint",
+    "plot": "03_V01_Mallet_at_joint_plot.png",
+    "H": 250.9,
+    "span": [
+      0.87,
+      1.06
+    ],
+    "g": {
+      "a": "0.16",
+      "b": "0.00",
+      "c": "0.30"
+    },
+    "edge": {
+      "a": true,
+      "b": true,
+      "c": true
+    }
+  },
+  {
+    "home": "V04",
+    "name": "Adjust gripper configuration",
+    "plot": "04_V04_Adjust_gripper_configuration_plot.png",
+    "H": 317.0,
+    "span": [
+      1.66,
+      1.36
+    ],
+    "g": {
+      "a": "0.00",
+      "b": "0.00",
+      "c": "0.22"
+    },
+    "edge": {
+      "a": true,
+      "b": true,
+      "c": true
+    }
+  },
+  {
+    "home": "V21",
+    "name": "Drill timber",
+    "plot": "05_V21_Drill_timber_plot.png",
+    "H": 550.5,
+    "span": [
+      0.4,
+      0.08
+    ],
+    "g": {
+      "a": "0.01",
+      "b": "0.00",
+      "c": "0.01"
+    },
+    "edge": {
+      "a": true,
+      "b": true,
+      "c": true
+    }
+  }
+]

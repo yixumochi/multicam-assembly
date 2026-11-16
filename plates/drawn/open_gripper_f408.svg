@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="316.8pt" height="223.2pt" viewBox="0 0 316.8 223.2" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:date>2026-11-14T00:20:04.720648</dc:date>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.11.2, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 223.2 
+L 316.8 223.2 
+L 316.8 0 
+L 0 0 
+z
+" style="fill: #ffffff"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 91.100485 118.541206 
+L 88.082569 108.883876 
+L 54.885499 116.126873 
+L 55.489082 118.541206 
+z
+" clip-path="url(#p9d7f92688b)" style="fill: #7d6b8a; opacity: 0.1"/>
+   </g>
+   <g id="patch_3">
+    <path d="M 182.241532 88.362051 
+L 151.458794 95.605048 
+L 153.873127 111.298208 
+L 159.305375 118.541206 
+L 178.016451 118.541206 
+L 183.448699 106.469544 
+z
+" clip-path="url(#p9d7f92688b)" style="fill: #7d6b8a; opacity: 0.1"/>
+   </g>
+   <g id="patch_4">
+    <path d="M 188.880946 85.947718 
+L 187.070197 80.51547 
+L 34.967256 114.316124 
+L 36.778006 119.748372 
+z
+" clip-path="url(#p9d7f92688b)" style="fill: #1f6feb; opacity: 0.18"/>
+   </g>
+   <g id="line2d_1">
+    <path d="M 91.100485 118.541206 
+L 88.082569 108.883876 
+L 54.885499 116.126873 
+L 55.489082 118.541206 
+L 91.100485 118.541206 
+" clip-path="url(#p9d7f92688b)" style="fill: none; stroke: #7d6b8a; stroke-width: 0.75; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_2">
+    <path d="M 182.241532 88.362051 
+L 151.458794 95.605048 
+L 153.873127 111.298208 
+L 159.305375 118.541206 
+L 178.016451 118.541206 
+L 183.448699 106.469544 
+L 182.241532 88.362051 
+" clip-path="url(#p9d7f92688b)" style="fill: none; stroke: #7d6b8a; stroke-width: 0.75; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_3">
+    <path d="M 188.880946 85.947718 
+L 187.070197 80.51547 
+L 34.967256 114.316124 
+L 36.778006 119.748372 
+L 188.880946 85.947718 
+" clip-path="url(#p9d7f92688b)" style="fill: none; stroke: #1f6feb; stroke-width: 1.2; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_4">
+    <path d="M 35.510398 116.805477 
+L 188.338293 83.460603 
+" clip-path="url(#p9d7f92688b)" style="fill: none; stroke: #1f6feb; stroke-width: 1.35; stroke-linecap: round"/>
+   </g>
+   <g id="line2d_5">
+    <defs>
+     <path id="m906f58b020" d="M 0 2.5 
+C 0.663008 2.5 1.29895 2.236584 1.767767 1.767767 
+C 2.236584 1.29895 2.5 0.663008 2.5 0 
+C 2.5 -0.663008 2.236584 -1.29895 1.767767 -1.767767 
+C 1.29895 -2.236584 0.663008 -2.5 0 -2.5 
+C -0.663008 -2.5 -1.29895 -2.236584 -1.767767 -1.767767 
+C -2.236584 -1.29895 -2.5 -0.663008 -2.5 0 
+C -2.5 0.663008 -2.236584 1.29895 -1.767767 1.767767 
+C -1.29895 2.236584 -0.663008 2.5 0 2.5 
+z
+" style="stroke: #e07a2f"/>
+    </defs>
+    <g clip-path="url(#p9d7f92688b)">
+     <use xlink:href="#m906f58b020" x="75.407324" y="110.091042" style="fill: #e07a2f; stroke: #e07a2f"/>
+    </g>
+   </g>
+   <g id="line2d_6">
+    <g clip-path="url(#p9d7f92688b)">
+     <use xlink:href="#m906f58b020" x="168.962704" y="88.965634" style="fill: #e07a2f; stroke: #e07a2f"/>
+    </g>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="p9d7f92688b">
+   <rect x="12.031099" y="4.464" width="292.737803" height="214.272"/>
+  </clipPath>
+ </defs>
+
+  <circle cx="75.407324" cy="110.091042" r="9.0" fill="none" stroke="#e07a2f" stroke-width="1.8"/>
+  <circle cx="168.962704" cy="88.965634" r="9.0" fill="none" stroke="#e07a2f" stroke-width="1.8"/>
+</svg>
