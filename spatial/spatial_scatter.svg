@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="980" height="620" viewBox="0 0 980 620">
+<rect width="100%" height="100%" fill="#fffef8"/>
+<text x="48" y="36" font-family="Segoe UI, sans-serif" font-size="20" fill="#17363b">Final Footprint vs. Assembly and Motion Envelope</text>
+<text x="48" y="58" font-family="Segoe UI, sans-serif" font-size="13" fill="#4e6665">13 comparable cases · m2 · parts · timeline window</text>
+<line x1="80" y1="90" x2="80" y2="540" stroke="#17363b"/>
+<line x1="80" y1="540" x2="900" y2="540" stroke="#17363b"/>
+<line x1="80.0" y1="540.0" x2="900.0" y2="90.0" stroke="#d8e5de"/>
+<text x="872.0" y="84.0" font-size="11" fill="#4e6665">1×</text>
+<line x1="80.0" y1="486.0" x2="801.6" y2="90.0" stroke="#d8e5de"/>
+<text x="773.6" y="84.0" font-size="11" fill="#4e6665">2×</text>
+<line x1="80.0" y1="414.6" x2="671.6" y2="90.0" stroke="#d8e5de"/>
+<text x="643.6" y="84.0" font-size="11" fill="#4e6665">5×</text>
+<circle cx="446.1" cy="151.0" r="5" fill="#e87c3a"/>
+<text x="454.1" y="155.0" font-family="Segoe UI, sans-serif" font-size="12" fill="#17363b">V01</text>
+<circle cx="475.3" cy="206.0" r="5" fill="#e87c3a"/>
+<text x="483.3" y="210.0" font-family="Segoe UI, sans-serif" font-size="12" fill="#17363b">V06</text>
+<circle cx="711.8" cy="118.6" r="5" fill="#e87c3a"/>
+<text x="719.8" y="122.6" font-family="Segoe UI, sans-serif" font-size="12" fill="#17363b">V11</text>
+<circle cx="659.4" cy="152.8" r="5" fill="#e87c3a"/>
+<text x="667.4" y="156.8" font-family="Segoe UI, sans-serif" font-size="12" fill="#17363b">V20</text>
+<circle cx="488.4" cy="190.9" r="5" fill="#12627d"/>
+<text x="496.4" y="180.9" font-family="Segoe UI, sans-serif" font-size="12" fill="#17363b">V04</text>
+<circle cx="864.9" cy="100.9" r="5" fill="#12627d"/>
+<text x="872.9" y="104.9" font-family="Segoe UI, sans-serif" font-size="12" fill="#17363b">V23</text>
+<circle cx="401.2" cy="175.4" r="5" fill="#12627d"/>
+<text x="409.2" y="179.4" font-family="Segoe UI, sans-serif" font-size="12" fill="#17363b">V27</text>
+<circle cx="360.5" cy="231.4" r="5" fill="#12627d"/>
+<text x="368.5" y="235.4" font-family="Segoe UI, sans-serif" font-size="12" fill="#17363b">V29</text>
+<circle cx="637.8" cy="167.3" r="5" fill="#2f6f86"/>
+<text x="645.8" y="129.3" font-family="Segoe UI, sans-serif" font-size="12" fill="#17363b">V22</text>
+<circle cx="423.2" cy="260.9" r="5" fill="#2f6f86"/>
+<text x="431.2" y="264.9" font-family="Segoe UI, sans-serif" font-size="12" fill="#17363b">V24</text>
+<circle cx="698.3" cy="188.0" r="5" fill="#2f6f86"/>
+<text x="706.3" y="192.0" font-family="Segoe UI, sans-serif" font-size="12" fill="#17363b">V26</text>
+<circle cx="509.7" cy="163.5" r="5" fill="#2f6f86"/>
+<text x="517.7" y="153.5" font-family="Segoe UI, sans-serif" font-size="12" fill="#17363b">V28</text>
+<circle cx="111.7" cy="243.1" r="5" fill="#2f6f86"/>
+<text x="119.7" y="247.1" font-family="Segoe UI, sans-serif" font-size="12" fill="#17363b">V30</text>
+<text x="490" y="580" text-anchor="middle" font-size="13" fill="#17363b">Final assembly footprint (m2)</text>
+<text x="24" y="320" transform="rotate(-90 24 320)" text-anchor="middle" font-size="13" fill="#17363b">Assembly and motion envelope (m2)</text>
+<text x="80" y="604" font-size="11" fill="#4e6665">Log axes. Reference lines read the area ratio. They are not a score.</text></svg>

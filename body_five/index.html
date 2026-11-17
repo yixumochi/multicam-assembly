@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="utf-8">
+<title>Type 2</title>
+<style>
+:root { --ink: #17363b; --muted: #4e6665; --line: #d8e5de; --blue: #12627d; }
+body { margin: 0; background: #fcfff8; color: var(--ink); font: 18px/1.45 Inter, "Segoe UI", sans-serif; }
+main { max-width: 980px; margin: 0 auto; padding: 28px 22px 64px; }
+h1 { margin: 0 0 6px; font-size: 28px; font-weight: 400; }
+.lead { margin: 0 0 22px; color: var(--muted); font-size: 16px; }
+.drawn-plate, .drawn-plate h3, .drawn-plate p { font-weight: 400; }
+.drawn-plate + .drawn-plate { margin-top: 28px; padding-top: 18px; border-top: 1px solid var(--line); }
+.drawn-plate > h3 { margin: 0 0 10px; font-size: 18px; }
+.turn-cols { display: grid; gap: 12px; }
+.turn-cols.cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.turn-col .frame { margin: 0; font-size: 22px; color: var(--blue); }
+.ref-tag { font-size: 12px; margin-left: 4px; }
+.turn-col .state { margin: 2px 0 8px; font-size: 18px; line-height: 1.25; min-height: 2.5em; }
+.turn-col .measure { margin: 0; font-size: 15px; line-height: 1.35; }
+.turn-col .measure + .measure { margin-bottom: 8px; }
+.turn-col img { width: 100%; height: auto; background: white; display: block; object-fit: contain; }
+.turn-col img.line { aspect-ratio: 4.4 / 3.1; }
+.turn-col img.shot { aspect-ratio: 16 / 9; }
+.turn-col.mark { outline: 4px solid var(--blue); outline-offset: 3px; }
+.turn-bottom { margin-top: 18px; }
+.plot-label { margin: 0 0 4px; font-size: 16px; }
+.turn-bottom-row { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.95fr); gap: 14px; align-items: stretch; }
+.plot-panel img { width: 100%; height: auto; background: white; display: block; }
+.turn-side { display: flex; flex-direction: column; justify-content: space-between; min-height: 100%; }
+.rel-table { border-collapse: collapse; font-size: 18px; width: 100%; }
+.rel-table th, .rel-table td { border: 1px solid var(--ink); padding: 4px 8px; text-align: center; font-weight: 400; }
+.rel-table th:first-child, .rel-table td[colspan] { text-align: left; }
+.abbr-key { margin: auto 0 0; }
+.abbr-key p { margin: 0; font-size: 12px; line-height: 1.45; color: var(--muted); }
+</style>
+<main>
+<h1>Type 2</h1>
+<p class="lead">Same three frames as Type 1. The overlay is the labeled hand or robot.</p>
+<article class="drawn-plate">
+<h3>Type 2 · V26 · Nail top plate</h3>
+<div class="turn-cols cols-3"><section class="turn-col">
+<p class="frame">a</p>
+<p class="state">Start</p>
+<img class="line" src="frames/061_Robot_V26_Nail_top_plate_a.png" alt="Nail top plate, frame a">
+<p class="measure">g 0.47 H</p>
+<p class="measure">in frame</p>
+<img class="shot" src="frames/061_Robot_V26_Nail_top_plate_a.jpg" alt="Nail top plate, frame a still">
+</section><section class="turn-col mark">
+<p class="frame">b <span class="ref-tag">Reference</span></p>
+<p class="state">Middle</p>
+<img class="line" src="frames/061_Robot_V26_Nail_top_plate_b.png" alt="Nail top plate, frame b">
+<p class="measure">g 0.00 H</p>
+<p class="measure">in frame</p>
+<img class="shot" src="frames/061_Robot_V26_Nail_top_plate_b.jpg" alt="Nail top plate, frame b still">
+</section><section class="turn-col">
+<p class="frame">c</p>
+<p class="state">End</p>
+<img class="line" src="frames/061_Robot_V26_Nail_top_plate_c.png" alt="Nail top plate, frame c">
+<p class="measure">g 0.28 H</p>
+<p class="measure">in frame</p>
+<img class="shot" src="frames/061_Robot_V26_Nail_top_plate_c.jpg" alt="Nail top plate, frame c still">
+</section></div>
+<div class="turn-bottom">
+<p class="plot-label">Member-aligned body</p>
+<div class="turn-bottom-row">
+<div class="plot-panel"><img class="plot" src="01_V26_Nail_top_plate_plot.png" alt="Nail top plate, body overlay"></div>
+<div class="turn-side">
+<div class="math-note"><table class="rel-table"><thead><tr><th>Relative to b</th><th>a</th><th>b</th><th>c</th></tr></thead><tbody>
+<tr><th>g/H</th><td>0.47</td><td>0.00</td><td>0.28</td></tr>
+<tr><td colspan="4">Labeled body: 0.73 x 0.97 H</td></tr>
+</tbody></table></div>
+<div class="abbr-key"><p>g/H: grip travel on the aligned member, from b</p><p>clipped: outline meets the picture edge</p><p>H: 248.4 px</p></div>
+</div></div></div></article>
+<article class="drawn-plate">
+<h3>Type 2 · V07 · Retract machining tool</h3>
+<div class="turn-cols cols-3"><section class="turn-col">
+<p class="frame">a</p>
+<p class="state">Start</p>
+<img class="line" src="frames/022_Manual_V07_Retract_machining_tool_a.png" alt="Retract machining tool, frame a">
+<p class="measure">g 0.10 H</p>
+<p class="measure">in frame</p>
+<img class="shot" src="frames/022_Manual_V07_Retract_machining_tool_a.jpg" alt="Retract machining tool, frame a still">
+</section><section class="turn-col mark">
+<p class="frame">b <span class="ref-tag">Reference</span></p>
+<p class="state">Middle</p>
+<img class="line" src="frames/022_Manual_V07_Retract_machining_tool_b.png" alt="Retract machining tool, frame b">
+<p class="measure">g 0.00 H</p>
+<p class="measure">in frame</p>
+<img class="shot" src="frames/022_Manual_V07_Retract_machining_tool_b.jpg" alt="Retract machining tool, frame b still">
+</section><section class="turn-col">
+<p class="frame">c</p>
+<p class="state">End</p>
+<img class="line" src="frames/022_Manual_V07_Retract_machining_tool_c.png" alt="Retract machining tool, frame c">
+<p class="measure">g 0.43 H</p>
+<p class="measure">in frame</p>
+<img class="shot" src="frames/022_Manual_V07_Retract_machining_tool_c.jpg" alt="Retract machining tool, frame c still">
+</section></div>
+<div class="turn-bottom">
+<p class="plot-label">Member-aligned body</p>
+<div class="turn-bottom-row">
+<div class="plot-panel"><img class="plot" src="02_V07_Retract_machining_tool_plot.png" alt="Retract machining tool, body overlay"></div>
+<div class="turn-side">
+<div class="math-note"><table class="rel-table"><thead><tr><th>Relative to b</th><th>a</th><th>b</th><th>c</th></tr></thead><tbody>
+<tr><th>g/H</th><td>0.10</td><td>0.00</td><td>0.43</td></tr>
+<tr><td colspan="4">Labeled body: 2.98 x 2.63 H</td></tr>
+</tbody></table></div>
+<div class="abbr-key"><p>g/H: grip travel on the aligned member, from b</p><p>clipped: outline meets the picture edge</p><p>H: 123.4 px</p></div>
+</div></div></div></article>
+<article class="drawn-plate">
+<h3>Type 2 · V01 · Mallet at joint</h3>
+<div class="turn-cols cols-3"><section class="turn-col">
+<p class="frame">a</p>
+<p class="state">Start</p>
+<img class="line" src="frames/006_Manual_V01_Mallet_at_joint_a.png" alt="Mallet at joint, frame a">
+<p class="measure">g 0.37 H</p>
+<p class="measure">clipped</p>
+<img class="shot" src="frames/006_Manual_V01_Mallet_at_joint_a.jpg" alt="Mallet at joint, frame a still">
+</section><section class="turn-col mark">
+<p class="frame">b <span class="ref-tag">Reference</span></p>
+<p class="state">Middle</p>
+<img class="line" src="frames/006_Manual_V01_Mallet_at_joint_b.png" alt="Mallet at joint, frame b">
+<p class="measure">g 0.00 H</p>
+<p class="measure">clipped</p>
+<img class="shot" src="frames/006_Manual_V01_Mallet_at_joint_b.jpg" alt="Mallet at joint, frame b still">
+</section><section class="turn-col">
+<p class="frame">c</p>
+<p class="state">End</p>
+<img class="line" src="frames/006_Manual_V01_Mallet_at_joint_c.png" alt="Mallet at joint, frame c">
+<p class="measure">g 0.16 H</p>
+<p class="measure">clipped</p>
+<img class="shot" src="frames/006_Manual_V01_Mallet_at_joint_c.jpg" alt="Mallet at joint, frame c still">
+</section></div>
+<div class="turn-bottom">
+<p class="plot-label">Member-aligned body</p>
+<div class="turn-bottom-row">
+<div class="plot-panel"><img class="plot" src="03_V01_Mallet_at_joint_plot.png" alt="Mallet at joint, body overlay"></div>
+<div class="turn-side">
+<div class="math-note"><table class="rel-table"><thead><tr><th>Relative to b</th><th>a</th><th>b</th><th>c</th></tr></thead><tbody>
+<tr><th>g/H</th><td>0.37</td><td>0.00</td><td>0.16</td></tr>
+<tr><td colspan="4">Labeled body: 0.87 x 1.06 H</td></tr>
+</tbody></table></div>
+<div class="abbr-key"><p>g/H: grip travel on the aligned member, from b</p><p>clipped: outline meets the picture edge</p><p>H: 250.9 px</p></div>
+</div></div></div></article>
+<article class="drawn-plate">
+<h3>Type 2 · V04 · Adjust gripper configuration</h3>
+<div class="turn-cols cols-3"><section class="turn-col">
+<p class="frame">a</p>
+<p class="state">Start</p>
+<img class="line" src="frames/027_Mixed_V04_Adjust_gripper_configuration_a.png" alt="Adjust gripper configuration, frame a">
+<p class="measure">g 0.35 H</p>
+<p class="measure">clipped</p>
+<img class="shot" src="frames/027_Mixed_V04_Adjust_gripper_configuration_a.jpg" alt="Adjust gripper configuration, frame a still">
+</section><section class="turn-col mark">
+<p class="frame">b <span class="ref-tag">Reference</span></p>
+<p class="state">Middle</p>
+<img class="line" src="frames/027_Mixed_V04_Adjust_gripper_configuration_b.png" alt="Adjust gripper configuration, frame b">
+<p class="measure">g 0.00 H</p>
+<p class="measure">clipped</p>
+<img class="shot" src="frames/027_Mixed_V04_Adjust_gripper_configuration_b.jpg" alt="Adjust gripper configuration, frame b still">
+</section><section class="turn-col">
+<p class="frame">c</p>
+<p class="state">End</p>
+<img class="line" src="frames/027_Mixed_V04_Adjust_gripper_configuration_c.png" alt="Adjust gripper configuration, frame c">
+<p class="measure">g 0.02 H</p>
+<p class="measure">clipped</p>
+<img class="shot" src="frames/027_Mixed_V04_Adjust_gripper_configuration_c.jpg" alt="Adjust gripper configuration, frame c still">
+</section></div>
+<div class="turn-bottom">
+<p class="plot-label">Member-aligned body</p>
+<div class="turn-bottom-row">
+<div class="plot-panel"><img class="plot" src="04_V04_Adjust_gripper_configuration_plot.png" alt="Adjust gripper configuration, body overlay"></div>
+<div class="turn-side">
+<div class="math-note"><table class="rel-table"><thead><tr><th>Relative to b</th><th>a</th><th>b</th><th>c</th></tr></thead><tbody>
+<tr><th>g/H</th><td>0.35</td><td>0.00</td><td>0.02</td></tr>
+<tr><td colspan="4">Labeled body: 1.66 x 1.36 H</td></tr>
+</tbody></table></div>
+<div class="abbr-key"><p>g/H: grip travel on the aligned member, from b</p><p>clipped: outline meets the picture edge</p><p>H: 317.0 px</p></div>
+</div></div></div></article>
+<article class="drawn-plate">
+<h3>Type 2 · V21 · Drill timber</h3>
+<div class="turn-cols cols-3"><section class="turn-col">
+<p class="frame">a</p>
+<p class="state">Start</p>
+<img class="line" src="frames/042_Mixed_V21_Drill_timber_a.png" alt="Drill timber, frame a">
+<p class="measure">g 0.02 H</p>
+<p class="measure">clipped</p>
+<img class="shot" src="frames/042_Mixed_V21_Drill_timber_a.jpg" alt="Drill timber, frame a still">
+</section><section class="turn-col mark">
+<p class="frame">b <span class="ref-tag">Reference</span></p>
+<p class="state">Middle</p>
+<img class="line" src="frames/042_Mixed_V21_Drill_timber_b.png" alt="Drill timber, frame b">
+<p class="measure">g 0.00 H</p>
+<p class="measure">clipped</p>
+<img class="shot" src="frames/042_Mixed_V21_Drill_timber_b.jpg" alt="Drill timber, frame b still">
+</section><section class="turn-col">
+<p class="frame">c</p>
+<p class="state">End</p>
+<img class="line" src="frames/042_Mixed_V21_Drill_timber_c.png" alt="Drill timber, frame c">
+<p class="measure">g 0.00 H</p>
+<p class="measure">clipped</p>
+<img class="shot" src="frames/042_Mixed_V21_Drill_timber_c.jpg" alt="Drill timber, frame c still">
+</section></div>
+<div class="turn-bottom">
+<p class="plot-label">Member-aligned body</p>
+<div class="turn-bottom-row">
+<div class="plot-panel"><img class="plot" src="05_V21_Drill_timber_plot.png" alt="Drill timber, body overlay"></div>
+<div class="turn-side">
+<div class="math-note"><table class="rel-table"><thead><tr><th>Relative to b</th><th>a</th><th>b</th><th>c</th></tr></thead><tbody>
+<tr><th>g/H</th><td>0.02</td><td>0.00</td><td>0.00</td></tr>
+<tr><td colspan="4">Labeled body: 0.40 x 0.08 H</td></tr>
+</tbody></table></div>
+<div class="abbr-key"><p>g/H: grip travel on the aligned member, from b</p><p>clipped: outline meets the picture edge</p><p>H: 550.5 px</p></div>
+</div></div></div></article>
+</main>
+</html>
