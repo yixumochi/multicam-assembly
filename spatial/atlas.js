@@ -1,14 +1,6 @@
 (() => {
   const atlas = document.getElementById("atlas");
-  const overview = document.getElementById("overview");
   const casePage = new URL("../index.html", location.href);
-  const exceptions = {
-    V23: "Footprint from the saved truss",
-    V24: "Coverage from the saved local registration",
-    V27: "Footprint from rod projection",
-    V28: "Coverage from the saved shelter plan"
-  };
-  const sensitivityCases = new Set(["V07", "V21", "V27"]);
   const metric = row => row.unit === "mm_to_m";
   const calibration = row => metric(row) ? undefined : areaCalibration[row.case];
   const hasMetres = row => metric(row) || Boolean(calibration(row));
@@ -19,6 +11,11 @@
     return reference ? row[field] * scale(reference) ** 2 : row[field];
   };
   const format = value => value.toFixed(3);
+  const readableArea = (row, field) => {
+    const reference = calibration(row);
+    const value = areaValue(row, field);
+    return (reference ? "≈" + value.toFixed(reference.digits) : format(value)) + " " + unit(row);
+  };
   const multiplier = row => format(row.ratio_activity_over_object) + "×";
   const caseUrl = row => casePage.href + "#" + row.mode + "/" + row.case;
   const svgNamespace = "http://www.w3.org/2000/svg";
@@ -45,21 +42,15 @@
     return node;
   }
 
-  function bars(row, maximum) {
+  function bars(maximum, fields) {
     const node = element("div", "atlas-bars");
-    const reference = calibration(row);
-    for (const [key, label, field] of [
-      ["footprint", "F", "object_area_m2"],
-      ["activity", "A", "activity_area_m2"]
-    ]) {
-      const value = areaValue(row, field);
+    for (const {key, label, value, caption} of fields) {
       const line = element("div", "atlas-bar-line");
       const track = element("span", "atlas-track");
       const fill = element("span", "atlas-fill " + key);
       fill.style.width = 100 * value / maximum + "%";
       track.append(fill);
-      const amount = reference ? "≈" + value.toFixed(reference.digits) : format(value);
-      line.append(element("b", "atlas-bar-label", label), track, element("span", "atlas-value", amount + " " + unit(row)));
+      line.append(element("b", "atlas-bar-label", label), track, element("span", "atlas-value", caption));
       node.append(line);
     }
     return node;
@@ -163,8 +154,11 @@
     const modelLimit = row => Math.ceil(Math.max(row.activity_area_m2, row.object_area_m2) / 10) * 10;
     const first = atlas.querySelector("#compare-first");
     const second = atlas.querySelector("#compare-second");
-    const areaChart = overview.querySelector("#atlas-areas");
+    const question = atlas.querySelector("#compare-question");
+    const roleChoice = atlas.querySelector("#compare-role");
+    const roleControl = atlas.querySelector("#compare-role-control");
     const byId = new Map(rows.map(row => [row.case, row]));
+    const compareLayers = [...atlas.querySelectorAll(".atlas-layers input[value]")];
     const picked = [first, second];
     for (const select of picked) {
       for (const row of rows) select.add(new Option(row.case, row.case));
@@ -172,76 +166,12 @@
     first.value = "V01";
     second.value = "V30";
 
-    function areaRow(row, maximum) {
-      const wrapper = element("div", "atlas-case-row");
-      const choose = element("button", "atlas-case-button", row.case);
-      choose.type = "button";
-      choose.dataset.case = row.case;
-      choose.setAttribute("aria-label", "Compare " + row.case + " in Spatial atlas");
-      choose.addEventListener("click", () => {
-        if (first.value !== row.case && second.value !== row.case) {
-          first.value = second.value;
-          second.value = row.case;
-          renderComparison();
-        }
-        const focusComparison = () => atlas.querySelector("#compare-title").focus();
-        if (location.hash === "#atlas") focusComparison();
-        else {
-          window.addEventListener("hashchange", focusComparison, {once:true});
-          location.hash = "atlas";
-        }
-      });
-      const sourceLink = element("a", "atlas-source", "Case sheet ↗");
-      sourceLink.href = caseUrl(row);
-      const identity = element("div", "atlas-identity");
-      identity.append(choose, sourceLink);
-      const note = calibration(row)?.label || exceptions[row.case];
-      if (note) identity.append(element("small", "", note));
-      wrapper.append(identity, bars(row, maximum), element("b", "atlas-ratio", multiplier(row)));
-      return wrapper;
-    }
-
-    function renderAreas() {
-      const header = element("div", "atlas-case-row atlas-table-header");
-      header.append(element("span", "", "Case"), axis(metricLimit, "m²"), element("span", "", "A/F"));
-      areaChart.append(header);
-      for (const mode of modes) {
-        const group = element("section", "atlas-area-group");
-        group.append(element("h3", "", mode.title));
-        const ordered = rows.filter(row => row.mode === mode.mode && hasMetres(row))
-          .sort((left, right) => areaValue(right, "activity_area_m2") - areaValue(left, "activity_area_m2"));
-        for (const row of ordered) {
-          group.append(areaRow(row, metricLimit));
-          if (calibration(row)) group.append(calibrationDetails(row));
-        }
-        areaChart.append(group);
-      }
-      const unscaled = rows.filter(row => !hasMetres(row));
-      if (unscaled.length) {
-        const models = element("section", "atlas-area-group atlas-models");
-        models.append(element("h3", "", "Model-unit cases"));
-        for (const row of unscaled) {
-          const maximum = modelLimit(row);
-          const caseRow = areaRow(row, maximum);
-          caseRow.querySelector(".atlas-bars").prepend(axis(maximum, ""));
-          models.append(caseRow);
-        }
-        areaChart.append(models);
-      }
-    }
-
-    function calibrationDetails(row) {
-      const reference = calibration(row);
-      const factor = scale(reference);
-      const dimensions = reference.bounds.map(value => (value * factor).toFixed(reference.digits || 1));
-      const detail = element("details", "atlas-calibration");
-      const sourceLink = element("a", "", reference.source);
-      sourceLink.href = reference.url;
-      detail.append(element("summary", "", row.case + " scale and source"),
-        element("p", "", `Scaled model bounds (X × Y × Z) ≈ ${dimensions.join(" × ")} m. The conversion uses ${factor.toFixed(4)} m per model unit. Original F ${format(row.object_area_m2)} and A ${format(row.activity_area_m2)} model units² are multiplied by the square of that scale.`),
-        element("p", "", `Rhino model ${reference.modelFile} supplies the reconstructed geometry used for these estimates.`), sourceLink);
-      return detail;
-    }
+    const roleNames = {human:"Human", machine:"Machine", part:"Parts"};
+    const roleAdvice = {
+      human:"Follow the paths people use to approach and move alongside the assembly.",
+      machine:"Follow how far the machine moves around the object.",
+      part:"Follow the routes parts take as they enter and turn near the object."
+    };
 
     function renderComparison() {
       const pair = picked.map(select => byId.get(select.value));
@@ -249,28 +179,56 @@
         const other = select === first ? second : first;
         for (const option of select.options) option.disabled = option.value === other.value;
       }
-      for (const button of areaChart.querySelectorAll(".atlas-case-button")) {
-        button.setAttribute("aria-pressed", String(pair.some(row => row.case === button.dataset.case)));
-      }
       const compareBars = atlas.querySelector("#compare-bars");
       const plans = atlas.querySelector("#compare-plans");
       compareBars.replaceChildren();
       plans.replaceChildren();
-      const [larger, smaller] = [...pair].sort((left, right) => right.activity_area_m2 - left.activity_area_m2);
-      const [higher, lower] = [...pair].sort((left, right) => right.ratio_activity_over_object - left.ratio_activity_over_object);
       const findings = atlas.querySelector("#compare-findings");
-      const areaFinding = pair.every(metric) ? (larger.activity_area_m2 === smaller.activity_area_m2
-        ? "Both cases have the same activity area."
-        : `${larger.case} covers more area during assembly (${format(larger.activity_area_m2)} vs ${format(smaller.activity_area_m2)} m²).`)
-        : "The selected comparison includes a literature-scaled area estimate (≈).";
-      const ratioFinding = higher.ratio_activity_over_object === lower.ratio_activity_over_object
-        ? "Both cases have the same A/F."
-        : `${higher.case} has the higher A/F (${multiplier(higher)} vs ${multiplier(lower)}).`;
-      const denominator = pair.every(metric) && higher.case !== larger.case
-        && larger.activity_area_m2 !== smaller.activity_area_m2
-        && higher.ratio_activity_over_object > lower.ratio_activity_over_object
-        ? ` Its object footprint is smaller (${format(higher.object_area_m2)} vs ${format(lower.object_area_m2)} m²).` : "";
-      findings.textContent = areaFinding + " " + ratioFinding + denominator;
+      const selectedRole = roleChoice.value;
+      const field = selectedRole + "_area_m2";
+      const metricPair = pair.every(hasMetres);
+      const roleShare = row => 100 * row[field] / row.activity_area_m2;
+      const roleMode = question.value === "role";
+      roleControl.hidden = !roleMode;
+      for (const input of compareLayers) input.closest("label").hidden = roleMode;
+      for (const input of compareLayers) input.disabled = roleMode;
+      let fieldsFor;
+      let extent;
+      let axisUnit;
+      if (question.value === "ratio") {
+        const ratio = row => row.ratio_activity_over_object;
+        const [higher, lower] = [...pair].sort((left,right) => ratio(right)-ratio(left));
+        const answer = ratio(higher) === ratio(lower)
+          ? "Both cases have the same A/F."
+          : `${higher.case} spreads further relative to its finished size (${multiplier(higher)} vs ${multiplier(lower)}).`;
+        const footprint = metricPair
+          ? ` Compare their finished footprints too (${readableArea(higher,"object_area_m2")} vs ${readableArea(lower,"object_area_m2")}).` : "";
+        findings.textContent = answer + footprint;
+        extent = Math.ceil(Math.max(...pair.map(ratio)) / 4) * 4;
+        axisUnit = "×";
+        fieldsFor = row => [{key:"activity", label:"A/F", value:ratio(row), caption:multiplier(row)}];
+      } else if (roleMode) {
+        const [higher, lower] = [...pair].sort((left,right) => roleShare(right)-roleShare(left));
+        const percentage = row => roleShare(row).toFixed(1) + "%";
+        const answer = roleShare(higher) === roleShare(lower)
+          ? `${roleNames[selectedRole]} tracks cover the same share in both cases (${percentage(higher)}).`
+          : `${roleNames[selectedRole]} tracks cover a larger share in ${higher.case} (${percentage(higher)} vs ${percentage(lower)} in ${lower.case}).`;
+        findings.textContent = answer + " " + roleAdvice[selectedRole];
+        extent = 100;
+        axisUnit = "%";
+        fieldsFor = row => [{key:"activity",label:"A %",value:roleShare(row),caption:percentage(row)}];
+      } else {
+        const area = row => areaValue(row,"activity_area_m2");
+        const [larger, smaller] = [...pair].sort((left,right) => area(right)-area(left));
+        findings.textContent = metricPair
+          ? (area(larger) === area(smaller)
+            ? "Both cases cover the same area during assembly."
+            : `${larger.case} covers more area during assembly (${readableArea(larger,"activity_area_m2")} vs ${readableArea(smaller,"activity_area_m2")}).`)
+          : "Switch to the relative-size question to compare cases with different units.";
+        extent = metricPair ? metricLimit : null;
+        axisUnit = "m²";
+        fieldsFor = row => [{key:"activity",label:"A",value:area(row),caption:readableArea(row,"activity_area_m2")}];
+      }
       const planData = pair.map(row => getPlan(source, row, registered));
       const common = atlas.querySelector("#atlas-common");
       const canShare = planData.every(plan => plan.metres);
@@ -279,76 +237,23 @@
         width:Math.max(...planData.map(plan => plan.viewBox[2]*plan.metres)),
         height:Math.max(...planData.map(plan => plan.viewBox[3]*plan.metres))
       } : null;
-      const layers = new Set([...atlas.querySelectorAll(".atlas-layers input[value]:checked")].map(input => input.value));
-      atlas.querySelector("#atlas-plan-note").textContent = "The authored footprint is shown in the original top drawing. The dashed box marks its saved bounds. " +
-        (canShare ? "Shared scale uses the saved metric registration. " : "These cases are displayed at their own plan scales. ") +
-        "Area beyond the object requires the intersection of activity coverage with the actual footprint.";
+      const layers = new Set(roleMode ? [selectedRole] : compareLayers.filter(input => input.checked).map(input => input.value));
+      atlas.querySelector("#atlas-plan-note").textContent = "The dashed outline marks the finished object’s bounds. " +
+        (shared ? "Both plans use the same scale." : "Each plan is fitted to its own view.");
       pair.forEach((row, index) => {
         const card = element("article", "atlas-card");
-        const maximum = hasMetres(row) ? metricLimit : modelLimit(row);
-        card.append(element("h4", "", row.case + " · A/F " + multiplier(row)), bars(row, maximum), axis(maximum, unit(row)));
+        const maximum = extent || (hasMetres(row) ? metricLimit : modelLimit(row));
+        card.append(element("h4", "", row.case), bars(maximum, fieldsFor(row)), axis(maximum, extent ? axisUnit : unit(row)));
         compareBars.append(card);
         plans.append(renderPlan(row, planData[index], shared, layers));
       });
     }
 
-    function groupChart(active, key, title, maximum, suffix) {
-      const card = element("div", "atlas-card atlas-distribution");
-      card.append(element("h4", "", title), axis(maximum, suffix));
-      for (const mode of modes) {
-        const data = active.filter(row => row.mode === mode.mode);
-        const centre = median(data.map(row => row[key]));
-        const group = element("div", "atlas-distribution-group");
-        group.append(element("h5", "", `${mode.title} · n=${data.length} · median ${format(centre)}${suffix === "×" ? "" : " "}${suffix}`));
-        const plot = element("div", "atlas-dot-plot");
-        const marker = element("span", "atlas-median");
-        marker.style.left = 100 * centre / maximum + "%";
-        plot.append(marker);
-        const laneEnds = [];
-        const ordered = [...data].sort((left, right) => left[key] - right[key]);
-        for (const row of ordered) {
-          const position = 100 * row[key] / maximum;
-          const cleared = laneEnds.findIndex(end => position - end > 13);
-          const lane = cleared === -1 ? laneEnds.length : cleared;
-          laneEnds[lane] = position;
-          const point = element("a", "atlas-point", row.case);
-          point.href = caseUrl(row);
-          point.title = row.case + " · " + format(row[key]) + " " + suffix;
-          point.style.left = position + "%";
-          point.style.top = (18 + lane*24) + "px";
-          plot.append(point);
-        }
-        plot.style.height = (27 + laneEnds.length*24) + "px";
-        group.append(plot);
-        card.append(group);
-      }
-      return card;
-    }
-
-    function renderGroups() {
-      const checked = atlas.querySelector("#atlas-sensitive").checked;
-      const active = rows.filter(row => !checked || !sensitivityCases.has(row.case));
-      const ratioLimit = Math.ceil(Math.max(...rows.map(row => row.ratio_activity_over_object)) / 10) * 10;
-      const renderer = atlas.querySelector("#atlas-groups");
-      renderer.replaceChildren(groupChart(active.filter(metric), "activity_area_m2", "Activity area (A)", metricLimit, "m²"),
-        groupChart(active, "ratio_activity_over_object", "Activity / footprint (A/F)", ratioLimit, "×"));
-      const base = median(rows.filter(row => row.mode === "human-led").map(row => row.ratio_activity_over_object));
-      const current = median(active.filter(row => row.mode === "human-led").map(row => row.ratio_activity_over_object));
-      atlas.querySelector("#atlas-group-note").textContent = checked
-        ? `Human-led median A/F moves from ${base.toFixed(2)}× to ${current.toFixed(2)}× with the selected exclusions.`
-        : "The area chart uses the 13 cases with existing metric scales. V07 and V21 are shown separately with literature-scaled estimates. The ratio chart includes all 15.";
-    }
-
-    renderAreas();
     renderComparison();
-    renderGroups();
-    for (const select of picked) select.addEventListener("change", renderComparison);
+    for (const control of [...picked,question,roleChoice]) control.addEventListener("change", renderComparison);
     atlas.querySelector(".atlas-layers").addEventListener("change", renderComparison);
-    atlas.querySelector("#atlas-sensitive").addEventListener("change", renderGroups);
     atlas.querySelector("#atlas-status").hidden = true;
     atlas.querySelector("#atlas-content").hidden = false;
-    overview.querySelector("#overview-status").hidden = true;
-    overview.querySelector("#overview-content").hidden = false;
     const planCache = new Map();
     initializeSpatialRoles({
       rows, modes, median, caseUrl,
@@ -383,7 +288,7 @@
 
   load().catch(error => {
     console.error(error);
-    for (const status of [atlas.querySelector("#atlas-status"), overview.querySelector("#overview-status"), document.getElementById("roles-status")]) {
+    for (const status of [atlas.querySelector("#atlas-status"), document.getElementById("roles-status")]) {
       status.textContent = "Could not load the case measurements. Reload the page to try again.";
     }
   });

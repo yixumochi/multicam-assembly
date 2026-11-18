@@ -57,11 +57,12 @@ function initializeSpatialRoles({rows, modes, median, caseUrl, showPlan, frameUr
     root.querySelector("#roles-plan-drawing").replaceChildren(drawing);
     const details = root.querySelector("#roles-plan-note");
     details.replaceChildren();
+    root.querySelector("#roles-track-key").hidden = !track;
     if (track) {
       details.append(document.createTextNode("Highlighted " + roles[role].toLowerCase() + " track " + track.id + " · "));
       for (const [index, endpoint] of [track.start, track.end].entries()) {
         const href = frameUrl(endpoint?.src);
-        const label = (index + 1) + " " + (index ? "End" : "Start") +
+        const label = (index + 1) + " " + (index ? "END" : "START") +
           (Number.isFinite(endpoint?.time) ? " (" + endpoint.time.toFixed(1) + " s)" : "");
         if (index) details.append(document.createTextNode(" → "));
         const cue = node(href ? "a" : "span", "", label);

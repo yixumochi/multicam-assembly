@@ -43,11 +43,11 @@ details summary { cursor: pointer; color: var(--blue); }
 @media (max-width: 640px) { .row, .shots { grid-template-columns: 1fr; } main, header { padding-left: 12px; padding-right: 12px; } }
 </style>
 <link rel="stylesheet" href="../research.css">
-<link rel="stylesheet" href="atlas.css?v=roles1">
+<link rel="stylesheet" href="atlas.css?v=guide2">
 <link rel="stylesheet" href="role-analysis.css">
 <script src="area-calibration.js" defer></script>
-<script src="role-analysis.js" defer></script>
-<script src="atlas.js?v=roles1" defer></script>
+<script src="role-analysis.js?v=guide2" defer></script>
+<script src="atlas.js?v=guide2" defer></script>
 </head>
 <body>
 <header>
@@ -60,15 +60,20 @@ details summary { cursor: pointer; color: var(--blue); }
 <main>
   <nav class="tabs" aria-label="Sections">
     <button type="button" data-tab="roles" aria-pressed="true">Spatial roles</button>
-    <button type="button" data-tab="overview" aria-pressed="false">Area overview</button>
-    <button type="button" data-tab="atlas" aria-pressed="false">Spatial atlas</button>
+    <button type="button" data-tab="atlas" aria-pressed="false">Compare two cases</button>
     <button type="button" data-tab="union" aria-pressed="false">Part-track union · E/F</button>
     <button type="button" data-tab="connection" aria-pressed="false">Connection</button>
   </nav>
 
   <section id="roles" class="case-area" aria-labelledby="roles-title">
     <h2 id="roles-title">Who uses the space during assembly?</h2>
-    <p>Compare where people, machines and parts move across 15 cases. Select a case to trace those roles on its original plan.</p>
+    <p>Where do people, machines and parts move during assembly? Start with one row, then follow one movement on the plan.</p>
+    <ol class="reading-steps">
+      <li><b>Read across one case.</b> A number like 58% means the tracked people covered 58% of the recorded activity area. People and parts can use the same space.</li>
+      <li><b>Read down one column.</b> Each group has five cases. The median is the middle value. Use it to spot cases that differ.</li>
+      <li><b>Open a plan.</b> Shading shows the selected role’s tracked coverage. <b>1 = START</b> and <b>2 = END</b> of the same recorded movement. The dark line follows its path.</li>
+    </ol>
+    <p class="spatial-takeaway"><b>What to take away.</b> Parts cover the most ground in 13 of the 15 recorded cases. Start the layout with room to bring in and turn parts. Then check the exceptions, such as people in V27 and machines in V26.</p>
     <p id="roles-status" role="status">Loading the role areas…</p>
     <div id="roles-content" hidden>
       <div class="role-controls">
@@ -86,7 +91,7 @@ details summary { cursor: pointer; color: var(--blue); }
         <h3 id="role-plan-title" tabindex="-1">Read the plan</h3>
         <div class="role-controls">
           <label for="roles-case">Case <select id="roles-case"></select></label>
-          <label for="roles-layer">Highlight
+          <label for="roles-layer">Show tracks for
             <select id="roles-layer">
               <option value="human">Human</option>
               <option value="machine">Machine</option>
@@ -95,6 +100,7 @@ details summary { cursor: pointer; color: var(--blue); }
           </label>
         </div>
         <p id="roles-detail" class="role-detail" aria-live="polite"></p>
+        <p id="roles-track-key" class="note"><b>1 START → 2 END</b> · Follow one recorded movement. Open the linked video frames below the plan to see both moments.</p>
         <div id="roles-plan-drawing"></div>
         <p id="roles-plan-note" class="note"></p>
       </section>
@@ -106,29 +112,21 @@ details summary { cursor: pointer; color: var(--blue); }
     </div>
   </section>
 
-  <section id="overview" class="case-area" aria-labelledby="overview-title" hidden>
-    <h2 id="overview-title">Object footprint and assembly activity</h2>
-    <p>Compare the object footprint (F) and tracked assembly activity coverage (A) for all 15 cases on a shared square-metre axis. A/F is the activity-to-footprint ratio. V07 and V21 are marked ≈ because their metric scales come from published dimensions.</p>
-    <p><a href="#roles">See how people, machines and parts use the space</a> · <a href="#atlas">Compare two cases in Spatial atlas</a> · <a href="../index.html#overview">Source measurements in Fifteen assembly cases</a></p>
-    <p id="overview-status" role="status">Loading the 15 case measurements…</p>
-    <div id="overview-content" hidden>
-      <div class="atlas-key" aria-label="Area legend"><span class="footprint">Object footprint (F)</span><span class="activity">Activity coverage (A)</span></div>
-      <div id="atlas-areas"></div>
-    </div>
-  </section>
-
-  <section id="union" hidden><div class="study"><h2>Object and part-track union (E/F)</h2><p>All 15 assembly cases are shown. Solid points are the nine registered metric results. Hollow points use published dimensions to scale two saved unions. Lines show the four possible ranges where the overlap is unknown.</p><p>F is the object footprint. M is the part-track coverage. E is their union. For the four ranges, the lower bound assumes maximum overlap and the upper bound assumes no overlap. <a href="#roles">Explore human, machine and part coverage</a>.</p></div>
+  <section id="union" hidden>
+    <h2>How far does part movement extend beyond the finished object?</h2>
+    <p>Put the finished object and the part tracks on the same plan. Their combined area divided by the finished footprint is E/F. At 1×, all tracked part coverage fits within the finished footprint.</p>
+    <p class="spatial-takeaway"><b>Read both charts together.</b> V30 has an E/F of 36.19×, while V01 has a larger combined area (28.0 m² vs 8.6 m²). Use the area to judge the scale of the layout and the ratio to see how much it expands relative to the finished object.</p>
     <div class="filters">
       <label>Case mode<select id="mode"><option>All</option><option>Manual</option><option>Mixed</option><option>Robot</option></select></label>
     </div>
-    <p class="note">Case mode is the label on the case, not a measure of every action. Log scale on both axes. The axes do not share one numeric range.</p>
+    <p class="note">Left shows footprint versus combined area. Right shows how many finished footprints the combined area covers. Select a case to open its connection record.</p>
     <div class="charts">
       <div class="plot"><svg id="scatter" viewBox="0 0 760 520"></svg></div>
       <div class="plot"><svg id="ratio" viewBox="0 0 360 520"></svg></div>
     </div>
     <div id="readout" class="readout"><p class="note">Hover or click a case.</p></div>
     <details id="who">
-      <summary id="count">Comparable cases</summary>
+      <summary id="count">How the 15 cases were calculated</summary>
       <div id="who-body"></div>
     </details>
     <p><a id="union-export" download="part-track-union-15-cases.csv">Download all 15 cases as CSV</a></p>
@@ -136,17 +134,26 @@ details summary { cursor: pointer; color: var(--blue); }
   </section>
 
   <section id="atlas" class="case-area" aria-labelledby="atlas-title" hidden>
-    <h2 id="atlas-title">Spatial atlas</h2>
-    <p>Compare two cases side by side and inspect their activity layers. <a href="#overview">View all 15 cases in Area overview</a></p>
+    <h2 id="atlas-title">Compare two cases</h2>
+    <p>Pick one question and apply it to both cases. Use the same measure for the pair, then look at both plans to see where the difference occurs.</p>
     <p id="atlas-status" role="status">Loading the 15 case measurements…</p>
     <div id="atlas-content" hidden>
-      <section class="atlas-section" aria-labelledby="compare-title">
-        <h3 id="compare-title" tabindex="-1">Compare two cases</h3>
+      <section class="atlas-section" aria-labelledby="atlas-title">
         <div class="atlas-controls">
+          <label for="compare-question">Question
+            <select id="compare-question">
+              <option value="area">Which covers more area during assembly?</option>
+              <option value="ratio">Which spreads further relative to its finished size?</option>
+              <option value="role">Where should this role have room to move?</option>
+            </select>
+          </label>
           <label for="compare-first">First case<select id="compare-first"></select></label>
           <label for="compare-second">Second case<select id="compare-second"></select></label>
+          <label id="compare-role-control" for="compare-role" hidden>Role
+            <select id="compare-role"><option value="human">Human</option><option value="machine">Machine</option><option value="part">Parts</option></select>
+          </label>
         </div>
-        <p id="compare-findings" aria-live="polite"></p>
+        <p id="compare-findings" class="spatial-takeaway" aria-live="polite"></p>
         <div id="compare-bars" class="atlas-pair"></div>
         <div class="atlas-controls atlas-layers">
           <label><input type="checkbox" value="human" checked> Human</label>
@@ -157,24 +164,22 @@ details summary { cursor: pointer; color: var(--blue); }
         <p id="atlas-plan-note" class="note"></p>
         <div id="compare-plans" class="atlas-pair"></div>
       </section>
-      <section class="atlas-section" aria-labelledby="groups-title">
-        <h3 id="groups-title">Compare assembly modes</h3>
-        <label class="atlas-toggle"><input id="atlas-sensitive" type="checkbox"> Exclude V07, V21 (literature-based scales) and V27 (rod projection)</label>
-        <p class="note">Dots show individual cases. The diamond marks the group median.</p>
-        <div id="atlas-groups" class="atlas-pair"></div>
-        <p id="atlas-group-note" aria-live="polite"></p>
-      </section>
+      <p class="note">A is the area covered during assembly. F is the finished footprint. ≈ marks areas scaled using published dimensions. <a href="../index.html#overview">Source case sheets</a></p>
     </div>
   </section>
 
   <section id="connection" hidden>
-    <h2>How does the approach and rotation strategy change around the connection?</h2>
-    <p class="note">The sentence is a question. The records below are what was written down. A global E/F does not measure joint clearance, work rate, or whether a robot can perform the action.</p>
+    <h2>What needs room at the joint?</h2>
+    <p>Choose a case. Look at the order of the frames and ask where the part comes from, who holds it and what has to move as it seats.</p>
+    <div class="atlas-controls"><label for="connection-case">Case
+      <select id="connection-case" disabled><option>Loading cases…</option></select>
+    </label></div>
+    <p id="connection-takeaway" class="spatial-takeaway" aria-live="polite"></p>
     <div class="evidence">
       <div id="detail" class="plan-fig"></div>
       <div id="shots"></div>
     </div>
-    <ul class="gap-list" id="gaps"></ul>
+    <details><summary>How to read the plan and frames</summary><ul class="gap-list" id="gaps"></ul></details>
   </section>
 </main>
 <script>
@@ -182,8 +187,8 @@ const UNION = new Set(["V01", "V04", "V06", "V11", "V20", "V22", "V26", "V29", "
 const MODE = { V01:"Manual", V06:"Manual", V07:"Manual", V11:"Manual", V20:"Manual", V04:"Mixed", V21:"Mixed", V22:"Mixed", V27:"Mixed", V29:"Mixed", V23:"Robot", V24:"Robot", V26:"Robot", V28:"Robot", V30:"Robot" }
 const COLOR = { Manual:"#e87c3a", Mixed:"#12627d", Robot:"#2f6f86" }
 const EXCLUDE = {
-  V07: "This union analysis uses the saved model-unit geometry. The Area overview includes the literature-scaled F and A estimates.",
-  V21: "This union analysis uses the saved model-unit geometry. The Area overview includes the literature-scaled F and A estimates.",
+  V07: "The saved geometry was scaled using the 4.5 m length reported in the paper.",
+  V21: "The saved geometry was scaled using ETH’s reported height of close to 4 m.",
   V23: "Saved footprint 47.806 m² and track coverage 53.239 m². The saved top is one truss, and that solid was not on the same plan box as the tracks, so F∪M was not computed.",
   V24: "Saved footprint 2.128 m² and track coverage 6.826 m². The registration did not pass the union check, so this is not an F∪M measurement.",
   V27: "Footprint 1.823 m² is the rod projection. Track coverage is 20.446 m². The available plans do not establish how much the footprints overlap.",
@@ -381,7 +386,7 @@ function renderWho() {
   const body = document.getElementById("who-body")
   body.replaceChildren()
   const lead = document.createElement("p")
-  lead.textContent = BASIS
+  lead.textContent = "Solid dots show registered results. Hollow dots use dimensions from published sources. Lines show how the area could vary with overlap. " + BASIS
   body.append(lead)
   const included = document.createElement("p")
   included.textContent = rows.map(row => row.case_id + " · " + unionResult(row).method).join(" / ")
@@ -459,6 +464,7 @@ function drawPlan(svg, item) {
 
 const EVIDENCE = {
   V30: {
+    takeaway: "The part approaches, adjusts, then seats in the first trial. In trial 7 it stops short. When laying out a similar joint, check for room to make that last adjustment and try again.",
     frames: [
       ["frames/task44_001200.jpg", "48.0 s · Approach joint, trial 1. The held member approaches the mating member and the gap narrows."],
       ["frames/task44_001387.jpg", "55.5 s · Insert joint, trial 1. The member continues down and adjusts; the two members are seen seating."],
@@ -467,12 +473,14 @@ const EVIDENCE = {
     text: "These three names use separate representative drawings. Approach joint rows share one drawing (about −0.3° to −0.4°). Insert joint rows share another (about −0.1° to −1.2°). The two attempt rows share a third (about 3.4° to 2.7°). The angle is the drawing, not a new measurement for every repeated row. The record names the held member; it does not give a joint coordinate on the plan."
   },
   V29: {
+    takeaway: "A gripper holds the part while a person steadies it and operates a tool. Check that the person can reach the joint and use the tool while the gripper stays in place.",
     frames: [
       ["frames/task43_002109.jpg", "88.0–90.3 s. One frame set for three concurrent records."]
     ],
     text: "At 88.0–90.3 s the table records three roles on the same frames: the gripper still holds the member, the left hand steadies it beside the power tool, and a person uses the power tool. The drill drawing runs from about 0.5° to 2.4°. The hold drawing is shared with other Hold member rows, so it is not a separate sweep for this second."
   },
   V01: {
+    takeaway: "A person uses a mallet at a low joint. Check whether they can reach the connection and swing the tool from a workable position.",
     frames: [
       ["frames/task40_000768.jpg", "32.0–33.1 s · Mallet at joint. A person in yellow gloves uses a mallet at a low joint; the contact face is partly hidden."]
     ],
@@ -480,6 +488,7 @@ const EVIDENCE = {
   }
 }
 
+const connectionCase = document.getElementById("connection-case")
 function renderConnection() {
   const root = document.getElementById("detail")
   const shots = document.getElementById("shots")
@@ -488,6 +497,12 @@ function renderConnection() {
   shots.replaceChildren()
   gaps.replaceChildren()
   const item = state.data.cases.find(row => row.case_id === state.selected)
+    || state.data.cases.find(row => row.case_id === "V30")
+  connectionCase.value = item.case_id
+  const evidence = EVIDENCE[item.case_id]
+  document.getElementById("connection-takeaway").textContent = evidence
+    ? evidence.takeaway
+    : "Use the plan to see the part routes around the object. Open the source case sheet to review the clip for approach, holding and seating."
   const title = document.createElement("h3")
   title.textContent = item ? item.case_id + " · " + modeOf(item) : "Select a case"
   root.append(title)
@@ -516,7 +531,10 @@ function renderConnection() {
     numbers.textContent = method + " · F " + prefix + fmt(footprint) + " m² · E " + prefix + spanLabel(low, high, " m²") + " · E/F " + prefix + spanLabel(low / footprint, high / footprint, "×")
     root.append(numbers)
   }
-  const evidence = item && EVIDENCE[item.case_id]
+  const caseLink = document.createElement("a")
+  caseLink.href = "../index.html#" + item.installation.toLowerCase().replaceAll(" ", "-") + "/" + item.case_id
+  caseLink.textContent = "Open " + item.case_id + " source case sheet"
+  root.append(caseLink)
   if (evidence) {
     evidence.frames.forEach(([src, text]) => {
       const figure = document.createElement("figure")
@@ -534,7 +552,7 @@ function renderConnection() {
   } else {
     const p = document.createElement("p")
     p.className = "note"
-    p.textContent = item ? "No separate connection keyframe is attached for " + item.case_id + " on this page." : "V30, V29, and V01 have saved keyframes for this question."
+    p.textContent = "Annotated joint frames are available for V01, V29 and V30. Use the source case sheet for " + item.case_id + "."
     shots.append(p)
   }
   ;[
@@ -556,7 +574,7 @@ function select(id, open) {
 function setTab(name) {
   state.tab = name
   document.querySelectorAll(".tabs button").forEach(button => button.setAttribute("aria-pressed", String(button.dataset.tab === name)))
-  ;["roles", "overview", "atlas", "union", "connection"].forEach(id => document.getElementById(id).hidden = id !== name)
+  ;["roles", "atlas", "union", "connection"].forEach(id => document.getElementById(id).hidden = id !== name)
   render()
 }
 function render() {
@@ -579,6 +597,7 @@ document.querySelectorAll(".tabs button").forEach(button => button.addEventListe
   else location.hash = tab
 }))
 document.getElementById("mode").addEventListener("change", event => { state.mode = event.target.value; render() })
+connectionCase.addEventListener("change", () => select(connectionCase.value, true))
 function openSpatialRoute() {
   const id = location.hash.slice(1)
   if (/^V\d+$/.test(id)) {
@@ -587,12 +606,17 @@ function openSpatialRoute() {
     setTab("connection")
     return
   }
-  setTab(["overview", "atlas", "union", "connection"].includes(id) ? id : "roles")
+  setTab(["atlas", "union", "connection"].includes(id) ? id : "roles")
 }
 window.addEventListener("hashchange", openSpatialRoute)
 openSpatialRoute()
 fetch("spatial_cases.json?v=read3").then(r => r.json()).then(data => {
   state.data = data
+  connectionCase.replaceChildren()
+  for (const row of data.cases) {
+    connectionCase.add(new Option(row.case_id + (EVIDENCE[row.case_id] ? " · joint frames" : ""), row.case_id))
+  }
+  connectionCase.disabled = false
   prepareUnionExport(data.cases)
   render()
 })
