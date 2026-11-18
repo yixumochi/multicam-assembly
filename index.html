@@ -289,7 +289,22 @@ button, input, select { accent-color: var(--blue); }
   .walk-grid, .pair-motion, .rest-plate { grid-template-columns: 1fr; }
 }
 
-</style><link rel="stylesheet" href="research.css"></head><body>
+</style><link rel="stylesheet" href="research.css"><script>
+if (window.parent !== window && new URLSearchParams(location.search).get('view') === 'case-area') {
+  document.documentElement.dataset.view = 'case-area';
+}
+</script>
+<style>
+html[data-view="case-area"] .masthead,
+html[data-view="case-area"] .page-tabs,
+html[data-view="case-area"] #path-page,
+html[data-view="case-area"] #explorer-body,
+html[data-view="case-area"] .site-head,
+html[data-view="case-area"] #cases-page .page[data-page="overview"] > :not(.survey-card) { display: none !important; }
+html[data-view="case-area"] .workspace,
+html[data-view="case-area"] #cases-page main { width:100%; max-width:none; margin:0; padding:0; }
+html[data-view="case-area"] body { margin:0; }
+</style></head><body>
 <header class="masthead">
   <div class="mast-copy">
     <div class="eyebrow">MultiCam / Research explorer</div>
@@ -905,6 +920,16 @@ document.querySelectorAll("[data-select]").forEach(button => {
     location.hash = button.closest("[data-page]").dataset.page + "/" + button.dataset.select;
   });
 });
+if (document.documentElement.dataset.view === 'case-area') {
+  const areaChart = document.querySelector('#cases-page .survey-card');
+  areaChart.querySelectorAll('a[href^="#"]').forEach(link => {
+    link.target = '_top';
+    link.href = new URL('index.html' + link.hash, location.href).href;
+  });
+  new ResizeObserver(() => {
+    parent.postMessage({type:'case-area-height', height:Math.ceil(areaChart.getBoundingClientRect().height)}, location.origin);
+  }).observe(areaChart);
+}
 document.querySelectorAll("[data-scale]").forEach(button => {
   button.addEventListener("click", () => {
     const scale = button.dataset.scale;
