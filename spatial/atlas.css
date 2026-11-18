@@ -23,6 +23,8 @@
 .atlas-area-group h3 { margin: 0; padding: 8px 12px; background: #f0f6f2; border-radius: 7px 7px 0 0; }
 .atlas-models { margin-top: 22px; }
 .atlas-models > p { padding: 8px 12px 0; }
+.atlas-calibration { padding: 0 12px 12px; color: var(--atlas-muted); }
+.atlas-calibration p { margin: 6px 0; }
 .atlas-identity { display: grid; grid-template-columns: max-content 1fr; align-items: center; gap: 3px 8px; }
 .atlas-identity small { grid-column: 1 / -1; color: var(--atlas-muted); font-size: 11px; line-height: 1.25; }
 .atlas-case-button { justify-self: start; cursor: pointer; font-weight: 650; }

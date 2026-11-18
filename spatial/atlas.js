@@ -2,8 +2,6 @@
   const atlas = document.getElementById("atlas");
   const casePage = new URL("../index.html", location.href);
   const exceptions = {
-    V07: "Model units",
-    V21: "Model units",
     V23: "Footprint from the saved truss",
     V24: "Coverage from the saved local registration",
     V27: "Footprint from rod projection",
@@ -11,7 +9,14 @@
   };
   const sensitivityCases = new Set(["V07", "V21", "V27"]);
   const metric = row => row.unit === "mm_to_m";
-  const unit = row => metric(row) ? "m²" : "model units²";
+  const calibration = row => metric(row) ? undefined : areaCalibration[row.case];
+  const hasMetres = row => metric(row) || Boolean(calibration(row));
+  const unit = row => hasMetres(row) ? "m²" : "model units²";
+  const scale = reference => reference.referenceMetres / reference.bounds[reference.axis];
+  const areaValue = (row, field) => {
+    const reference = calibration(row);
+    return reference ? row[field] * scale(reference) ** 2 : row[field];
+  };
   const format = value => value.toFixed(3);
   const multiplier = row => format(row.ratio_activity_over_object) + "×";
   const caseUrl = row => casePage.href + "#" + row.mode + "/" + row.case;
@@ -41,16 +46,19 @@
 
   function bars(row, maximum) {
     const node = element("div", "atlas-bars");
-    for (const [key, label, value] of [
-      ["footprint", "F", row.object_area_m2],
-      ["activity", "A", row.activity_area_m2]
+    const reference = calibration(row);
+    for (const [key, label, field] of [
+      ["footprint", "F", "object_area_m2"],
+      ["activity", "A", "activity_area_m2"]
     ]) {
+      const value = areaValue(row, field);
       const line = element("div", "atlas-bar-line");
       const track = element("span", "atlas-track");
       const fill = element("span", "atlas-fill " + key);
       fill.style.width = 100 * value / maximum + "%";
       track.append(fill);
-      line.append(element("b", "atlas-bar-label", label), track, element("span", "atlas-value", format(value) + " " + unit(row)));
+      const amount = reference ? "≈" + value.toFixed(reference.digits) : format(value);
+      line.append(element("b", "atlas-bar-label", label), track, element("span", "atlas-value", amount + " " + unit(row)));
       node.append(line);
     }
     return node;
@@ -131,7 +139,9 @@
   }
 
   function start(source, {rows, modes}, registered) {
-    const metricLimit = Math.ceil(Math.max(...rows.filter(metric).flatMap(row => [row.activity_area_m2, row.object_area_m2])) / 20) * 20;
+    const metricLimit = Math.ceil(Math.max(...rows.filter(hasMetres).flatMap(row => [
+      areaValue(row, "activity_area_m2"), areaValue(row, "object_area_m2")
+    ])) / 20) * 20;
     const modelLimit = row => Math.ceil(Math.max(row.activity_area_m2, row.object_area_m2) / 10) * 10;
     const first = atlas.querySelector("#compare-first");
     const second = atlas.querySelector("#compare-second");
@@ -161,7 +171,8 @@
       sourceLink.href = caseUrl(row);
       const identity = element("div", "atlas-identity");
       identity.append(choose, sourceLink);
-      if (exceptions[row.case]) identity.append(element("small", "", exceptions[row.case]));
+      const note = calibration(row)?.label || exceptions[row.case];
+      if (note) identity.append(element("small", "", note));
       wrapper.append(identity, bars(row, maximum), element("b", "atlas-ratio", multiplier(row)));
       return wrapper;
     }
@@ -179,13 +190,26 @@
         areaChart.append(group);
       }
       const models = element("section", "atlas-area-group atlas-models");
-      models.append(element("h3", "", "Cases measured in model units"),
-        element("p", "note", "Each row has its own linear scale in model units². A/F is dimensionless."));
+      models.append(element("h3", "", "Square-metre estimates from published dimensions"),
+        element("p", "note", "Bars use the shared square-metre axis above. The estimates use a single published dimension per reconstructed model. A/F is preserved."));
       for (const row of rows.filter(row => !metric(row))) {
-        const maximum = modelLimit(row);
+        const reference = calibration(row);
+        const maximum = reference ? metricLimit : modelLimit(row);
         const caseRow = areaRow(row, maximum);
-        caseRow.querySelector(".atlas-bars").prepend(axis(maximum, ""));
+        if (!reference) {
+          caseRow.querySelector(".atlas-bars").prepend(axis(maximum, ""));
+          models.append(caseRow);
+          continue;
+        }
+        const dimensions = reference.bounds.map(value => (value * scale(reference)).toFixed(reference.digits || 1));
+        const detail = element("details", "atlas-calibration");
+        const sourceLink = element("a", "", reference.source);
+        sourceLink.href = reference.url;
+        detail.append(element("summary", "", row.case + " scale and source"),
+          element("p", "", `Scaled model bounds (X × Y × Z) ≈ ${dimensions.join(" × ")} m. The conversion uses ${scale(reference).toFixed(4)} m per model unit. Original F ${format(row.object_area_m2)} and A ${format(row.activity_area_m2)} model units² are multiplied by the square of that scale.`),
+          element("p", "", `Rhino source: ${reference.modelFile}. The bounds and area estimates describe the reconstruction.`), sourceLink);
         models.append(caseRow);
+        models.append(detail);
       }
       areaChart.append(models);
     }
@@ -209,7 +233,7 @@
       const areaFinding = pair.every(metric) ? (larger.activity_area_m2 === smaller.activity_area_m2
         ? "Both cases have the same activity area."
         : `${larger.case} covers more area during assembly (${format(larger.activity_area_m2)} vs ${format(smaller.activity_area_m2)} m²).`)
-        : "Model-unit areas use case-specific scales. Compare the dimensionless ratios across cases.";
+        : "The selected comparison includes a literature-scaled area estimate (≈).";
       const ratioFinding = higher.ratio_activity_over_object === lower.ratio_activity_over_object
         ? "Both cases have the same A/F."
         : `${higher.case} has the higher A/F (${multiplier(higher)} vs ${multiplier(lower)}).`;
@@ -232,7 +256,7 @@
         "Area beyond the object requires the intersection of activity coverage with the actual footprint.";
       pair.forEach((row, index) => {
         const card = element("article", "atlas-card");
-        const maximum = metric(row) ? metricLimit : modelLimit(row);
+        const maximum = hasMetres(row) ? metricLimit : modelLimit(row);
         card.append(element("h4", "", row.case + " · A/F " + multiplier(row)), bars(row, maximum), axis(maximum, unit(row)));
         compareBars.append(card);
         plans.append(renderPlan(row, planData[index], shared, layers));
@@ -283,7 +307,7 @@
       const current = median(active.filter(row => row.mode === "human-led").map(row => row.ratio_activity_over_object));
       atlas.querySelector("#atlas-group-note").textContent = checked
         ? `Human-led median A/F moves from ${base.toFixed(2)}× to ${current.toFixed(2)}× with the selected exclusions.`
-        : "The area chart uses the 13 cases with square-metre measurements. The ratio chart includes all 15.";
+        : "The area chart uses the 13 cases with existing metric scales. V07 and V21 are shown separately with literature-scaled estimates. The ratio chart includes all 15.";
     }
 
     renderAreas();
