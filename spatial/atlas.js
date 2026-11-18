@@ -1,5 +1,6 @@
 (() => {
   const atlas = document.getElementById("atlas");
+  const overview = document.getElementById("overview");
   const casePage = new URL("../index.html", location.href);
   const exceptions = {
     V23: "Footprint from the saved truss",
@@ -145,7 +146,7 @@
     const modelLimit = row => Math.ceil(Math.max(row.activity_area_m2, row.object_area_m2) / 10) * 10;
     const first = atlas.querySelector("#compare-first");
     const second = atlas.querySelector("#compare-second");
-    const areaChart = atlas.querySelector("#atlas-areas");
+    const areaChart = overview.querySelector("#atlas-areas");
     const byId = new Map(rows.map(row => [row.case, row]));
     const picked = [first, second];
     for (const select of picked) {
@@ -159,13 +160,19 @@
       const choose = element("button", "atlas-case-button", row.case);
       choose.type = "button";
       choose.dataset.case = row.case;
+      choose.setAttribute("aria-label", "Compare " + row.case + " in Spatial atlas");
       choose.addEventListener("click", () => {
         if (first.value !== row.case && second.value !== row.case) {
           first.value = second.value;
           second.value = row.case;
           renderComparison();
         }
-        atlas.querySelector("#compare-title").scrollIntoView({block:"start"});
+        const focusComparison = () => atlas.querySelector("#compare-title").focus();
+        if (location.hash === "#atlas") focusComparison();
+        else {
+          window.addEventListener("hashchange", focusComparison, {once:true});
+          location.hash = "atlas";
+        }
       });
       const sourceLink = element("a", "atlas-source", "Case sheet ↗");
       sourceLink.href = caseUrl(row);
@@ -184,34 +191,39 @@
       for (const mode of modes) {
         const group = element("section", "atlas-area-group");
         group.append(element("h3", "", mode.title));
-        for (const row of rows.filter(row => row.mode === mode.mode && metric(row)).sort((left, right) => right.activity_area_m2 - left.activity_area_m2)) {
+        const ordered = rows.filter(row => row.mode === mode.mode && hasMetres(row))
+          .sort((left, right) => areaValue(right, "activity_area_m2") - areaValue(left, "activity_area_m2"));
+        for (const row of ordered) {
           group.append(areaRow(row, metricLimit));
+          if (calibration(row)) group.append(calibrationDetails(row));
         }
         areaChart.append(group);
       }
-      const models = element("section", "atlas-area-group atlas-models");
-      models.append(element("h3", "", "Square-metre estimates from published dimensions"),
-        element("p", "note", "Bars use the shared square-metre axis above. The estimates use a single published dimension per reconstructed model. A/F is preserved."));
-      for (const row of rows.filter(row => !metric(row))) {
-        const reference = calibration(row);
-        const maximum = reference ? metricLimit : modelLimit(row);
-        const caseRow = areaRow(row, maximum);
-        if (!reference) {
+      const unscaled = rows.filter(row => !hasMetres(row));
+      if (unscaled.length) {
+        const models = element("section", "atlas-area-group atlas-models");
+        models.append(element("h3", "", "Model-unit cases"));
+        for (const row of unscaled) {
+          const maximum = modelLimit(row);
+          const caseRow = areaRow(row, maximum);
           caseRow.querySelector(".atlas-bars").prepend(axis(maximum, ""));
           models.append(caseRow);
-          continue;
         }
-        const dimensions = reference.bounds.map(value => (value * scale(reference)).toFixed(reference.digits || 1));
-        const detail = element("details", "atlas-calibration");
-        const sourceLink = element("a", "", reference.source);
-        sourceLink.href = reference.url;
-        detail.append(element("summary", "", row.case + " scale and source"),
-          element("p", "", `Scaled model bounds (X × Y × Z) ≈ ${dimensions.join(" × ")} m. The conversion uses ${scale(reference).toFixed(4)} m per model unit. Original F ${format(row.object_area_m2)} and A ${format(row.activity_area_m2)} model units² are multiplied by the square of that scale.`),
-          element("p", "", `Rhino source: ${reference.modelFile}. The bounds and area estimates describe the reconstruction.`), sourceLink);
-        models.append(caseRow);
-        models.append(detail);
+        areaChart.append(models);
       }
-      areaChart.append(models);
+    }
+
+    function calibrationDetails(row) {
+      const reference = calibration(row);
+      const factor = scale(reference);
+      const dimensions = reference.bounds.map(value => (value * factor).toFixed(reference.digits || 1));
+      const detail = element("details", "atlas-calibration");
+      const sourceLink = element("a", "", reference.source);
+      sourceLink.href = reference.url;
+      detail.append(element("summary", "", row.case + " scale and source"),
+        element("p", "", `Scaled model bounds (X × Y × Z) ≈ ${dimensions.join(" × ")} m. The conversion uses ${factor.toFixed(4)} m per model unit. Original F ${format(row.object_area_m2)} and A ${format(row.activity_area_m2)} model units² are multiplied by the square of that scale.`),
+        element("p", "", `Rhino model ${reference.modelFile} supplies the reconstructed geometry used for these estimates.`), sourceLink);
+      return detail;
     }
 
     function renderComparison() {
@@ -318,6 +330,8 @@
     atlas.querySelector("#atlas-sensitive").addEventListener("change", renderGroups);
     atlas.querySelector("#atlas-status").hidden = true;
     atlas.querySelector("#atlas-content").hidden = false;
+    overview.querySelector("#overview-status").hidden = true;
+    overview.querySelector("#overview-content").hidden = false;
   }
 
   async function load() {
@@ -341,6 +355,8 @@
 
   load().catch(error => {
     console.error(error);
-    atlas.querySelector("#atlas-status").textContent = "The case measurements could not be loaded. Reload the page or open the source measurements.";
+    for (const status of [atlas.querySelector("#atlas-status"), overview.querySelector("#overview-status")]) {
+      status.textContent = "Could not load the case measurements. Reload the page to try again.";
+    }
   });
 })();

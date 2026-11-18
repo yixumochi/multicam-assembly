@@ -15,7 +15,7 @@ h3 { margin: 0 0 6px; font-size: 15px; }
 .eyebrow { color: var(--blue); letter-spacing: .12em; text-transform: uppercase; font-size: 11px; font-weight: 700; }
 a { color: var(--blue); }
 main { padding: 14px 28px 40px; max-width: 1240px; }
-.tabs { display: flex; gap: 6px; margin: 12px 0; }
+.tabs { display: flex; flex-wrap: wrap; gap: 6px; margin: 12px 0; }
 .tabs button[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
 button, select { font: inherit; color: var(--ink); background: #fff; border: 1px solid var(--line); border-radius: 6px; padding: 5px 8px; }
 .filters, .title-row, .modes { display: flex; flex-wrap: wrap; gap: 10px 14px; align-items: end; }
@@ -57,12 +57,24 @@ details summary { cursor: pointer; color: var(--blue); }
 </header>
 <main>
   <nav class="tabs" aria-label="Sections">
-    <button type="button" data-tab="atlas" aria-pressed="true">Spatial atlas</button>
-    <button type="button" data-tab="overview" aria-pressed="false">Area overview · E/F</button>
+    <button type="button" data-tab="overview" aria-pressed="true">Area overview</button>
+    <button type="button" data-tab="atlas" aria-pressed="false">Spatial atlas</button>
+    <button type="button" data-tab="union" aria-pressed="false">Part-track union · E/F</button>
     <button type="button" data-tab="connection" aria-pressed="false">Connection</button>
   </nav>
 
-  <section id="overview" hidden><div class="study"><h2>Object and part-track union (E/F)</h2><p>F is the authored object footprint. M is the part-track hull coverage. E is the union of F and M, with overlap counted once. Nine cases have comparable metric unions.</p><p>The <a href="#atlas">Spatial atlas</a> compares the object footprint with the saved activity coverage for all 15 cases.</p></div>
+  <section id="overview" class="case-area" aria-labelledby="overview-title">
+    <h2 id="overview-title">Object footprint and assembly activity</h2>
+    <p>Compare the object footprint (F) and tracked assembly activity coverage (A) for all 15 cases on a shared square-metre axis. A/F is the activity-to-footprint ratio. V07 and V21 are marked ≈ because their metric scales come from published dimensions.</p>
+    <p><a href="../index.html#overview">Source measurements in Fifteen assembly cases</a> · <a href="#atlas">Compare two cases in Spatial atlas</a></p>
+    <p id="overview-status" role="status">Loading the 15 case measurements…</p>
+    <div id="overview-content" hidden>
+      <div class="atlas-key" aria-label="Area legend"><span class="footprint">Object footprint (F)</span><span class="activity">Activity coverage (A)</span></div>
+      <div id="atlas-areas"></div>
+    </div>
+  </section>
+
+  <section id="union" hidden><div class="study"><h2>Object and part-track union (E/F)</h2><p>F is the authored object footprint. M is the part-track hull coverage. E is the union of F and M, with overlap counted once. Nine cases have comparable metric unions.</p><p><a href="#overview">See footprint and activity coverage for all 15 cases</a></p></div>
     <div class="filters">
       <label>Case mode<select id="mode"><option>All</option><option>Manual</option><option>Mixed</option><option>Robot</option></select></label>
     </div>
@@ -79,15 +91,13 @@ details summary { cursor: pointer; color: var(--blue); }
     <p><a href="spatial_scatter.svg">Scatter SVG</a> · <a href="spatial_scatter.png">Scatter PNG</a> · <a href="spatial_ratio.svg">E/F SVG</a> · <a href="spatial_ratio.png">E/F PNG</a> · <a href="case_area_comparison.csv">CSV with explicit measurement scope</a></p>
   </section>
 
-  <section id="atlas" aria-labelledby="atlas-title">
-    <h2 id="atlas-title">Object footprint and assembly activity</h2>
-    <p>Compare the finished object footprint (F) with the saved activity coverage (A). A/F shows how large that coverage is relative to the object. <a href="../index.html#overview">Source measurements in Fifteen assembly cases</a></p>
+  <section id="atlas" class="case-area" aria-labelledby="atlas-title" hidden>
+    <h2 id="atlas-title">Spatial atlas</h2>
+    <p>Compare two cases side by side and inspect their activity layers. <a href="#overview">View all 15 cases in Area overview</a></p>
     <p id="atlas-status" role="status">Loading the 15 case measurements…</p>
     <div id="atlas-content" hidden>
-      <div class="atlas-key" aria-label="Area legend"><span class="footprint">Object footprint (F)</span><span class="activity">Activity coverage (A)</span></div>
-      <div id="atlas-areas"></div>
       <section class="atlas-section" aria-labelledby="compare-title">
-        <h3 id="compare-title">Compare two cases</h3>
+        <h3 id="compare-title" tabindex="-1">Compare two cases</h3>
         <div class="atlas-controls">
           <label for="compare-first">First case<select id="compare-first"></select></label>
           <label for="compare-second">Second case<select id="compare-second"></select></label>
@@ -105,7 +115,7 @@ details summary { cursor: pointer; color: var(--blue); }
       </section>
       <section class="atlas-section" aria-labelledby="groups-title">
         <h3 id="groups-title">Compare assembly modes</h3>
-        <label class="atlas-toggle"><input id="atlas-sensitive" type="checkbox"> Exclude V07, V21 (model units) and V27 (rod projection)</label>
+        <label class="atlas-toggle"><input id="atlas-sensitive" type="checkbox"> Exclude V07, V21 (literature-based scales) and V27 (rod projection)</label>
         <p class="note">Dots show individual cases. The diamond marks the group median.</p>
         <div id="atlas-groups" class="atlas-pair"></div>
         <p id="atlas-group-note" aria-live="polite"></p>
@@ -128,15 +138,15 @@ const UNION = new Set(["V01", "V04", "V06", "V11", "V20", "V22", "V26", "V29", "
 const MODE = { V01:"Manual", V06:"Manual", V07:"Manual", V11:"Manual", V20:"Manual", V04:"Mixed", V21:"Mixed", V22:"Mixed", V27:"Mixed", V29:"Mixed", V23:"Robot", V24:"Robot", V26:"Robot", V28:"Robot", V30:"Robot" }
 const COLOR = { Manual:"#e87c3a", Mixed:"#12627d", Robot:"#2f6f86" }
 const EXCLUDE = {
-  V07: "Rhino unit is None. Footprint 15.843 and envelope 40.772 stay in model units and are not converted to m².",
-  V21: "Rhino unit is None. Footprint 9.514 and envelope 32.633 stay in model units. The rebuild record leaves absolute scale unresolved.",
+  V07: "This union analysis uses the saved model-unit geometry. The Area overview includes the literature-scaled F and A estimates.",
+  V21: "This union analysis uses the saved model-unit geometry. The Area overview includes the literature-scaled F and A estimates.",
   V23: "Saved footprint 47.806 m² and track coverage 53.239 m². The saved top is one truss, and that solid was not on the same plan box as the tracks, so F∪M was not computed.",
   V24: "Saved footprint 2.128 m² and track coverage 6.826 m². The registration did not pass the union check, so this is not an F∪M measurement.",
   V27: "Footprint 1.823 m² is the rod projection. Track coverage is 20.446 m². Up-facing faces do not meet the part-track plan, so the union is empty.",
   V28: "Saved footprint 3.915 m² and track coverage 23.818 m². The shelter plan is rotated relative to the saved object box, so the union was not taken."
 }
 const BASIS = "F is the plan area of up-facing faces of the authored solid. Millimetre files are divided by 1,000. M is the union of convex hulls of saved part-track points on that fitted plan. A hull is the spread of those points, not a swept body, and it does not include workers, tools, or robot bodies. E is the raster union of F and M; overlap is counted once. A square-metre figure is the file scale, not a site survey."
-const state = { data: null, mode: "All", selected: null, tab: "atlas", hover: null }
+const state = { data: null, mode: "All", selected: null, tab: "overview", hover: null }
 const svgNS = "http://www.w3.org/2000/svg"
 
 function modeOf(row) { return MODE[row.case_id] }
@@ -392,7 +402,7 @@ function renderConnection() {
   title.textContent = item ? item.case_id + " · " + modeOf(item) : "Select a case"
   root.append(title)
   if (!item) {
-    const p = document.createElement("p"); p.className = "note"; p.textContent = "Select a case in the area overview to inspect its connection record."
+    const p = document.createElement("p"); p.className = "note"; p.textContent = "Select a case in Part-track union to inspect its connection record."
     root.append(p)
   } else {
     const svg = document.createElementNS(svgNS, "svg")
@@ -453,7 +463,7 @@ function select(id, open) {
 function setTab(name) {
   state.tab = name
   document.querySelectorAll(".tabs button").forEach(button => button.setAttribute("aria-pressed", String(button.dataset.tab === name)))
-  ;["overview", "atlas", "connection"].forEach(id => document.getElementById(id).hidden = id !== name)
+  ;["overview", "atlas", "union", "connection"].forEach(id => document.getElementById(id).hidden = id !== name)
   render()
 }
 function render() {
@@ -474,7 +484,7 @@ function openSpatialRoute() {
     setTab("connection")
     return
   }
-  setTab(["overview", "connection"].includes(id) ? id : "atlas")
+  setTab(["atlas", "union", "connection"].includes(id) ? id : "overview")
 }
 window.addEventListener("hashchange", openSpatialRoute)
 openSpatialRoute()
