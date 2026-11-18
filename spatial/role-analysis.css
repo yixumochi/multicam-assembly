@@ -1,0 +1,39 @@
+#roles-content { max-width: 1000px; }
+.role-controls { display: flex; align-items: end; flex-wrap: wrap; gap: 10px 20px; margin: 14px 0 8px; }
+.role-controls select { min-width: 120px; font-size: 14px; }
+.role-row { display: grid; grid-template-columns: 66px repeat(3,minmax(0,1fr)) 78px; align-items: center; gap: 12px; padding: 3px 8px; }
+.role-header { color: var(--muted); font-size: 13px; font-weight: 650; }
+.role-mode { margin: 12px 0 20px; border-top: 1px solid var(--atlas-line); }
+.role-mode h3 { margin-top: 10px; font-size: 17px; }
+.role-interpretation { display: flex; align-items: baseline; flex-wrap: wrap; gap: 5px 10px; margin-bottom: 8px; }
+.role-interpretation p { margin: 0; max-width: 76ch; }
+.role-example { cursor: pointer; color: var(--blue); font-size: 12px; }
+.role-cell { display: grid; grid-template-columns: minmax(0,1fr) 52px; gap: 8px; align-items: center; }
+.role-key::before { content: ""; display: inline-block; width: 7px; height: 7px; margin-right: 5px; border-radius: 50%; background: var(--role-color); }
+.role-human { --role-color:#b95314; }
+.role-machine { --role-color:#2678a0; }
+.role-part { --role-color:#237c5f; }
+.role-axis { height: 1px; position: relative; background: var(--atlas-line); }
+.role-mark { position: absolute; top: 50%; left: var(--position); transform: translate(-50%,-50%); width: 7px; height: 7px; border-radius: 50%; background: var(--role-color); }
+.role-median { background: #eaf2ed; font-weight: 650; }
+.role-median .role-mark { border-radius: 0; transform: translate(-50%,-50%) rotate(45deg); }
+.role-total, .role-number { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.role-number, .role-total { font-size: 12px; }
+.role-case-label { justify-self: start; font-size: 12px; padding: 4px 7px; }
+button.role-case-label { cursor: pointer; color: var(--blue); }
+button.role-case-label[aria-pressed="true"] { border-color: var(--atlas-accent); background: #e4f2eb; color: #194a3c; }
+.role-detail { font-variant-numeric: tabular-nums; }
+#roles-plan-drawing { max-width: 760px; }
+#roles-plan-drawing .atlas-card svg { max-height: 510px; }
+#roles-plan-drawing svg .role-highlight { stroke: #142f37; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+#roles-plan-drawing svg .role-endpoint { fill: #142f37; stroke: #fff; stroke-width: 1.5; vector-effect: non-scaling-stroke; }
+#roles-plan-drawing svg .role-endpoint-label { fill: #fff; font-weight: 700; }
+.role-method { margin-top: 18px; }
+.role-method p { max-width: 80ch; }
+@media (max-width: 620px) {
+  .role-row { grid-template-columns: 55px repeat(3,minmax(0,1fr)) 57px; gap: 8px; padding-inline: 4px; }
+  .role-cell { grid-template-columns: minmax(0,1fr); gap: 4px; }
+  .role-number { text-align: left; }
+  .role-header, .role-total { font-size: 11px; }
+  .role-axis { margin-inline: 4px; }
+}

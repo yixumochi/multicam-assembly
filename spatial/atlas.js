@@ -82,7 +82,7 @@
     return {plan, data, viewBox, metres: nativeMetresPerPixel(row, data, granted)};
   }
 
-  function renderPlan(row, {plan, data, viewBox, metres}, shared, layers) {
+  function renderPlan(row, {plan, data, viewBox, metres}, shared, layers, highlighted) {
     const panel = element("article", "atlas-card");
     const link = element("a", "", row.case + " case sheet");
     link.href = caseUrl(row);
@@ -118,6 +118,23 @@
         x:Math.min(minX,maxX), y:Math.min(minY,maxY), width:Math.abs(maxX-minX), height:Math.abs(maxY-minY),
         fill:"none", stroke:"#193f4d", "stroke-dasharray":"5 3"
       }));
+    }
+    if (highlighted) {
+      const points = highlighted.line;
+      const radius = Math.min(width, height) * 0.023;
+      geometry.append(svgElement("polyline", {
+        points:coordinates(points), class:"role-highlight", fill:"none"
+      }));
+      for (const [index, point] of [points[0], points.at(-1)].entries()) {
+        const [x, y] = point;
+        geometry.append(svgElement("circle", {cx:x, cy:y, r:radius, class:"role-endpoint"}));
+        const number = svgElement("text", {
+          x, y, "dominant-baseline":"central", "text-anchor":"middle", "font-size":radius * 1.15,
+          class:"role-endpoint-label"
+        });
+        number.textContent = index + 1;
+        geometry.append(number);
+      }
     }
     canvas.append(geometry);
     if (shared) {
@@ -332,6 +349,17 @@
     atlas.querySelector("#atlas-content").hidden = false;
     overview.querySelector("#overview-status").hidden = true;
     overview.querySelector("#overview-content").hidden = false;
+    const planCache = new Map();
+    initializeSpatialRoles({
+      rows, modes, median, caseUrl,
+      showPlan(row, role, selectTrack) {
+        if (!planCache.has(row.case)) planCache.set(row.case, getPlan(source, row, registered));
+        const plan = planCache.get(row.case);
+        const track = selectTrack(plan.data.actions.filter(action => action.role === role), plan.viewBox);
+        return {drawing: renderPlan(row, plan, null, new Set([role]), track), track};
+      },
+      frameUrl: name => name ? new URL(name, casePage).href : null
+    });
   }
 
   async function load() {
@@ -355,7 +383,7 @@
 
   load().catch(error => {
     console.error(error);
-    for (const status of [atlas.querySelector("#atlas-status"), overview.querySelector("#overview-status")]) {
+    for (const status of [atlas.querySelector("#atlas-status"), overview.querySelector("#overview-status"), document.getElementById("roles-status")]) {
       status.textContent = "Could not load the case measurements. Reload the page to try again.";
     }
   });

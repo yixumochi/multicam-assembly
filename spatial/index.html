@@ -43,9 +43,11 @@ details summary { cursor: pointer; color: var(--blue); }
 @media (max-width: 640px) { .row, .shots { grid-template-columns: 1fr; } main, header { padding-left: 12px; padding-right: 12px; } }
 </style>
 <link rel="stylesheet" href="../research.css">
-<link rel="stylesheet" href="atlas.css">
+<link rel="stylesheet" href="atlas.css?v=roles1">
+<link rel="stylesheet" href="role-analysis.css">
 <script src="area-calibration.js" defer></script>
-<script src="atlas.js" defer></script>
+<script src="role-analysis.js" defer></script>
+<script src="atlas.js?v=roles1" defer></script>
 </head>
 <body>
 <header>
@@ -57,16 +59,57 @@ details summary { cursor: pointer; color: var(--blue); }
 </header>
 <main>
   <nav class="tabs" aria-label="Sections">
-    <button type="button" data-tab="overview" aria-pressed="true">Area overview</button>
+    <button type="button" data-tab="roles" aria-pressed="true">Spatial roles</button>
+    <button type="button" data-tab="overview" aria-pressed="false">Area overview</button>
     <button type="button" data-tab="atlas" aria-pressed="false">Spatial atlas</button>
     <button type="button" data-tab="union" aria-pressed="false">Part-track union · E/F</button>
     <button type="button" data-tab="connection" aria-pressed="false">Connection</button>
   </nav>
 
-  <section id="overview" class="case-area" aria-labelledby="overview-title">
+  <section id="roles" class="case-area" aria-labelledby="roles-title">
+    <h2 id="roles-title">Who uses the space during assembly?</h2>
+    <p>Compare where people, machines and parts move across 15 cases. Select a case to trace those roles on its original plan.</p>
+    <p id="roles-status" role="status">Loading the role areas…</p>
+    <div id="roles-content" hidden>
+      <div class="role-controls">
+        <label for="roles-denominator">Compare each role with
+          <select id="roles-denominator">
+            <option value="activity">Assembly activity area A (%)</option>
+            <option value="footprint">Finished object footprint F (×)</option>
+          </select>
+        </label>
+        <a href="#role-plan" id="roles-plan-link">Jump to the selected plan ↓</a>
+      </div>
+      <p class="note" id="roles-basis"></p>
+      <div id="roles-chart"></div>
+      <section id="role-plan" class="atlas-section" aria-labelledby="role-plan-title">
+        <h3 id="role-plan-title" tabindex="-1">Read the plan</h3>
+        <div class="role-controls">
+          <label for="roles-case">Case <select id="roles-case"></select></label>
+          <label for="roles-layer">Highlight
+            <select id="roles-layer">
+              <option value="human">Human</option>
+              <option value="machine">Machine</option>
+              <option value="part">Parts</option>
+            </select>
+          </label>
+        </div>
+        <p id="roles-detail" class="role-detail" aria-live="polite"></p>
+        <div id="roles-plan-drawing"></div>
+        <p id="roles-plan-note" class="note"></p>
+      </section>
+      <details class="role-method"><summary>How to read the areas</summary>
+        <p>A is the saved total assembly activity area. F is the finished object’s plan footprint. The three role areas can overlap, so coverage percentages can total more than 100%. Group medians describe the five recorded cases in each assembly mode. Ratios are dimensionless. The V27 footprint uses a rod projection.</p>
+        <p>The highlighted track is the selected role’s largest saved straight-line displacement from start to end in plan coordinates. These points locate a recorded movement. Design questions about access, clearance, or handoff call for checking the full sequence.</p>
+        <p><a href="../index.html#analysis">Fifteen assembly cases · source values</a></p>
+      </details>
+    </div>
+  </section>
+
+  <section id="overview" class="case-area" aria-labelledby="overview-title" hidden>
     <h2 id="overview-title">Object footprint and assembly activity</h2>
     <p>Compare the object footprint (F) and tracked assembly activity coverage (A) for all 15 cases on a shared square-metre axis. A/F is the activity-to-footprint ratio. V07 and V21 are marked ≈ because their metric scales come from published dimensions.</p>
-    <p><a href="../index.html#overview">Source measurements in Fifteen assembly cases</a> · <a href="#atlas">Compare two cases in Spatial atlas</a></p>
+    <p><a href="#roles">See how people, machines and parts use the space</a> · <a href="#atlas">Compare two cases in Spatial atlas</a> · <a href="../index.html#overview">Source measurements in Fifteen assembly cases</a></p>
     <p id="overview-status" role="status">Loading the 15 case measurements…</p>
     <div id="overview-content" hidden>
       <div class="atlas-key" aria-label="Area legend"><span class="footprint">Object footprint (F)</span><span class="activity">Activity coverage (A)</span></div>
@@ -74,7 +117,7 @@ details summary { cursor: pointer; color: var(--blue); }
     </div>
   </section>
 
-  <section id="union" hidden><div class="study"><h2>Object and part-track union (E/F)</h2><p>All 15 assembly cases are shown. Solid points are the nine registered metric results. Hollow points use published dimensions to scale two saved unions. Lines show the four possible ranges where the overlap is unknown.</p><p>F is the object footprint. M is the part-track coverage. E is their union. For the four ranges, the lower bound assumes maximum overlap and the upper bound assumes no overlap. <a href="#overview">See footprint and assembly activity coverage for all 15 cases</a></p></div>
+  <section id="union" hidden><div class="study"><h2>Object and part-track union (E/F)</h2><p>All 15 assembly cases are shown. Solid points are the nine registered metric results. Hollow points use published dimensions to scale two saved unions. Lines show the four possible ranges where the overlap is unknown.</p><p>F is the object footprint. M is the part-track coverage. E is their union. For the four ranges, the lower bound assumes maximum overlap and the upper bound assumes no overlap. <a href="#roles">Explore human, machine and part coverage</a>.</p></div>
     <div class="filters">
       <label>Case mode<select id="mode"><option>All</option><option>Manual</option><option>Mixed</option><option>Robot</option></select></label>
     </div>
@@ -147,7 +190,7 @@ const EXCLUDE = {
   V28: "Saved footprint 3.915 m² and track coverage 23.818 m². The shelter plan is rotated relative to the saved object box, so the union was not taken."
 }
 const BASIS = "F is the plan area of up-facing faces of the authored solid. Millimetre files are divided by 1,000. M is the union of convex hulls of saved part-track points on that fitted plan. A hull is the spread of those points, not a swept body, and it does not include workers, tools, or robot bodies. E is the raster union of F and M; overlap is counted once. A square-metre figure is the file scale, not a site survey."
-const state = { data: null, mode: "All", selected: null, tab: "overview", hover: null }
+const state = { data: null, mode: "All", selected: null, tab: "roles", hover: null }
 const svgNS = "http://www.w3.org/2000/svg"
 
 function modeOf(row) { return MODE[row.case_id] }
@@ -513,7 +556,7 @@ function select(id, open) {
 function setTab(name) {
   state.tab = name
   document.querySelectorAll(".tabs button").forEach(button => button.setAttribute("aria-pressed", String(button.dataset.tab === name)))
-  ;["overview", "atlas", "union", "connection"].forEach(id => document.getElementById(id).hidden = id !== name)
+  ;["roles", "overview", "atlas", "union", "connection"].forEach(id => document.getElementById(id).hidden = id !== name)
   render()
 }
 function render() {
@@ -544,7 +587,7 @@ function openSpatialRoute() {
     setTab("connection")
     return
   }
-  setTab(["atlas", "union", "connection"].includes(id) ? id : "overview")
+  setTab(["overview", "atlas", "union", "connection"].includes(id) ? id : "roles")
 }
 window.addEventListener("hashchange", openSpatialRoute)
 openSpatialRoute()
