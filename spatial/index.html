@@ -44,10 +44,10 @@ details summary { cursor: pointer; color: var(--blue); }
 </style>
 <link rel="stylesheet" href="../research.css">
 <link rel="stylesheet" href="atlas.css?v=guide2">
-<link rel="stylesheet" href="role-analysis.css">
+<link rel="stylesheet" href="role-analysis.css?v=atlas3">
 <script src="area-calibration.js" defer></script>
-<script src="role-analysis.js?v=guide2" defer></script>
-<script src="atlas.js?v=guide2" defer></script>
+<script src="role-analysis.js?v=atlas3" defer></script>
+<script src="atlas.js?v=atlas3" defer></script>
 </head>
 <body>
 <header>
@@ -67,26 +67,30 @@ details summary { cursor: pointer; color: var(--blue); }
 
   <section id="roles" class="case-area" aria-labelledby="roles-title">
     <h2 id="roles-title">Who uses the space during assembly?</h2>
-    <p>Where do people, machines and parts move during assembly? Start with one row, then follow one movement on the plan.</p>
-    <ol class="reading-steps">
-      <li><b>Read across one case.</b> A number like 58% means the tracked people covered 58% of the recorded activity area. People and parts can use the same space.</li>
-      <li><b>Read down one column.</b> Each group has five cases. The median is the middle value. Use it to spot cases that differ.</li>
-      <li><b>Open a plan.</b> Shading shows the selected role’s tracked coverage. <b>1 = START</b> and <b>2 = END</b> of the same recorded movement. The dark line follows its path.</li>
-    </ol>
+    <p>Each row represents a case. Its circles sit in the column for its assembly mode. Click a row to see where those activities took place on the plan.</p>
     <p class="spatial-takeaway"><b>What to take away.</b> Parts cover the most ground in 13 of the 15 recorded cases. Start the layout with room to bring in and turn parts. Then check the exceptions, such as people in V27 and machines in V26.</p>
     <p id="roles-status" role="status">Loading the role areas…</p>
     <div id="roles-content" hidden>
       <div class="role-controls">
-        <label for="roles-denominator">Compare each role with
+        <label for="roles-denominator">Size the circles by
           <select id="roles-denominator">
+            <option value="area">Recorded coverage (m²)</option>
             <option value="activity">Assembly activity area A (%)</option>
             <option value="footprint">Finished object footprint F (×)</option>
           </select>
         </label>
         <a href="#role-plan" id="roles-plan-link">Jump to the selected plan ↓</a>
       </div>
+      <fieldset id="roles-area-layers" class="role-area-layers">
+        <legend>Area layers</legend>
+        <label class="role-swatch role-human"><input type="checkbox" value="human" checked> Human</label>
+        <label class="role-swatch role-machine"><input type="checkbox" value="machine" checked> Robot / machine</label>
+        <label class="role-swatch role-part"><input type="checkbox" value="part" checked> Parts</label>
+        <label class="role-swatch role-activity"><input type="checkbox" value="activity" checked> Total activity</label>
+      </fieldset>
       <p class="note" id="roles-basis"></p>
       <div id="roles-chart"></div>
+      <details class="role-method"><summary>Group medians, case values and examples</summary><div id="roles-case-values"></div></details>
       <section id="role-plan" class="atlas-section" aria-labelledby="role-plan-title">
         <h3 id="role-plan-title" tabindex="-1">Read the plan</h3>
         <div class="role-controls">
@@ -119,7 +123,7 @@ details summary { cursor: pointer; color: var(--blue); }
     <div class="filters">
       <label>Case mode<select id="mode"><option>All</option><option>Manual</option><option>Mixed</option><option>Robot</option></select></label>
     </div>
-    <p class="note">Left shows footprint versus combined area. Right shows how many finished footprints the combined area covers. Select a case to open its connection record.</p>
+    <p class="note">Left shows footprint versus combined area. Right shows how many finished footprints the combined area covers. <a href="#roles">See all 15 cases as layered area circles</a>.</p>
     <div class="charts">
       <div class="plot"><svg id="scatter" viewBox="0 0 760 520"></svg></div>
       <div class="plot"><svg id="ratio" viewBox="0 0 360 520"></svg></div>

@@ -256,7 +256,7 @@
     atlas.querySelector("#atlas-content").hidden = false;
     const planCache = new Map();
     initializeSpatialRoles({
-      rows, modes, median, caseUrl,
+      rows, modes, median, caseUrl, areaValue, calibration,
       showPlan(row, role, selectTrack) {
         if (!planCache.has(row.case)) planCache.set(row.case, getPlan(source, row, registered));
         const plan = planCache.get(row.case);
