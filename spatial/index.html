@@ -74,7 +74,7 @@ details summary { cursor: pointer; color: var(--blue); }
     </div>
   </section>
 
-  <section id="union" hidden><div class="study"><h2>Object and part-track union (E/F)</h2><p>F is the authored object footprint. M is the part-track hull coverage. E is the union of F and M, with overlap counted once. Nine cases have comparable metric unions.</p><p><a href="#overview">See footprint and activity coverage for all 15 cases</a></p></div>
+  <section id="union" hidden><div class="study"><h2>Object and part-track union (E/F)</h2><p>All 15 assembly cases are shown. Solid points are the nine registered metric results. Hollow points use published dimensions to scale two saved unions. Lines show the four possible ranges where the overlap is unknown.</p><p>F is the object footprint. M is the part-track coverage. E is their union. For the four ranges, the lower bound assumes maximum overlap and the upper bound assumes no overlap. <a href="#overview">See footprint and assembly activity coverage for all 15 cases</a></p></div>
     <div class="filters">
       <label>Case mode<select id="mode"><option>All</option><option>Manual</option><option>Mixed</option><option>Robot</option></select></label>
     </div>
@@ -88,7 +88,8 @@ details summary { cursor: pointer; color: var(--blue); }
       <summary id="count">Comparable cases</summary>
       <div id="who-body"></div>
     </details>
-    <p><a href="spatial_scatter.svg">Scatter SVG</a> · <a href="spatial_scatter.png">Scatter PNG</a> · <a href="spatial_ratio.svg">E/F SVG</a> · <a href="spatial_ratio.png">E/F PNG</a> · <a href="case_area_comparison.csv">CSV with explicit measurement scope</a></p>
+    <p><a id="union-export" download="part-track-union-15-cases.csv">Download all 15 cases as CSV</a></p>
+    <details><summary>Original nine-case figures and source data</summary><p><a href="spatial_scatter.svg">Scatter SVG</a> · <a href="spatial_scatter.png">Scatter PNG</a> · <a href="spatial_ratio.svg">E/F SVG</a> · <a href="spatial_ratio.png">E/F PNG</a> · <a href="case_area_comparison.csv">Source CSV</a></p></details>
   </section>
 
   <section id="atlas" class="case-area" aria-labelledby="atlas-title" hidden>
@@ -142,7 +143,7 @@ const EXCLUDE = {
   V21: "This union analysis uses the saved model-unit geometry. The Area overview includes the literature-scaled F and A estimates.",
   V23: "Saved footprint 47.806 m² and track coverage 53.239 m². The saved top is one truss, and that solid was not on the same plan box as the tracks, so F∪M was not computed.",
   V24: "Saved footprint 2.128 m² and track coverage 6.826 m². The registration did not pass the union check, so this is not an F∪M measurement.",
-  V27: "Footprint 1.823 m² is the rod projection. Track coverage is 20.446 m². Up-facing faces do not meet the part-track plan, so the union is empty.",
+  V27: "Footprint 1.823 m² is the rod projection. Track coverage is 20.446 m². The available plans do not establish how much the footprints overlap.",
   V28: "Saved footprint 3.915 m² and track coverage 23.818 m². The shelter plan is rotated relative to the saved object box, so the union was not taken."
 }
 const BASIS = "F is the plan area of up-facing faces of the authored solid. Millimetre files are divided by 1,000. M is the union of convex hulls of saved part-track points on that fitted plan. A hull is the spread of those points, not a swept body, and it does not include workers, tools, or robot bodies. E is the raster union of F and M; overlap is counted once. A square-metre figure is the file scale, not a site survey."
@@ -152,7 +153,38 @@ const svgNS = "http://www.w3.org/2000/svg"
 function modeOf(row) { return MODE[row.case_id] }
 function colorOf(row) { return COLOR[modeOf(row)] }
 function shown() { return state.data.cases.filter(row => state.mode === "All" || modeOf(row) === state.mode) }
-function comparable(rows) { return rows.filter(row => UNION.has(row.case_id) && row.area_unit === "m2" && row.envelope_area > 0 && row.final_footprint_area > 0) }
+function unionResult(row) {
+  const footprint = row.final_footprint_area
+  if (UNION.has(row.case_id)) {
+    return {footprint, low: row.envelope_area, high: row.envelope_area, method: "Registered metric union"}
+  }
+  const reference = areaCalibration[row.case_id]
+  if (reference) {
+    const squareScale = (reference.referenceMetres / reference.bounds[reference.axis]) ** 2
+    const envelope = row.envelope_area * squareScale
+    return {footprint: footprint * squareScale, low: envelope, high: envelope, method: "Literature-scaled union"}
+  }
+  const motion = row.motion_hull_area
+  return {footprint, low: Math.max(footprint, motion), high: footprint + motion, method: "Bounds from saved footprint and part-track coverage"}
+}
+function spanLabel(low, high, suffix) {
+  return fmt(low) + (high === low ? "" : "–" + fmt(high)) + suffix
+}
+function selectMark(mark, row) {
+  mark.style.cursor = "pointer"
+  mark.setAttribute("tabindex", "0")
+  mark.setAttribute("role", "button")
+  mark.setAttribute("aria-label", row.case_id + " connection record")
+  mark.addEventListener("pointerenter", () => { state.hover = row.case_id; renderReadout() })
+  mark.addEventListener("focus", () => { state.hover = row.case_id; renderReadout() })
+  mark.addEventListener("click", () => select(row.case_id, true))
+  mark.addEventListener("keydown", event => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault()
+      select(row.case_id, true)
+    }
+  })
+}
 function el(name, attrs, text) {
   const node = document.createElementNS(svgNS, name)
   Object.entries(attrs || {}).forEach(([key, value]) => node.setAttribute(key, value))
@@ -169,7 +201,6 @@ function pointsOf(poly, box, frame) {
   return poly.map(p => (frame.x + (p[0] - box.x0) * frame.scale).toFixed(1) + "," + (frame.y + frame.h - (p[1] - box.y0) * frame.scale).toFixed(1)).join(" ")
 }
 function fmt(n) { return n == null ? "—" : Number(n).toFixed(2) }
-function unitOf(row) { return row.area_unit === "m2" ? "m²" : "model unit²" }
 
 function logTicks(lo, hi) {
   const marks = []
@@ -186,20 +217,18 @@ function tickLabel(value) { return value >= 10 ? String(Math.round(value)) : Str
 function renderScatter() {
   const plot = document.getElementById("scatter")
   plot.replaceChildren()
-  const rows = comparable(shown())
+  const rows = shown()
   plot.append(el("text", { x: 58, y: 22, "font-size": 12, fill: "#4e6665" }, "Log scale"))
   const legend = [["Manual", 470], ["Mixed", 545], ["Robot", 620]]
   legend.forEach(([name, x]) => {
     plot.append(el("circle", { cx: x, cy: 18, r: 5, fill: COLOR[name] }))
     plot.append(el("text", { x: x + 8, y: 22, "font-size": 11, fill: "#17363b" }, name))
   })
-  plot.append(el("text", { x: 470, y: 38, "font-size": 10, fill: "#4e6665" }, "Case-mode labels"))
-  if (!rows.length) {
-    plot.append(el("text", { x: 58, y: 80, "font-size": 13, fill: "#17363b" }, "No comparable metre cases in this filter."))
-    return
-  }
-  const xs = rows.map(row => row.final_footprint_area)
-  const ys = rows.map(row => row.envelope_area)
+  plot.append(el("text", { x: 58, y: 38, "font-size": 11, fill: "#4e6665" }, "● Registered   ○ Literature-scaled   │ Range"))
+  if (!rows.length) return
+  const results = rows.map(unionResult)
+  const xs = results.map(result => result.footprint)
+  const ys = results.flatMap(result => [result.low, result.high])
   const xLo = Math.min(...xs) * 0.82, xHi = Math.max(...xs) * 1.18
   const yLo = Math.min(...ys) * 0.82, yHi = Math.max(...ys) * 1.12
   const L = 64, R = 730, T = 52, B = 458
@@ -218,7 +247,7 @@ function renderScatter() {
     plot.append(el("text", { x: L - 8, y: Y(value) + 4, "text-anchor": "end", "font-size": 11, fill: "#4e6665" }, tickLabel(value)))
   })
   const factors = [1, 2, 5, 10, 20, 50].filter(factor => factor * xLo < yHi && factor * xHi > yLo)
-  const pointPx = rows.map(row => [X(row.final_footprint_area), Y(row.envelope_area)])
+  const pointPx = results.map(result => [X(result.footprint), Y(Math.sqrt(result.low * result.high))])
   factors.forEach(factor => {
     const hits = []
     const yAt = x => factor * x
@@ -244,11 +273,12 @@ function renderScatter() {
     }, "E/F = " + factor + "×"))
   })
   plot.append(el("text", { x: (L + R) / 2, y: 502, "text-anchor": "middle", "font-size": 13, fill: "#17363b" }, "Final footprint, F (m²)"))
-  plot.append(el("text", { x: 16, y: (T + B) / 2, transform: "rotate(-90 16 " + ((T + B) / 2) + ")", "text-anchor": "middle", "font-size": 13, fill: "#17363b" }, "Recorded envelope, E (m²)"))
+  plot.append(el("text", { x: 16, y: (T + B) / 2, transform: "rotate(-90 16 " + ((T + B) / 2) + ")", "text-anchor": "middle", "font-size": 13, fill: "#17363b" }, "Union area, E (m²)"))
   const placed = []
   const spots = [[12, -12], [12, 16], [-36, -12], [-36, 16], [12, -28], [-36, 28], [28, -4], [-52, -4], [12, 32], [-36, -28]]
-  rows.forEach(row => {
-    const cx = X(row.final_footprint_area), cy = Y(row.envelope_area)
+  rows.forEach((row, index) => {
+    const {low, high} = results[index]
+    const [cx, cy] = pointPx[index]
     let best = [cx + 12, cy - 12], bestScore = -1
     spots.forEach(([dx, dy]) => {
       const lx = Math.max(L + 8, Math.min(R - 36, cx + dx))
@@ -258,46 +288,60 @@ function renderScatter() {
     })
     const [lx, ly] = best
     placed.push([lx, ly])
-    const dot = el("circle", { cx, cy, r: state.selected === row.case_id ? 7 : 5, fill: colorOf(row) })
-    dot.style.cursor = "pointer"
-    dot.addEventListener("pointerenter", () => { state.hover = row.case_id; renderReadout() })
-    dot.addEventListener("click", () => select(row.case_id, true))
-    plot.append(dot)
-    plot.append(el("text", { x: lx, y: ly, "font-size": 12, fill: "#17363b" }, row.case_id))
+    const mark = el("g", {"data-union-case":row.case_id})
+    const color = colorOf(row)
+    if (high > low) {
+      mark.append(el("line", {x1:cx, x2:cx, y1:Y(low), y2:Y(high), stroke:color, "stroke-width":3}))
+      for (const value of [low, high]) mark.append(el("line", {x1:cx-5, x2:cx+5, y1:Y(value), y2:Y(value), stroke:color, "stroke-width":2}))
+    } else {
+      mark.append(el("circle", {cx, cy, r: state.selected === row.case_id ? 7 : 5, fill:UNION.has(row.case_id) ? color : "white", stroke:color, "stroke-width":2}))
+    }
+    mark.append(el("text", {x:lx, y:ly, "font-size":12, fill:"#17363b"}, row.case_id))
+    selectMark(mark, row)
+    plot.append(mark)
   })
 }
 
 function renderRatio() {
   const plot = document.getElementById("ratio")
   plot.replaceChildren()
-  const rows = comparable(shown()).slice().sort((a, b) => b.envelope_ratio - a.envelope_ratio)
+  const rows = shown().map(row => ({row, ...unionResult(row)}))
+    .sort((left, right) => right.low / right.footprint - left.low / left.footprint)
+  plot.setAttribute("viewBox", "0 0 400 " + (64 + rows.length * 29))
   plot.append(el("text", { x: 12, y: 22, "font-size": 13, fill: "#17363b" }, "Envelope ratio, E/F"))
   plot.append(el("text", { x: 12, y: 38, "font-size": 11, fill: "#4e6665" }, rows.length + " cases · common scale, zero baseline"))
   if (!rows.length) return
-  const max = Math.max(...comparable(state.data.cases).map(row => row.envelope_ratio)) * 1.08
-  rows.forEach((row, index) => {
-    const y = 58 + index * 46
-    const w = (row.envelope_ratio / max) * 250
-    const bar = el("rect", { x: 46, y, width: w, height: 16, rx: 3, fill: colorOf(row), opacity: state.selected === row.case_id ? 1 : 0.85 })
-    bar.style.cursor = "pointer"
-    bar.addEventListener("pointerenter", () => { state.hover = row.case_id; renderReadout() })
-    bar.addEventListener("click", () => select(row.case_id, true))
-    plot.append(bar)
-    plot.append(el("text", { x: 40, y: y + 13, "text-anchor": "end", "font-size": 12, fill: "#17363b" }, row.case_id))
-    plot.append(el("text", { x: 50 + w, y: y + 13, "font-size": 12, fill: "#17363b" }, row.envelope_ratio.toFixed(2) + "×"))
+  const max = Math.max(...state.data.cases.map(row => {
+    const result = unionResult(row)
+    return result.high / result.footprint
+  }))
+  rows.forEach(({row, footprint, low, high}, index) => {
+    const y = 56 + index * 29
+    const w = 240 * (low / footprint) / max
+    const end = 240 * (high / footprint) / max
+    const color = colorOf(row)
+    const registered = UNION.has(row.case_id)
+    const mark = el("g", {"data-union-case":row.case_id})
+    mark.append(el("rect", {x:46, y, width:w, height:14, rx:2, fill:registered || high > low ? color : "white", stroke:color}))
+    if (high > low) mark.append(el("line", {x1:46+w, x2:46+end, y1:y+7, y2:y+7, stroke:color, "stroke-width":3, "stroke-dasharray":"3 2"}))
+    mark.append(el("text", {x:40, y:y+11, "text-anchor":"end", "font-size":12, fill:"#17363b"}, row.case_id))
+    const prefix = !registered && high === low ? "≈" : ""
+    mark.append(el("text", {x:52+end, y:y+11, "font-size":12, fill:"#17363b"}, prefix + spanLabel(low / footprint, high / footprint, "×")))
+    selectMark(mark, row)
+    plot.append(mark)
   })
 }
 
 function renderWho() {
-  const rows = comparable(shown())
-  document.getElementById("count").textContent = rows.length + " comparable cases"
+  const rows = shown()
+  document.getElementById("count").textContent = rows.length + " cases · measurement basis"
   const body = document.getElementById("who-body")
   body.replaceChildren()
   const lead = document.createElement("p")
   lead.textContent = BASIS
   body.append(lead)
   const included = document.createElement("p")
-  included.textContent = "Included: " + rows.map(row => row.case_id + " (" + modeOf(row) + ", " + fmt(row.final_footprint_area) + " → " + fmt(row.envelope_area) + " m², " + row.t0_s + "–" + row.t1_s + " s)").join("; ") + "."
+  included.textContent = rows.map(row => row.case_id + " · " + unionResult(row).method).join(" / ")
   body.append(included)
   const left = document.createElement("ul")
   left.className = "gap-list"
@@ -315,20 +359,23 @@ function renderReadout() {
   const id = state.hover || state.selected
   const row = id && state.data.cases.find(item => item.case_id === id)
   root.replaceChildren()
-  if (!row || !UNION.has(row.case_id)) {
+  if (!row) {
     const p = document.createElement("p")
     p.className = "note"
-    p.textContent = row ? row.case_id + " is not in the comparable scatter. " + (EXCLUDE[row.case_id] || "") : "Hover or click a comparable case."
+    p.textContent = "Hover or select a case."
     root.append(p)
     return
   }
   const dl = document.createElement("dl")
+  const {footprint, low, high, method} = unionResult(row)
+  const prefix = areaCalibration[row.case_id] ? "≈" : ""
   const fields = [
     ["Case", row.case_id + " · " + modeOf(row) + " case-mode label"],
-    ["Final footprint F", fmt(row.final_footprint_area) + " m²"],
-    ["Recorded envelope E", fmt(row.envelope_area) + " m²"],
-    ["Envelope ratio E/F", Number(row.envelope_ratio).toFixed(2) + "×"],
-    ["Additional area E−F", fmt(row.additional_area) + " m²"],
+    ["Measurement basis", method],
+    ["Final footprint F", prefix + fmt(footprint) + " m²"],
+    ["Union area E", prefix + spanLabel(low, high, " m²")],
+    ["Union ratio E/F", prefix + spanLabel(low / footprint, high / footprint, "×")],
+    ["Additional area E−F", prefix + spanLabel(low - footprint, high - footprint, " m²")],
     ["Object and stage", row.analysis_target + "; " + row.process_stage + " " + row.t0_s + "–" + row.t1_s + " s"],
     ["Actor scope", "Parts only. " + row.part_tracks + " part-track hulls."],
     ["Source", row.source_reference]
@@ -344,7 +391,7 @@ function renderReadout() {
 function drawPlan(svg, item) {
   svg.replaceChildren()
   svg.setAttribute("viewBox", "0 0 640 360")
-  if (!UNION.has(item.case_id) || !bounds(item)) {
+  if (!bounds(item)) {
     if (item.plan_image) {
       svg.setAttribute("viewBox", "0 0 " + item.plan_w + " " + item.plan_h)
       svg.append(el("image", { href: item.plan_image, x: 0, y: 0, width: item.plan_w, height: item.plan_h }))
@@ -412,6 +459,8 @@ function renderConnection() {
     caption.className = "note"
     if (UNION.has(item.case_id)) {
       caption.textContent = "F, pale solid, is the authored footprint. M, green, is the part-track hull union. The dark line is the outline of E = F∪M. Overlap is counted once in the area, not by stacking the fills."
+    } else if (areaCalibration[item.case_id]) {
+      caption.textContent = "The drawing uses the saved model geometry. The area estimate applies the literature scale to the previously computed union."
     } else if (item.plan_image) {
       caption.textContent = "This is the saved plan drawing. Green is the union of part-track hulls on that image. An F∪M contour in metres was not computed, so none is drawn."
     } else {
@@ -419,8 +468,9 @@ function renderConnection() {
     }
     root.append(caption)
     const numbers = document.createElement("p")
-    numbers.textContent = "F " + fmt(item.final_footprint_area) + " " + unitOf(item) + " · E " + fmt(item.envelope_area) + " · E/F " + (item.envelope_ratio == null ? "—" : Number(item.envelope_ratio).toFixed(2) + "×") + " · E−F " + fmt(item.additional_area)
-    if (!UNION.has(item.case_id)) numbers.textContent = item.area_unit === "m2" ? "Saved coverage " + fmt(item.envelope_area) + " m² · F " + fmt(item.final_footprint_area) + " m² · Comparable E/F not computed." : "Model units² only: F " + fmt(item.final_footprint_area) + " · reported envelope " + fmt(item.envelope_area) + ". Not comparable in m².";
+    const {footprint, low, high, method} = unionResult(item)
+    const prefix = areaCalibration[item.case_id] ? "≈" : ""
+    numbers.textContent = method + " · F " + prefix + fmt(footprint) + " m² · E " + prefix + spanLabel(low, high, " m²") + " · E/F " + prefix + spanLabel(low / footprint, high / footprint, "×")
     root.append(numbers)
   }
   const evidence = item && EVIDENCE[item.case_id]
@@ -470,6 +520,16 @@ function render() {
   if (!state.data) return
   renderScatter(); renderRatio(); renderWho(); renderReadout(); renderConnection()
 }
+function prepareUnionExport(rows) {
+  const header = ["case_id", "case_mode", "footprint_m2", "union_lower_m2", "union_upper_m2", "ratio_lower", "ratio_upper", "measurement_basis"]
+  const values = rows.map(row => {
+    const {footprint, low, high, method} = unionResult(row)
+    return [row.case_id, modeOf(row), footprint, low, high, low / footprint, high / footprint, method]
+      .map(value => typeof value === "number" ? value.toFixed(4) : value)
+  })
+  const csv = [header, ...values].map(row => row.join(",")).join("\r\n")
+  document.getElementById("union-export").href = "data:text/csv;charset=utf-8," + encodeURIComponent(csv)
+}
 document.querySelectorAll(".tabs button").forEach(button => button.addEventListener("click", () => {
   const {tab} = button.dataset
   if (location.hash === "#" + tab) setTab(tab)
@@ -490,6 +550,7 @@ window.addEventListener("hashchange", openSpatialRoute)
 openSpatialRoute()
 fetch("spatial_cases.json?v=read3").then(r => r.json()).then(data => {
   state.data = data
+  prepareUnionExport(data.cases)
   render()
 })
 </script>
