@@ -6,6 +6,7 @@
   const hasMetres = row => metric(row) || Boolean(calibration(row));
   const unit = row => hasMetres(row) ? "m²" : "model units²";
   const scale = reference => reference.referenceMetres / reference.bounds[reference.axis];
+  const areaFields = ["activity", "object", "human", "machine", "part"].map(key => key + "_area_m2");
   const areaValue = (row, field) => {
     const reference = calibration(row);
     return reference ? row[field] * scale(reference) ** 2 : row[field];
@@ -148,10 +149,9 @@
   }
 
   function start(source, {rows, modes}, registered) {
-    const metricLimit = Math.ceil(Math.max(...rows.filter(hasMetres).flatMap(row => [
-      areaValue(row, "activity_area_m2"), areaValue(row, "object_area_m2")
-    ])) / 20) * 20;
-    const modelLimit = row => Math.ceil(Math.max(row.activity_area_m2, row.object_area_m2) / 10) * 10;
+    const metricLimit = Math.ceil(Math.max(20, ...rows.filter(hasMetres)
+      .flatMap(row => areaFields.map(field => areaValue(row, field)))) / 20) * 20;
+    const modelLimit = row => Math.ceil(Math.max(10, ...areaFields.map(field => row[field])) / 10) * 10;
     const first = atlas.querySelector("#compare-first");
     const second = atlas.querySelector("#compare-second");
     const question = atlas.querySelector("#compare-question");
@@ -160,11 +160,12 @@
     const byId = new Map(rows.map(row => [row.case, row]));
     const compareLayers = [...atlas.querySelectorAll(".atlas-layers input[value]")];
     const picked = [first, second];
+    const detail = atlas.querySelector("#atlas-pair-detail");
     for (const select of picked) {
+      select.add(new Option("Choose a case", ""));
       for (const row of rows) select.add(new Option(row.case, row.case));
     }
-    first.value = "V01";
-    second.value = "V30";
+    let selectedRelation = null;
 
     const roleNames = {human:"Human", machine:"Machine", part:"Parts"};
     const roleAdvice = {
@@ -177,8 +178,12 @@
       const pair = picked.map(select => byId.get(select.value));
       for (const select of picked) {
         const other = select === first ? second : first;
-        for (const option of select.options) option.disabled = option.value === other.value;
+        for (const option of select.options) option.disabled = Boolean(option.value) && option.value === other.value;
       }
+      relationAtlas.update(picked.map(select => select.value), selectedRelation);
+      roleControl.hidden = question.value !== "role";
+      detail.hidden = !pair.every(Boolean);
+      if (detail.hidden) return;
       const compareBars = atlas.querySelector("#compare-bars");
       const plans = atlas.querySelector("#compare-plans");
       compareBars.replaceChildren();
@@ -189,13 +194,23 @@
       const metricPair = pair.every(hasMetres);
       const roleShare = row => 100 * row[field] / row.activity_area_m2;
       const roleMode = question.value === "role";
-      roleControl.hidden = !roleMode;
+      atlas.querySelector("#atlas-pair-key").hidden = question.value !== "summary";
       for (const input of compareLayers) input.closest("label").hidden = roleMode;
       for (const input of compareLayers) input.disabled = roleMode;
       let fieldsFor;
       let extent;
       let axisUnit;
-      if (question.value === "ratio") {
+      if (question.value === "summary") {
+        const fields = [["object", "footprint", "F"], ["activity", "activity", "A"],
+          ["human", "human", "H"], ["machine", "machine", "R"], ["part", "part", "P"]];
+        findings.textContent = selectedRelation?.finding || (metricPair
+          ? `${pair[0].case} recorded ${readableArea(pair[0], "activity_area_m2")} of activity and ${pair[1].case} recorded ${readableArea(pair[1], "activity_area_m2")}. Compare their A/F and role coverage below.`
+          : "A/F is comparable across units. Each case uses its own area scale below.");
+        extent = metricPair ? metricLimit : null;
+        axisUnit = "m²";
+        fieldsFor = row => fields.map(([field, key, label]) => ({key, label,
+          value:areaValue(row, field + "_area_m2"), caption:readableArea(row, field + "_area_m2")}));
+      } else if (question.value === "ratio") {
         const ratio = row => row.ratio_activity_over_object;
         const [higher, lower] = [...pair].sort((left,right) => ratio(right)-ratio(left));
         const answer = ratio(higher) === ratio(lower)
@@ -243,14 +258,48 @@
       pair.forEach((row, index) => {
         const card = element("article", "atlas-card");
         const maximum = extent || (hasMetres(row) ? metricLimit : modelLimit(row));
-        card.append(element("h4", "", row.case), bars(maximum, fieldsFor(row)), axis(maximum, extent ? axisUnit : unit(row)));
+        const heading = element("h4");
+        const link = element("a", "", row.case + " case sheet");
+        link.href = caseUrl(row);
+        heading.append(link);
+        card.append(heading, bars(maximum, fieldsFor(row)), axis(maximum, extent ? axisUnit : unit(row)));
+        if (question.value === "summary") card.append(element("p", "atlas-pair-ratio", "A/F  " + multiplier(row)));
         compareBars.append(card);
         plans.append(renderPlan(row, planData[index], shared, layers));
       });
     }
 
+    const relationAtlas = initializeCaseRelations({rows, modes, hasMetres, areaValue, calibration, readableArea,
+      chooseCase(id) {
+        selectedRelation = null;
+        question.value = "summary";
+        const complete = Boolean(first.value && second.value);
+        if (complete || id === first.value || id === second.value) {
+          first.value = id;
+          second.value = "";
+        } else if (!first.value) {
+          first.value = id;
+        } else {
+          second.value = id;
+        }
+        renderComparison();
+        if (!detail.hidden) atlas.querySelector("#atlas-pair-heading").focus();
+      },
+      chooseRelation(relation) {
+        selectedRelation = relation;
+        question.value = "summary";
+        first.value = relation.ids[0];
+        second.value = relation.ids[1];
+        renderComparison();
+        atlas.querySelector("#atlas-pair-heading").focus();
+      }
+    });
     renderComparison();
-    for (const control of [...picked,question,roleChoice]) control.addEventListener("change", renderComparison);
+    for (const select of picked) select.addEventListener("change", () => {
+      selectedRelation = null;
+      renderComparison();
+    });
+    for (const control of [question,roleChoice]) control.addEventListener("change", renderComparison);
     atlas.querySelector(".atlas-layers").addEventListener("change", renderComparison);
     atlas.querySelector("#atlas-status").hidden = true;
     atlas.querySelector("#atlas-content").hidden = false;

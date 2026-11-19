@@ -1,0 +1,97 @@
+.case-relations {
+  --plate-paper: #f6f2e8;
+  --plate-ink: #30342e;
+  --plate-rust: #a64024;
+  --plate-blue: #234f78;
+  --plate-rule: #bdb4a1;
+  background: var(--plate-paper);
+  color: var(--plate-ink);
+  padding: clamp(12px, 3vw, 34px);
+}
+
+.case-relations h3 {
+  margin: 0;
+  font: 400 clamp(27px, 4vw, 44px)/1.2 Georgia, serif;
+}
+
+.case-relations-key {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 17px;
+  margin: 12px 0 4px;
+  font-size: 13px;
+}
+
+.case-relations-key b { margin-right: 3px; }
+.case-relations-key .case-human b { color: var(--plate-rust); }
+.case-relations-key .case-machine b { color: var(--plate-blue); }
+.case-relations > .note { margin: 5px 0 10px; }
+.case-relations :is(.case-relations-questions, .case-relations-pairs) {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 12px 0;
+}
+
+.case-relations :is(.case-relations-questions, .case-relations-pairs) button {
+  background: transparent;
+  border: 1px solid var(--plate-rule);
+  border-radius: 0;
+  color: var(--plate-ink);
+  cursor: pointer;
+  font: inherit;
+  font-size: 13px;
+  min-height: 38px;
+  padding: 6px 10px;
+  text-align: left;
+}
+
+.case-relations :is(.case-relations-questions, .case-relations-pairs) button[aria-pressed="true"] {
+  background: var(--plate-ink);
+  border-color: var(--plate-ink);
+  color: var(--plate-paper);
+}
+
+.case-relations-drawing {
+  display: block;
+  width: min(100%, 1000px);
+  height: auto;
+  margin: 16px auto 0;
+  border-top: 1px solid var(--plate-rule);
+  border-bottom: 1px solid var(--plate-rule);
+}
+
+.case-relations-drawing text { fill: var(--plate-ink); pointer-events: none; }
+.case-relations-drawing .case-mode-title { font: 27px Georgia, serif; }
+.case-relations-drawing .case-node-label { font: 700 23px Georgia, serif; }
+.case-relations-drawing .case-node-values { font-size: 12px; white-space: pre; }
+.case-band { fill: var(--plate-ink); }
+.case-node-activity { fill: var(--plate-paper); stroke: #d6cdb9; }
+.case-node-footprint { fill: #bebeb0; stroke: var(--plate-ink); }
+.case-node-human { fill: #db875f; fill-opacity: .74; stroke: var(--plate-rust); }
+.case-node-machine { fill: #6693b8; fill-opacity: .72; stroke: var(--plate-blue); }
+.case-node-hatch { opacity: .43; }
+.case-label-paper { fill: var(--plate-paper); opacity: .92; }
+.case-hit { fill: transparent; }
+.case-relations-drawing [data-atlas-case] { cursor: pointer; }
+.case-relations-drawing [data-atlas-case]:focus-visible { outline: none; }
+.case-node-focus { fill: none; stroke: transparent; stroke-width: 3px; pointer-events: none; }
+[data-atlas-case]:is(:hover, :focus-visible, [aria-pressed="true"]) .case-node-focus { stroke: var(--plate-rust); }
+
+.case-connection { cursor: pointer; }
+.case-connection :is(.case-connection-hit, .case-connection-line) { fill: none; }
+.case-connection-hit { stroke: transparent; stroke-width: 24px; }
+.case-connection-line { stroke: #97603b; stroke-width: 3px; pointer-events: none; }
+.case-connection:is(:hover, .is-selected) .case-connection-line { stroke: var(--plate-rust); stroke-width: 5px; }
+
+#compare-bars .atlas-fill.human { background: #a64024; }
+#compare-bars .atlas-fill.machine { background: #234f78; }
+#compare-bars .atlas-fill.part { background: #786c4d; }
+#compare-bars .atlas-pair-ratio { margin: 9px 0 0; font-size: 13px; font-weight: 650; }
+
+@media (max-width: 640px) {
+  .case-relations-drawing .case-mode-title { font-size: 34px; }
+  .case-relations-drawing .case-node-label { font-size: 31px; }
+  .case-relations-drawing .case-node-values { display: none; }
+  .case-relations :is(.case-relations-questions, .case-relations-pairs) button { min-height: 44px; }
+}
