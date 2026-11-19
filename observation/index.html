@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Relative position</title>
+<style>
+:root { --ink:#17363b; --muted:#4e6665; --line:#d8e5de; --paper:#fffef8; --blue:#12627d; --ref:#996118; }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--paper); color: var(--ink); font: 15px/1.45 "Segoe UI", sans-serif; }
+header { display: flex; justify-content: space-between; gap: 16px; align-items: end; padding: 18px 28px 12px; border-bottom: 1px solid var(--ink); }
+h1 { margin: 2px 0 0; font-size: 26px; letter-spacing: -.03em; }
+h2 { margin: 0 0 8px; font-size: 13px; letter-spacing: .08em; text-transform: uppercase; }
+h3 { margin: 0; font-size: 20px; letter-spacing: -.02em; }
+.eyebrow { color: var(--blue); letter-spacing: .12em; text-transform: uppercase; font-size: 11px; font-weight: 700; }
+a { color: var(--blue); }
+main { padding: 14px 28px 48px; max-width: 1240px; }
+.note { margin: 0 0 12px; color: var(--muted); font-size: 13px; }
+.group { margin: 0 0 14px; }
+.row { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; }
+.case { display: flex; justify-content: space-between; align-items: baseline; padding: 8px 10px; text-align: left; border: 1px solid var(--line); border-top: 3px solid var(--edge); border-radius: 8px; background: #fff; color: var(--ink); cursor: pointer; font: inherit; }
+.case small { color: var(--muted); font-size: 11px; }
+.case.is-selected { outline: 2px solid var(--ink); }
+.sheet { margin-top: 8px; background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 14px; }
+.sheet-head { display: flex; justify-content: space-between; gap: 12px; align-items: end; margin-bottom: 10px; }
+.clips { display: flex; gap: 6px; }
+.clips button[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+button { font: inherit; color: var(--ink); background: #fff; border: 1px solid var(--line); border-radius: 6px; padding: 5px 8px; cursor: pointer; }
+.columns { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.panel h4 { margin: 0 0 8px; font-size: 15px; }
+.frames, .masks { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+figure { margin: 0; }
+img { width: 100%; height: auto; display: block; background: #e8e8e8; border-radius: 4px; }
+.mask { background: #f4f8f8; border: 1px solid var(--line); border-radius: 4px; }
+figcaption { display: flex; align-items: center; gap: 6px; margin-top: 4px; font-size: 12px; }
+.swatch { width: 14px; height: 3px; display: inline-block; }
+.kicker { margin: 10px 0 4px; font-size: 12px; font-weight: 700; }
+.point { margin: 8px 0; font-size: 12px; color: var(--muted); }
+.point b { color: var(--ref); font-weight: 650; }
+.stage { position: relative; background: #f4f8f8; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+.stage img { background: transparent; }
+.stage svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.angle-card { display: grid; grid-template-columns: minmax(0, 1fr) 190px; gap: 8px; background: #f4f8f8; border: 1px solid var(--line); border-radius: 8px; padding: 8px; }
+.angle-card svg { width: 100%; height: auto; }
+.angle-card table { width: 100%; border-collapse: collapse; font-size: 12px; align-self: center; }
+.angle-card td { padding: 6px 0; border-bottom: 1px solid var(--line); }
+.span { margin: 8px 0 0; font-size: 12px; font-weight: 700; }
+.fine { margin: 8px 0 0; font-size: 12px; color: var(--muted); }
+.empty { padding: 28px 8px; text-align: center; color: var(--muted); }
+@media (max-width: 980px) { .columns, .angle-card, .row { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 640px) { .row, .columns, .frames, .masks, .angle-card { grid-template-columns: 1fr; } main, header { padding-left: 12px; padding-right: 12px; } .sheet-head { display: block; } }
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <div class="eyebrow">Fifteen assembly cases</div>
+    <h1>Relative position and angle</h1>
+  </div>
+  <a href="../index.html#explorer">Back to the assembly pages</a>
+</header>
+<main>
+  <p class="note">The cases use the same three groups as the explorer: Manual, Mixed, and Robot. A sheet is shown only where one was recorded. The blue, green, and orange marks are the three sample times in that sheet. They are not the case-group labels.</p>
+  <div id="groups"></div>
+  <section id="detail" class="sheet"></section>
+</main>
+<script>
+const GROUPS = [
+  { name: "Manual", edge: "#12627d", cases: ["V01", "V06", "V07", "V11", "V20"] },
+  { name: "Mixed", edge: "#3d7a45", cases: ["V04", "V21", "V22", "V27", "V29"] },
+  { name: "Robot", edge: "#97420e", cases: ["V23", "V24", "V26", "V28", "V30"] }
+]
+const state = { sheets: [], caseId: "V01", clip: "A" }
+
+function el(name, attrs, text) {
+  const node = document.createElementNS("http://www.w3.org/2000/svg", name)
+  Object.entries(attrs || {}).forEach(([key, value]) => node.setAttribute(key, value))
+  if (text != null) node.textContent = text
+  return node
+}
+
+function renderGroups() {
+  const root = document.getElementById("groups")
+  root.replaceChildren()
+  GROUPS.forEach(group => {
+    const section = document.createElement("section")
+    section.className = "group"
+    const title = document.createElement("h2")
+    title.textContent = group.name
+    section.append(title)
+    const row = document.createElement("div")
+    row.className = "row"
+    group.cases.forEach(id => {
+      const button = document.createElement("button")
+      button.type = "button"
+      button.className = "case" + (state.caseId === id ? " is-selected" : "")
+      button.style.setProperty("--edge", group.edge)
+      button.innerHTML = "<span>" + id + "</span><small>" + (id === "V01" ? "3 clips" : "No sheet") + "</small>"
+      button.addEventListener("click", () => select(id))
+      row.append(button)
+    })
+    section.append(row)
+    root.append(section)
+  })
+}
+
+function select(id) {
+  state.caseId = id
+  if (id !== "V01") state.clip = "A"
+  history.replaceState(null, "", "#" + id + (id === "V01" ? "/" + state.clip : ""))
+  renderGroups()
+  renderDetail()
+}
+
+function renderDetail() {
+  const detail = document.getElementById("detail")
+  detail.replaceChildren()
+  if (state.caseId !== "V01") {
+    const group = GROUPS.find(item => item.cases.includes(state.caseId)).name
+    detail.innerHTML = "<h3>" + state.caseId + " · " + group + "</h3><p class='empty'>No relative-position sheet is stored for this case.</p>"
+    return
+  }
+  const head = document.createElement("div")
+  head.className = "sheet-head"
+  head.innerHTML = "<div><h3>V01 · Manual</h3><p class='note'>Three tool observations from the V01 timeline board. Each clip uses three sample frames.</p></div>"
+  const clips = document.createElement("div")
+  clips.className = "clips"
+  state.sheets.forEach(sheet => {
+    const button = document.createElement("button")
+    button.type = "button"
+    button.textContent = sheet.key + "  " + sheet.name
+    button.setAttribute("aria-pressed", String(sheet.key === state.clip))
+    button.addEventListener("click", () => { state.clip = sheet.key; select("V01") })
+    clips.append(button)
+  })
+  head.append(clips)
+  detail.append(head)
+  detail.append(drawSheet(state.sheets.find(sheet => sheet.key === state.clip)))
+  const source = document.createElement("p")
+  source.className = "fine"
+  source.textContent = "Source: V01 timeline board. Masks are the blue marks on the original frames, normalized to 592 × 334 px. Angles are the smaller on-screen angle, traced by hand to about 5°. Clearance and force are not measured here."
+  detail.append(source)
+  const file = document.createElement("p")
+  file.className = "fine"
+  file.innerHTML = "<a href='V01_Relative_Position_Angle_color.pdf'>V01 sheet PDF</a>"
+  detail.append(file)
+}
+
+function caption(sample) {
+  const item = document.createElement("figcaption")
+  item.innerHTML = "<i class='swatch' style='background:" + sample.color + "'></i>" + sample.time + " s"
+  return item
+}
+
+function tiles(sheet, kind) {
+  const wrap = document.createElement("div")
+  wrap.className = kind.startsWith("mask") ? "masks" : "frames"
+  sheet.samples.forEach((sample, index) => {
+    const figure = document.createElement("figure")
+    const image = document.createElement("img")
+    image.src = "v01/" + sheet.key + (index + 1) + "-" + kind + ".png"
+    image.alt = sheet.key + " " + sample.time + " s"
+    if (kind.startsWith("mask")) image.className = "mask"
+    figure.append(image, caption(sample))
+    if (kind === "maskline") {
+      const label = document.createElement("figcaption")
+      label.textContent = sample.label
+      figure.append(label)
+    }
+    wrap.append(figure)
+  })
+  return wrap
+}
+
+function drawSheet(sheet) {
+  const root = document.createElement("div")
+  root.className = "columns"
+  root.append(positionColumn(sheet), angleColumn(sheet))
+  return root
+}
+
+function positionColumn(sheet) {
+  const panel = document.createElement("section")
+  panel.className = "panel"
+  panel.innerHTML = "<h4>01  Relative position and extent</h4>"
+  const framesTitle = document.createElement("p")
+  framesTitle.className = "kicker"
+  framesTitle.textContent = "Three source frames"
+  const maskTitle = document.createElement("p")
+  maskTitle.className = "kicker"
+  maskTitle.textContent = "The three masks"
+  const point = document.createElement("p")
+  point.className = "point"
+  point.innerHTML = "<b>Common point</b> " + sheet.point
+  const extentTitle = document.createElement("p")
+  extentTitle.className = "kicker"
+  extentTitle.textContent = "Three frames overlaid, and the extent"
+  const fine = document.createElement("p")
+  fine.className = "fine"
+  fine.textContent = "The box encloses the three masks. W " + sheet.width + " px, H " + sheet.height + " px, in the 592 × 334 frame."
+  panel.append(framesTitle, tiles(sheet, "frame"), maskTitle, tiles(sheet, "mask"), point, extentTitle, overlay(sheet), fine)
+  return panel
+}
+
+function overlay(sheet) {
+  const stage = document.createElement("div")
+  stage.className = "stage"
+  const image = document.createElement("img")
+  image.src = "v01/" + sheet.key + "-overlay.png"
+  image.alt = "Three masks registered on the common point"
+  const svg = el("svg", { viewBox: "0 0 592 334" })
+  const [l, t, r, b] = sheet.bounds
+  const [cx, cy] = sheet.common
+  svg.append(el("rect", { x: l, y: t, width: r - l, height: b - t, fill: "none", stroke: "#4e6665", "stroke-dasharray": "4 3" }))
+  svg.append(el("circle", { cx, cy, r: 5, fill: "#996118", stroke: "#fff", "stroke-width": 1.5 }))
+  const placeLeft = cx < l || cx > 430
+  svg.append(el("text", { x: placeLeft ? cx - 10 : cx + 10, y: Math.max(16, cy - 8), "text-anchor": placeLeft ? "end" : "start", "font-size": 13, fill: "#996118" }, "Common point"))
+  stage.append(image, svg)
+  return stage
+}
+
+function angleColumn(sheet) {
+  const panel = document.createElement("section")
+  panel.className = "panel"
+  panel.innerHTML = "<h4>02  Change in angle</h4>"
+  const framesTitle = document.createElement("p")
+  framesTitle.className = "kicker"
+  framesTitle.textContent = "Three source frames"
+  const maskTitle = document.createElement("p")
+  maskTitle.className = "kicker"
+  maskTitle.textContent = "The three masks"
+  const key = document.createElement("p")
+  key.className = "point"
+  key.innerHTML = "<b style='color:#996118'>Member edge</b> · colored line: " + sheet.tool
+  const diagramTitle = document.createElement("p")
+  diagramTitle.className = "kicker"
+  diagramTitle.textContent = "On-screen angle, tool against the member edge"
+  const fine = document.createElement("p")
+  fine.className = "fine"
+  fine.textContent = sheet.note
+  panel.append(framesTitle, tiles(sheet, "angle"), maskTitle, tiles(sheet, "maskline"), key, diagramTitle, angleCard(sheet), fine)
+  return panel
+}
+
+function angleCard(sheet) {
+  const card = document.createElement("div")
+  card.className = "angle-card"
+  const svg = el("svg", { viewBox: "0 0 250 210" })
+  const origin = [36, 168]
+  const polar = (deg, radius) => [origin[0] + radius * Math.cos(deg * Math.PI / 180), origin[1] - radius * Math.sin(deg * Math.PI / 180)]
+  const observed = sheet.samples.filter(sample => sample.angle != null).map(sample => sample.angle)
+  if (observed.length >= 2) {
+    const lo = Math.min(...observed), hi = Math.max(...observed)
+    const points = [origin]
+    for (let step = 0; step <= 24; step += 1) points.push(polar(lo + (hi - lo) * step / 24, 108))
+    svg.append(el("polygon", { points: points.map(point => point.join(",")).join(" "), fill: "#dfeaf2" }))
+  }
+  ;[30, 60, 90].forEach(guide => {
+    const end = polar(guide, 108)
+    const label = polar(guide, 122)
+    svg.append(el("line", { x1: origin[0], y1: origin[1], x2: end[0], y2: end[1], stroke: "#d5e2dc" }))
+    svg.append(el("text", { x: label[0], y: label[1], "text-anchor": "middle", "font-size": 11, fill: "#4e6665" }, guide + "°"))
+  })
+  const arc = []
+  for (let deg = 0; deg <= 90; deg += 3) arc.push(polar(deg, 108))
+  svg.append(el("polyline", { points: arc.map(point => point.join(",")).join(" "), fill: "none", stroke: "#d5e2dc" }))
+  const axis = polar(0, 150)
+  svg.append(el("line", { x1: origin[0], y1: origin[1], x2: axis[0], y2: axis[1], stroke: "#996118", "stroke-width": 2 }))
+  svg.append(el("text", { x: origin[0], y: 196, "font-size": 11, fill: "#996118" }, sheet.timber + " 0°"))
+  sheet.samples.forEach((sample, index) => {
+    if (sample.angle == null) return
+    const end = polar(sample.angle, 78 + index * 12)
+    svg.append(el("line", { x1: origin[0], y1: origin[1], x2: end[0], y2: end[1], stroke: sample.color, "stroke-width": 2.4 }))
+    svg.append(el("circle", { cx: end[0], cy: end[1], r: 3.2, fill: sample.color }))
+  })
+  svg.append(el("circle", { cx: origin[0], cy: origin[1], r: 3.2, fill: "#996118" }))
+  const table = document.createElement("table")
+  table.innerHTML = "<tr><td>Time</td><td>Smaller angle</td></tr>"
+  sheet.samples.forEach(sample => {
+    const row = document.createElement("tr")
+    row.innerHTML = "<td><i class='swatch' style='background:" + sample.color + "'></i> " + sample.time + " s</td><td>" + sample.label + "</td>"
+    table.append(row)
+  })
+  const rounded = sheet.samples.filter(sample => sample.angle != null).map(sample => Math.round(sample.angle / 5) * 5)
+  const lo = Math.min(...rounded), hi = Math.max(...rounded)
+  const span = document.createElement("p")
+  span.className = "span"
+  span.textContent = lo === hi ? "Readable frames, all about " + lo + "°" : "Readable frames, about " + lo + "°–" + hi + "°"
+  const copy = document.createElement("div")
+  copy.append(table, span)
+  card.append(svg, copy)
+  return card
+}
+
+fetch("v01/sheets.json")
+  .then(response => response.json())
+  .then(sheets => {
+    state.sheets = sheets
+    const hash = location.hash.replace("#", "").split("/")
+    if (GROUPS.some(group => group.cases.includes(hash[0]))) state.caseId = hash[0]
+    if (sheets.some(sheet => sheet.key === hash[1])) state.clip = hash[1]
+    renderGroups()
+    renderDetail()
+  })
+</script>
+</body>
+</html>

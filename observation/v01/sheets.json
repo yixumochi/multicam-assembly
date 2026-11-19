@@ -1,0 +1,125 @@
+[
+  {
+    "key": "A",
+    "name": "Floor mortise",
+    "interval": "33.58\u201335.08 s",
+    "point": "Outer corner of the right foreground member, moved to the middle frame.",
+    "timber": "Right member edge",
+    "tool": "Same mallet-head edge",
+    "note": "The handle is mostly covered by the hand. The angle uses the same mallet-head edge visible in these frames.",
+    "bounds": [
+      113,
+      37,
+      324,
+      179
+    ],
+    "width": 211,
+    "height": 142,
+    "common": [
+      527,
+      297
+    ],
+    "samples": [
+      {
+        "time": "33.58",
+        "angle": 80.7,
+        "label": "about 80\u00b0",
+        "color": "#6ac2e7"
+      },
+      {
+        "time": "34.38",
+        "angle": 67.0,
+        "label": "about 65\u00b0",
+        "color": "#baf492"
+      },
+      {
+        "time": "35.02",
+        "angle": 66.6,
+        "label": "about 65\u00b0",
+        "color": "#ee751c"
+      }
+    ]
+  },
+  {
+    "key": "B",
+    "name": "Peg, open side",
+    "interval": "50.80\u201354.51 s",
+    "point": "End corner of the projecting member, moved to the middle frame.",
+    "timber": "Edge above the corner",
+    "tool": "Visible handle",
+    "note": "Only a short piece of the handle shows. A few degrees may come from the tracing, and do not confirm a change.",
+    "bounds": [
+      241,
+      92,
+      374,
+      214
+    ],
+    "width": 133,
+    "height": 122,
+    "common": [
+      190,
+      62
+    ],
+    "samples": [
+      {
+        "time": "52.89",
+        "angle": 59.0,
+        "label": "about 60\u00b0",
+        "color": "#6ac2e7"
+      },
+      {
+        "time": "53.64",
+        "angle": 64.7,
+        "label": "about 65\u00b0",
+        "color": "#baf492"
+      },
+      {
+        "time": "54.30",
+        "angle": 63.2,
+        "label": "about 65\u00b0",
+        "color": "#ee751c"
+      }
+    ]
+  },
+  {
+    "key": "C",
+    "name": "Under the beam",
+    "interval": "178.05\u2013182.56 s",
+    "point": "Center of the round hole on the post, moved to the middle frame.",
+    "timber": "Lower edge of the beam",
+    "tool": "Right handle",
+    "note": "At 178.05 s the blue mark was on the post, so that mask is moved onto the mallet. The angle uses only the later two frames.",
+    "bounds": [
+      245,
+      123,
+      458,
+      328
+    ],
+    "width": 213,
+    "height": 205,
+    "common": [
+      500,
+      164
+    ],
+    "samples": [
+      {
+        "time": "178.05",
+        "angle": null,
+        "label": "Not readable",
+        "color": "#6ac2e7"
+      },
+      {
+        "time": "180.13",
+        "angle": 83.4,
+        "label": "about 85\u00b0",
+        "color": "#baf492"
+      },
+      {
+        "time": "182.05",
+        "angle": 84.7,
+        "label": "about 85\u00b0",
+        "color": "#ee751c"
+      }
+    ]
+  }
+]
