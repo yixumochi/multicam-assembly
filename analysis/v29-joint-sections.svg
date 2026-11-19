@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 240" role="img" aria-labelledby="title description">
+  <title id="title">Proposed straight and chamfered timber slot sections</title>
+  <desc id="description">Side-by-side cross-sections show a member approaching a straight-entry slot and a slot with chamfered entry edges. The two slots share the same width and depth below the lead-in. Dashed outlines mark the intended seated position. Arrows show schematic trial directions.</desc>
+  <defs>
+    <marker id="arrow-teal" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto">
+      <path d="M0 0L10 5L0 10Z" fill="#10665e"/>
+    </marker>
+    <marker id="arrow-orange" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto">
+      <path d="M0 0L10 5L0 10Z" fill="#a4511f"/>
+    </marker>
+  </defs>
+  <rect x="1" y="1" width="310" height="238" rx="9" fill="#fbfbf8" stroke="#d6dedb" stroke-width="2"/>
+  <rect x="329" y="1" width="310" height="238" rx="9" fill="#fbfbf8" stroke="#d6dedb" stroke-width="2"/>
+  <g fill="#263e3e" font-family="system-ui, sans-serif" font-size="27" font-weight="650" text-anchor="middle">
+    <text x="156" y="39">Straight entry</text>
+    <text x="484" y="39">Chamfered entry</text>
+  </g>
+  <g fill="#dce2df" stroke="#435855" stroke-width="2.5" stroke-linejoin="round">
+    <path d="M28 132H120V200H192V132H284V218H28Z"/>
+    <path d="M356 132H425L448 154V200H520V154L543 132H612V218H356Z"/>
+  </g>
+  <g fill="none" stroke="#647873" stroke-width="2" stroke-dasharray="6 5">
+    <path d="M127 200V157H185V200"/>
+    <path d="M455 200V157H513V200"/>
+  </g>
+  <rect x="127" y="64" width="58" height="42" rx="2" fill="#dceee9" stroke="#10665e" stroke-width="2.5"/>
+  <rect x="433" y="64" width="58" height="42" rx="2" transform="rotate(-13 462 85)" fill="#f6e7d8" stroke="#a4511f" stroke-width="2.5"/>
+  <path d="M156 87V147" fill="none" stroke="#10665e" stroke-width="3" marker-end="url(#arrow-teal)"/>
+  <path d="M462 87L484 147" fill="none" stroke="#a4511f" stroke-width="3" marker-end="url(#arrow-orange)"/>
+</svg>
