@@ -18,6 +18,8 @@
     return (reference ? "≈" + value.toFixed(reference.digits) : format(value)) + " " + unit(row);
   };
   const multiplier = row => format(row.ratio_activity_over_object) + "×";
+  const shareOfActivity = (row, field) => row.activity_area_m2 > 0 ? 100 * row[field] / row.activity_area_m2 : NaN;
+  const readableShare = value => Number.isFinite(value) ? value.toFixed(1) + "%" : "Unavailable";
   const caseUrl = row => casePage.href + "#" + row.mode + "/" + row.case;
   const svgNamespace = "http://www.w3.org/2000/svg";
   const coordinates = points => points.map(point => point.join(",")).join(" ");
@@ -38,20 +40,27 @@
   function axis(maximum, label) {
     const node = element("div", "atlas-axis");
     for (let tick = 0; tick <= 4; tick++) {
-      node.append(element("span", "", (maximum * tick / 4).toLocaleString("en") + (tick === 4 ? " " + label : "")));
+      const suffix = label === "%" ? label : tick === 4 ? " " + label : "";
+      node.append(element("span", "", (maximum * tick / 4).toLocaleString("en") + suffix));
     }
     return node;
   }
 
   function bars(maximum, fields) {
     const node = element("div", "atlas-bars");
-    for (const {key, label, value, caption} of fields) {
+    for (const {key, label, value, caption, absolute} of fields) {
       const line = element("div", "atlas-bar-line");
       const track = element("span", "atlas-track");
       const fill = element("span", "atlas-fill " + key);
-      fill.style.width = 100 * value / maximum + "%";
+      fill.style.width = (Number.isFinite(value) ? 100 * value / maximum : 0) + "%";
       track.append(fill);
-      line.append(element("b", "atlas-bar-label", label), track, element("span", "atlas-value", caption));
+      const readout = element("span", "atlas-value");
+      if (absolute) {
+        readout.append(element("strong", "atlas-share-value", caption), element("span", "atlas-share-area", absolute));
+      } else {
+        readout.textContent = caption;
+      }
+      line.append(element("b", "atlas-bar-label", label), track, readout);
       node.append(line);
     }
     return node;
@@ -221,8 +230,14 @@
     function studyPlan(row, plan, shared, layers, fields, maximum, highlighted) {
       const card = renderPlan(row, plan, shared, new Set(layers), highlighted);
       card.querySelector("svg image").setAttribute("opacity", "0.84");
-      const plot = bars(maximum, fieldRows(row, fields));
-      card.querySelector("svg").before(plot, axis(maximum, unit(row)));
+      const shares = fields.map(([key, label]) => {
+        const field = key + "_area_m2";
+        const value = shareOfActivity(row, field);
+        return {key, label:label + "/A", value, caption:readableShare(value), absolute:readableArea(row, field)};
+      });
+      const plot = bars(maximum, shares);
+      plot.classList.add("atlas-share-chart");
+      card.querySelector("svg").before(plot, axis(maximum, "%"));
       if (highlighted) {
         const timing = element("p", "note pair-study-timing");
         const marks = [highlighted.start, highlighted.end];
@@ -255,7 +270,7 @@
       const selectedRole = roleChoice.value;
       const field = selectedRole + "_area_m2";
       const metricPair = pair.every(hasMetres);
-      const roleShare = row => 100 * row[field] / row.activity_area_m2;
+      const roleShare = row => shareOfActivity(row, field);
       const roleMode = question.value === "role";
       const studyMode = question.value === "summary";
       atlas.querySelector("#atlas-pair-key").hidden = !studyMode;
@@ -291,7 +306,7 @@
         fieldsFor = row => [{key:"activity", label:"A/F", value:ratio(row), caption:multiplier(row)}];
       } else if (roleMode) {
         const [higher, lower] = [...pair].sort((left,right) => roleShare(right)-roleShare(left));
-        const percentage = row => roleShare(row).toFixed(1) + "%";
+        const percentage = row => readableShare(roleShare(row));
         const answer = roleShare(higher) === roleShare(lower)
           ? `${roleNames[selectedRole]} tracks cover the same share in both cases (${percentage(higher)}).`
           : `${roleNames[selectedRole]} tracks cover a larger share in ${higher.case} (${percentage(higher)} vs ${percentage(lower)} in ${lower.case}).`;
@@ -333,17 +348,23 @@
         modelReading.textContent = `V24 has ${(counts[1]/counts[0]).toFixed(1)} times as many modeled main members. V01 covers ${(
           areaValue(byId.get("V01"), "activity_area_m2")/areaValue(byId.get("V24"), "activity_area_m2")).toFixed(1)} times the recorded activity area.`;
       }
+      const coveragePeak = Math.max(100, ...pair.flatMap(row => ["human", "machine", "part"]
+        .map(key => shareOfActivity(row, key + "_area_m2")).filter(Number.isFinite)));
+      const coverageMaximum = 25 * Math.ceil(coveragePeak/25);
       pair.forEach((row, index) => {
         const card = element("article", "atlas-card");
         const maximum = extent || (hasMetres(row) ? metricLimit : modelLimit(row));
         card.append(caseHeading(row), bars(maximum, fieldsFor(row)), axis(maximum, extent ? axisUnit : unit(row)));
         compareBars.append(card);
         if (studyMode) {
-          card.append(element("p", "atlas-pair-ratio", "A/F  " + multiplier(row)));
+          const ratios = element("p", "atlas-pair-ratio");
+          ratios.append(element("span", "", "A/F  " + multiplier(row)),
+            element("span", "atlas-inverse-ratio", "F/A  " + readableShare(shareOfActivity(row, "object_area_m2"))));
+          card.append(ratios);
           const plan = planData[index];
           operatorPlans.append(studyPlan(row, plan, shared, ["human","machine"],
-            [["human","human","H"], ["machine","machine","R"]], maximum));
-          partPlans.append(studyPlan(row, plan, shared, ["part"], [["part","part","P"]], maximum, partExample(row,plan)));
+            [["human","H"], ["machine","R"]], coverageMaximum));
+          partPlans.append(studyPlan(row, plan, shared, ["part"], [["part","P"]], coverageMaximum, partExample(row,plan)));
           modelCards.append(metricCard(row,modelMetrics[row.case]));
         } else {
           plans.append(renderPlan(row, planData[index], shared, layers));

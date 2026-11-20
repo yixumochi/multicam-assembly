@@ -111,7 +111,11 @@
 #compare-operators .atlas-fill.human { background: var(--plate-human); }
 #compare-operators .atlas-fill.machine { background: var(--plate-machine); }
 #compare-parts .atlas-fill.part { background: var(--plate-part); }
-#compare-bars .atlas-pair-ratio { margin: 9px 0 0; font-size: 13px; font-weight: 650; }
+#compare-bars .atlas-pair-ratio { display: flex; flex-wrap: wrap; gap: 4px 16px; margin: 9px 0 0; font-size: 13px; font-weight: 650; }
+.atlas-inverse-ratio { color: var(--atlas-muted); }
+.atlas-share-chart .atlas-bar-line { min-height: 25px; }
+.atlas-share-chart .atlas-track { background: repeating-linear-gradient(to right, #edf3ef 0 calc(25% - 1px), #cfddd5 calc(25% - 1px) 25%); }
+.atlas-share-area { margin-left: 6px; color: var(--atlas-muted); }
 
 .pair-study-title { margin: 0 0 9px; color: var(--plate-ink); font-size: clamp(17px, 2vw, 21px); }
 .pair-study-section { border-top: 1px solid var(--plate-rule); margin-top: 22px; padding-top: 16px; }
@@ -134,4 +138,5 @@
   .case-relations-drawing .case-node-values { display: none; }
   .case-relations :is(.case-relations-questions, .case-relations-pairs) button { min-height: 44px; }
   .pair-study-section .atlas-axis { margin: 0 95px 8px 31px; }
+  .atlas-share-area { display: block; margin-left: 0; }
 }
