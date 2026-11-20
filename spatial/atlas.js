@@ -69,6 +69,51 @@
     return margin > 0 ? [left - margin, top - margin, width + margin * 2, height + margin * 2] : viewBox;
   }
 
+  function footprintFrame({data, outline}) {
+    const box = data.object_range;
+    if (!box) return null;
+    const points = outline ?? [[box[0], box[1]], [box[2], box[3]]];
+    const xs = points.map(([x]) => x);
+    const ys = points.map(([, y]) => y);
+    const x = Math.min(...xs), y = Math.min(...ys);
+    const width = Math.max(...xs) - x, height = Math.max(...ys) - y;
+    return {x, y, width, height};
+  }
+
+  function footprintPlan(plan) {
+    const frame = footprintFrame(plan);
+    if (!frame) return plan;
+    const {x, y, width, height} = frame;
+    const margin = Math.max(width, height) * .32;
+    return {...plan, viewBox:[x - margin, y - margin, width + 2 * margin, height + 2 * margin]};
+  }
+
+  function sharedPlanBox(plans) {
+    return {
+      width:Math.max(...plans.map(plan => plan.viewBox[2] * plan.metres)),
+      height:Math.max(...plans.map(plan => plan.viewBox[3] * plan.metres))
+    };
+  }
+
+  function cleanPlanFilter(id) {
+    const filter = svgElement("filter", {
+      id, x:"0%", y:"0%", width:"100%", height:"100%", primitiveUnits:"objectBoundingBox",
+      "color-interpolation-filters":"sRGB"
+    });
+    // Lift soft render shadows while retaining the original plan's edges.
+    filter.append(
+      svgElement("feColorMatrix", {type:"saturate", values:0, result:"ink"}),
+      svgElement("feGaussianBlur", {in:"ink", stdDeviation:".01 .014", result:"shadows"}),
+      svgElement("feComposite", {in:"ink", in2:"shadows", operator:"arithmetic", k2:1, k3:-.8, k4:.8})
+    );
+    const contrast = svgElement("feComponentTransfer", {});
+    for (const channel of ["R","G","B"]) {
+      contrast.append(svgElement("feFunc" + channel, {type:"linear", slope:1.65, intercept:-.65}));
+    }
+    filter.append(contrast);
+    return filter;
+  }
+
   function filledCoverage(geometry, actions, layers, caseId, mergeRoles) {
     const byRole = new Map();
     for (const action of actions) {
@@ -116,18 +161,40 @@
     const backdrop = plan.querySelector("image").cloneNode(true);
     backdrop.setAttribute("href", new URL(backdrop.getAttribute("href"), casePage).href);
     backdrop.setAttribute("opacity", mode === "footprint" ? "0.9" : outline ? "0.5" : "0.7");
+    if (row.case !== "V01" && row.case !== "V24") {
+      const filterId = `plan-clean-${row.case}-${mode}`;
+      const defs = svgElement("defs", {});
+      defs.append(cleanPlanFilter(filterId));
+      canvas.append(defs);
+      backdrop.setAttribute("filter", `url(#${filterId})`);
+    }
     geometry.classList.add("atlas-coverage-plan");
     backdrop.classList.add("atlas-coverage-drawing");
     filledCoverage(geometry, data.actions, new Set(planLayers[mode]), row.case, mode === "activity");
     geometry.append(backdrop);
-    if (outline) geometry.append(svgElement("path", {
+    if (mode === "footprint") {
+      const frame = footprintFrame({data, outline});
+      if (frame) {
+        const padding = Math.max(frame.width, frame.height) * .055;
+        const title = svgElement("title", {});
+        title.textContent = row.case === "V26" ? "Saved workcell reference" : "Footprint framing box";
+        const box = svgElement("rect", {
+          x:frame.x - padding, y:frame.y - padding,
+          width:frame.width + 2 * padding, height:frame.height + 2 * padding,
+          class:"atlas-footprint-frame"
+        });
+        box.append(title);
+        geometry.append(box);
+      }
+    } else if (outline) geometry.append(svgElement("path", {
       d:`M ${coordinates(outline)} Z`, class:"atlas-object-outline"
     }));
     canvas.append(geometry);
     if (shared) {
       const start = shared.width * 0.04;
       const baseline = shared.height * 0.94;
-      const length = shared.width >= 15 ? 5 : 1;
+      const target = Math.min(shared.width * .24, shared.height * .40);
+      const length = [10, 5, 2, 1, .5, .2, .1].find(mark => mark <= target) ?? .05;
       canvas.append(svgElement("line", {x1:start, x2:start+length, y1:baseline, y2:baseline, stroke:"#193f4d"}));
       const label = svgElement("text", {x:start, y:baseline-shared.height*.024, "font-size":shared.width*.035, fill:"#193f4d"});
       label.textContent = length + " m";
@@ -272,8 +339,11 @@
       const field = study.keys[0] + "_area_m2";
       const values = pair.map(row => areaValue(row, field));
       const similar = Math.abs(values[0] - values[1]) <= study.tolerance * Math.max(...values);
-      const badge = element("span", "compare-badge", similar ? "Similar" : "Different");
+      const badge = element("span", "compare-badge");
       badge.dataset.similar = String(similar);
+      const mark = element("span", "compare-badge-mark", similar ? "≈" : "≠");
+      mark.setAttribute("aria-hidden", "true");
+      badge.append(mark, element("span", "", similar ? "Similar" : "Different"));
       header.append(badge);
     }
     return header;
@@ -355,6 +425,9 @@
       const plan = renderPlan(row, plans[index], shared, mode, name);
       const side = element("div", "compare-plan");
       side.append(plan);
+      if (mode === "footprint" && row.case === "V26") {
+        side.append(element("p", "note compare-plan-caption", "Saved workcell view"));
+      }
       const charts = element("div", "compare-case-charts");
       const controls = keys.map(key => [coverageChart(row, key, footprintMax), key]);
       for (const [chart] of controls) charts.append(chart);
@@ -469,17 +542,17 @@
       const canShare = plans.every(plan => plan.metres);
       common.disabled = !canShare;
       common.closest("label").hidden = !canShare;
-      const shared = canShare && common.checked ? {
-        width:Math.max(...plans.map(plan => plan.viewBox[2] * plan.metres)),
-        height:Math.max(...plans.map(plan => plan.viewBox[3] * plan.metres))
-      } : null;
-      atlas.querySelector("#atlas-plan-note").textContent = shared ? "Top Views share a metre scale" : "Top Views fitted separately";
+      const shared = canShare && common.checked ? sharedPlanBox(plans) : null;
+      const closePlans = plans.map(footprintPlan);
+      atlas.querySelector("#atlas-plan-note").textContent = shared ? "Shared metre scale within each row" : "Top Views fitted separately";
       const chartLabels = element("div", "compare-chart-headings");
       chartLabels.append(...pair.map(row => element("span", "", row.case)));
       const heading = rowLayout(element("div", ""), caseLink(pair[0]), chartLabels, caseLink(pair[1]));
       heading.classList.add("compare-matrix-heading");
       const metrics = pair.map(row => modelMetrics[row.case]);
-      matrix.replaceChildren(heading, ...studyRows.map(study => studyRow(study, pair, plans, shared)),
+      matrix.replaceChildren(heading, ...studyRows.map(study => study.mode === "footprint"
+        ? studyRow(study, pair, closePlans, shared && sharedPlanBox(closePlans))
+        : studyRow(study, pair, plans, shared)),
         modelComparison(pair, metrics, plans));
       atlas.querySelector("#compare-findings").textContent = caseFindings(pair);
     }

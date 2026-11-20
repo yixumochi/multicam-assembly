@@ -26,10 +26,24 @@
 .compare-matrix-heading { padding-block: 9px; text-align: center; }
 .compare-matrix-heading a { font-weight: 760; text-underline-offset: 4px; }
 .compare-chart-headings { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 9px; color: var(--atlas-muted); font-size: 12px; font-weight: 650; }
-.compare-badge { display: inline-flex; padding: 3px 9px; border: 1px solid var(--plate-rule); border-radius: 14px; background: #fff; color: var(--plate-ink); font-size: 11px; font-weight: 650; }
-.compare-badge[data-similar="true"] { background: #edf5ef; }
-.compare-badge[data-similar="false"] { background: #e9f4fa; border-color: #c5dfe9; }
+.compare-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 28px;
+  padding: 2px 9px;
+  border: 1px solid transparent;
+  border-radius: 14px;
+  font-size: 12px;
+  font-weight: 750;
+  letter-spacing: .045em;
+  text-transform: uppercase;
+}
+.compare-badge-mark { font-size: 17px; line-height: 1; }
+.compare-badge[data-similar="true"] { background: var(--plate-footprint); border-color: #6aa46a; color: var(--plate-ink); }
+.compare-badge[data-similar="false"] { background: var(--plate-blue); color: white; }
 
+.compare-plan, .compare-model-card { width: min(94%, 274px); justify-self: center; align-self: start; }
 .compare-plan .atlas-coverage-canvas {
   display: block;
   width: 100%;
@@ -40,9 +54,17 @@
 }
 .compare-plan .atlas-coverage-canvas[data-emphasis]:not([data-emphasis=""]) { outline: 2px solid var(--plate-blue); outline-offset: 1px; }
 .compare-plan .atlas-object-outline { stroke-width: 1.4px; }
+.atlas-footprint-frame {
+  fill: none;
+  stroke: var(--plate-ink);
+  stroke-width: 1.5px;
+  stroke-dasharray: 5 3;
+  vector-effect: non-scaling-stroke;
+}
 .compare-plan [data-coverage-layer="activity"] { fill: #a9c5c4; }
 .compare-plan [data-emphasis="activity"] .atlas-object-outline,
-.compare-plan [data-emphasis="object"] .atlas-object-outline { stroke: #337747; stroke-width: 2.8px; }
+.compare-plan [data-emphasis="object"] .atlas-footprint-frame { stroke: #337747; stroke-width: 2.4px; }
+.compare-plan .compare-plan-caption { margin: 4px 0 0; font-size: 11px; }
 .compare-plan [data-emphasis="human"] [data-coverage-layer="machine"],
 .compare-plan [data-emphasis="machine"] [data-coverage-layer="human"],
 .compare-plan :is([data-emphasis="human"], [data-emphasis="machine"]) [data-coverage-layer="overlap"] { visibility: hidden; }
@@ -73,7 +95,7 @@
 .compare-case-charts:first-child .compare-footprint-chart .compare-measure-fill { margin-inline-start: auto; }
 [data-compare-row="operators"] .atlas-pie-svg { width: clamp(33px, 4vw, 53px); }
 
-.compare-model-card { min-width: 0; align-self: start; }
+.compare-model-card { min-width: 0; }
 .compare-model-card .pair-study-iso { border: 1px solid var(--plate-rule); border-radius: 5px; overflow: hidden; }
 .compare-model-card .pair-study-iso img { object-fit: contain; }
 .compare-model-card .pair-study-facts { font-size: 12px; }
