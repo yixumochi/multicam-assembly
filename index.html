@@ -178,17 +178,48 @@ button, input, select { accent-color: var(--blue); }
 #study-method .name-pair-media figcaption { margin-top: 10px; color: var(--muted); font-size: 14px; line-height: 1.5; }
 .name-pair-media figcaption a { text-decoration: underline; text-underline-offset: 3px; }
 .rest-plates { display: grid; gap: 18px; margin-top: 14px; }
-.pair-pop { position: fixed; inset: 0; z-index: 40; display: grid; place-items: center; padding: 28px; background: rgba(23, 54, 59, .28); }
+.pair-pop { position: fixed; inset: 0; z-index: 70; display: grid; place-items: center; padding: 24px; background: rgba(23, 54, 59, .28); }
 .pair-pop[hidden] { display: none; }
-.pair-sheet { width: min(1180px, 100%); max-height: calc(100vh - 56px); overflow: auto; background: var(--paper); border: 1px solid var(--ink); padding: 18px 18px 22px; }
-.pair-sheet-head { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; margin: 0 0 12px; }
-.pair-sheet-head h2 { margin: 0; font-size: 18px; font-weight: 650; }
-.pair-sheet-head button { font-size: 18px; }
-.pair-cases { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.pair-sheet { width: min(1180px, 100%); max-height: calc(100vh - 48px); max-height: calc(100dvh - 48px); overflow: auto; overscroll-behavior: contain; background: var(--paper); border: 1px solid var(--ink); padding: 18px 20px 22px; }
+.pair-sheet-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; margin: 0 0 18px; }
+.pair-sheet-head h2 { margin: 0; font-size: 19px; font-weight: 700; line-height: 1.25; }
+.pair-sheet-head button { flex: none; font-size: 15px; }
+.pair-name-score { width: fit-content; margin: 7px 0 0; padding: 3px 8px; color: var(--ink); background: var(--soft); border-radius: 4px; font-size: 14px; font-weight: 650; font-variant-numeric: tabular-nums; }
+.pair-cases { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.pair-evidence, .pair-measurement { min-width: 0; margin: 0; padding: 10px; border: 1px solid var(--line); border-top: 3px solid var(--pair-series); background: #fff; }
+.pair-evidence > h3, .pair-measurement > h4 { margin: 0 0 4px; color: var(--pair-series); font-size: 16px; font-weight: 650; }
+.pair-evidence .pair-source { margin: 0 0 10px; font-size: 14px; }
+.pair-source a { text-decoration: underline; text-underline-offset: 3px; }
+.pair-evidence .turn-cols { gap: 9px; }
+.pair-evidence .turn-col .frame { display: flex; flex-wrap: wrap; align-items: center; align-content: center; gap: 3px 5px; min-height: 2.2em; margin: 0; color: var(--ink); font-size: 15px; line-height: 1.2; }
+.pair-evidence .turn-col.mark { outline: 2px solid var(--pair-series); outline-offset: 2px; }
+.pair-evidence .ref-tag { margin: 0; color: var(--pair-series); font-weight: 650; }
+.pair-evidence .turn-col .measure { margin: 3px 0; color: var(--pair-series); font-weight: 650; font-variant-numeric: tabular-nums; }
+.pair-image { display: block; background: #fff; }
+.pair-image:hover { outline: 2px solid var(--blue); outline-offset: 1px; }
+.pair-image img { display: block; width: 100%; height: auto; }
 .pair-angle { margin-top: 16px; }
-.pair-angle h3 { margin: 0 0 8px; font-size: 18px; font-weight: 650; }
-.pair-angle svg { width: 100%; height: auto; background: #fff; border: 1px solid var(--line); }
-.pair-angle p { margin: 8px 0 0; font-size: 18px; }
+.pair-angle h3 { margin: 0 0 4px; font-size: 18px; font-weight: 650; }
+.pair-angle-note { margin: 4px 0 10px; color: var(--muted); font-size: 14px; line-height: 1.45; }
+.pair-image-guide { margin: 7px 0 0; }
+.pair-angle-legend { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 14px; padding: 0; margin: 8px 0 10px; list-style: none; }
+.pair-angle-legend li { min-width: 0; border-inline-start: 3px solid var(--pair-series); padding-inline-start: 8px; font-size: 14px; font-variant-numeric: tabular-nums; }
+.pair-angle-legend strong, .pair-angle-legend span { display: block; }
+.pair-angle-legend strong { color: var(--pair-series); }
+.pair-plot { overflow-x: auto; border: 1px solid var(--line); background: #fff; }
+.pair-plot svg { display: block; width: 100%; min-width: 450px; height: auto; font-size: 13px; }
+.pair-value { paint-order: stroke; stroke: #fff; stroke-width: 3px; stroke-linejoin: round; }
+.pair-measurements { margin-top: 16px; border: 1px solid var(--line); padding: 9px 12px 12px; }
+.pair-measurements summary { cursor: pointer; font-size: 16px; font-weight: 650; }
+.pair-measurement img { height: clamp(124px, 18vw, 210px); object-fit: contain; }
+.pair-measure-table { width: 100%; border-collapse: collapse; color: var(--ink); margin: 8px 0 6px; font-size: 14px; font-variant-numeric: tabular-nums; }
+.pair-measure-table th, .pair-measure-table td { border-bottom: 1px solid var(--line); padding: 5px; text-align: center; }
+.pair-measure-table th:first-child { text-align: left; }
+@media (max-width: 720px) {
+  .pair-pop { padding: 8px; }
+  .pair-sheet { max-height: calc(100vh - 16px); max-height: calc(100dvh - 16px); padding: 12px; }
+  .pair-cases, .pair-angle-legend { grid-template-columns: minmax(0, 1fr); }
+}
 .rest-plate { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr); gap: 8px 12px; align-items: center; }
 .rest-plate h3 { grid-column: 1 / -1; margin: 0; font-size: 15px; font-weight: 650; }
 .rest-frames { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
@@ -2741,7 +2772,7 @@ function currentEdges(base) {
 function nodeHTML(node) {
   return '<span class="pair-name">'+esc(displayName(node))+'</span><span class="pair-meta">'+node.v_ids.map(v=>'<span class="pill">'+esc(v)+'</span>').join('')+'<span>'+node.events.length+' event'+(node.events.length===1?'':'s')+'</span></span>'
 }
-function chooseEdge(edge) {state.selectedEdge=edge;state.selectedNode=null;render(); if(innerWidth<761){$('detail').scrollIntoView({behavior:'smooth',block:'start'});$('detail').focus({preventScroll:true})}}
+function chooseEdge(edge) {state.selectedEdge=edge;state.selectedNode=null;render(); if(view!=='network' && innerWidth<761){$('detail').scrollIntoView({behavior:'smooth',block:'start'});$('detail').focus({preventScroll:true})}}
 function renderPairs(edges) {
   const size=pageSize==='all'?Math.max(edges.length,1):pageSize
   page=Math.min(page,Math.max(0,Math.ceil(edges.length/size)-1))
@@ -3194,9 +3225,20 @@ function pairHost() {
   })
   document.body.appendChild(host)
   document.addEventListener('keydown', event => {
-    if (event.key !== 'Escape' || host.hidden) return
-    clearDetail()
-    render()
+    if (host.hidden) return
+    if (event.key === 'Escape') {
+      clearDetail()
+      render()
+      return
+    }
+    if (event.key !== 'Tab') return
+    const stops = [...host.querySelectorAll('button, a[href], summary')].filter(control => control.getClientRects().length)
+    const first = stops[0]
+    const last = stops[stops.length - 1]
+    const boundary = event.shiftKey ? first : last
+    if (document.activeElement !== boundary) return
+    event.preventDefault()
+    ;(event.shiftKey ? last : first).focus()
   })
   return host
 }
@@ -3206,134 +3248,235 @@ function closePairPop() {
   host.hidden = true
   host.dataset.edge = ''
 }
-function pairFrames(plate) {
-  const article = document.createElement('article')
-  article.className = 'drawn-plate'
-  const title = document.createElement('h3')
-  title.textContent = plate ? plate.home + ' · ' + plate.name : 'No eligible drawing in this snapshot (text relation retained)'
-  if (!plate) {
-    article.appendChild(title)
-    return article
-  }
-  const cols = document.createElement('div')
-  cols.className = 'turn-cols cols-3'
-  plate.frames.forEach(frame => {
-    const col = document.createElement('section')
-    col.className = 'turn-col' + (frame.mark === plate.ref ? ' mark' : '')
-    const head = document.createElement('p')
-    head.className = 'frame'
-    head.textContent = (REST_STATE[frame.mark] || frame.mark) + (frame.mark === plate.ref ? ' · reference' : '')
-    const axis = document.createElement('p')
-    axis.className = 'measure'
-    axis.textContent = !frame.theta || frame.theta === '—' ? 'θ —' : 'θ ' + frame.theta + '°'
-    col.append(head, restImage(frame.file, plate.name + ', frame ' + frame.mark, 'line'), axis, restImage(frame.file.replace(/\.png$/, '.jpg'), plate.name + ' still', 'shot'))
-    cols.appendChild(col)
-  })
-  article.append(title, cols)
-  return article
-}
+const PAIR_COLORS = ['#176f8d', '#b34d1b']
+const PAIR_STAGES = Object.keys(REST_STATE)
+
 function angleNumber(value) {
   const number = parseFloat(value)
   return Number.isFinite(number) ? number : null
 }
+
+function angleText(number, signed = false) {
+  if (number === null) return '—'
+  const magnitude = Math.abs(number).toFixed(1)
+  const prefix = Number(magnitude) === 0 ? '' : number < 0 ? '−' : signed ? '+' : ''
+  return prefix + magnitude + '°'
+}
+
+function pairImage(file, alt, kind) {
+  const img = restImage(file, alt, kind)
+  const link = document.createElement('a')
+  link.className = 'pair-image'
+  link.href = img.src
+  link.target = '_blank'
+  link.rel = 'noopener'
+  link.setAttribute('aria-label', 'Open full size: ' + alt + ' (new tab)')
+  link.appendChild(img)
+  return link
+}
+
+function pairFrames(plate, color) {
+  const article = document.createElement('article')
+  article.className = 'drawn-plate pair-evidence'
+  article.style.setProperty('--pair-series', color)
+  const title = document.createElement('h3')
+  title.textContent = plate ? plate.home + ' · ' + plate.name : 'Drawing unavailable'
+  article.appendChild(title)
+  if (!plate) return article
+
+  const source = document.createElement('p')
+  source.className = 'pair-source'
+  if (Number.isFinite(plate.start) && Number.isFinite(plate.end)) {
+    source.append('Annotated span ' + plate.start.toFixed(2) + '–' + plate.end.toFixed(2) + ' s')
+  }
+  const casePage = document.getElementById(plate.home)?.closest('[data-page]')
+  if (casePage) {
+    if (source.textContent) source.append(' · ')
+    const link = document.createElement('a')
+    link.href = '#' + casePage.dataset.page + '/' + encodeURIComponent(plate.home)
+    link.target = '_blank'
+    link.rel = 'noopener'
+    link.textContent = 'Case film and record'
+    source.appendChild(link)
+  }
+  if (source.textContent) article.appendChild(source)
+
+  const cols = document.createElement('div')
+  cols.className = 'turn-cols cols-' + plate.frames.length
+  plate.frames.forEach(frame => {
+    const col = document.createElement('section')
+    col.className = 'turn-col' + (frame.mark === plate.ref ? ' mark' : '')
+    const stage = REST_STATE[frame.mark] || frame.mark
+    const head = document.createElement('p')
+    head.className = 'frame'
+    head.textContent = stage
+    if (frame.mark === plate.ref) {
+      const ref = document.createElement('span')
+      ref.className = 'ref-tag'
+      ref.textContent = 'Reference'
+      head.appendChild(ref)
+    }
+    const axis = document.createElement('p')
+    axis.className = 'measure'
+    axis.textContent = 'θ ' + angleText(angleNumber(frame.theta))
+    const label = plate.home + ' · ' + plate.name + ' · ' + stage
+    col.append(head, pairImage(frame.file, label + ' outline', 'line'), axis,
+      pairImage(frame.file.replace(/\.png$/, '.jpg'), label + ' film still', 'shot'))
+    cols.appendChild(col)
+  })
+  article.appendChild(cols)
+  return article
+}
+
+function pairAngleLegend(series) {
+  const legend = document.createElement('ul')
+  legend.className = 'pair-angle-legend'
+  series.forEach(({plate, color, angles}) => {
+    const item = document.createElement('li')
+    item.style.setProperty('--pair-series', color)
+    const title = document.createElement('strong')
+    title.textContent = plate.home + ' · ' + plate.name
+    const summary = document.createElement('span')
+    const [start, , end] = angles
+    summary.textContent = start === null || end === null
+      ? 'End − start unavailable'
+      : angleText(start) + ' → ' + angleText(end) + ' · End − start ' + angleText(end - start, true)
+    item.append(title, summary)
+    legend.appendChild(item)
+  })
+  return legend
+}
+
 function angleChart(left, right) {
   const wrap = document.createElement('div')
   wrap.className = 'pair-angle'
   const heading = document.createElement('h3')
-  heading.textContent = 'Member angle to horizontal'
-  const series = [left, right].filter(plate => plate && plate.frames.some(frame => angleNumber(frame.theta) !== null))
-  if (!series.length) {
-    const note = document.createElement('p')
-    note.textContent = 'Neither action has a member angle to compare.'
-    wrap.append(heading, note)
+  heading.textContent = 'Member angle to image horizontal'
+  wrap.appendChild(heading)
+  const series = [left, right].flatMap((plate, index) => plate ? [{
+    plate, color: PAIR_COLORS[index],
+    angles: PAIR_STAGES.map(mark => angleNumber(plate.frames.find(frame => frame.mark === mark)?.theta)),
+  }] : [])
+  const values = series.flatMap(item => item.angles.filter(value => value !== null))
+  const note = document.createElement('p')
+  note.className = 'pair-angle-note'
+  if (!values.length) {
+    note.textContent = 'Angle measurements are unavailable for this pair.'
+    wrap.appendChild(note)
     return wrap
   }
-  const marks = ['a', 'b', 'c']
-  const values = []
-  series.forEach(plate => plate.frames.forEach(frame => {
-    const number = angleNumber(frame.theta)
-    if (number !== null) values.push(number)
-  }))
-  let low = Math.min(...values) - 8
-  let high = Math.max(...values) + 8
-  if (high - low < 24) {
-    const mid = (high + low) / 2
-    low = mid - 12
-    high = mid + 12
-  }
-  const width = 720
-  const height = 280
-  const leftPad = 58
-  const rightPad = 18
-  const topPad = 28
-  const bottomPad = 42
-  const plotW = width - leftPad - rightPad
-  const plotH = height - topPad - bottomPad
-  const xAt = index => leftPad + (marks.length === 1 ? plotW / 2 : plotW * index / (marks.length - 1))
-  const yAt = number => topPad + (high - number) / (high - low) * plotH
-  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
-  svg.setAttribute('viewBox', '0 0 ' + width + ' ' + height)
-  const axis = document.createElementNS('http://www.w3.org/2000/svg', 'path')
-  axis.setAttribute('d', 'M ' + leftPad + ' ' + topPad + ' V ' + (topPad + plotH) + ' H ' + (leftPad + plotW))
-  axis.setAttribute('fill', 'none')
-  axis.setAttribute('stroke', '#17363b')
-  axis.setAttribute('stroke-width', '1.2')
-  svg.appendChild(axis)
-  ;[high, (high + low) / 2, low].forEach(tick => {
+  note.textContent = 'Each point is a sampled frame. Angles use each camera’s image horizontal and can wrap at ±90°.'
+  wrap.append(note, pairAngleLegend(series))
+
+  const min = Math.min(...values)
+  const max = Math.max(...values)
+  const span = Math.max(20, max - min + 12)
+  const step = span > 100 ? 30 : span > 55 ? 20 : span > 30 ? 10 : 5
+  const low = Math.floor((min - 6) / step) * step
+  const high = Math.ceil((max + 6) / step) * step
+  const width = 790
+  const height = 230
+  const plotLeft = 64
+  const plotRight = width - 34
+  const plotTop = 22
+  const plotBottom = height - 48
+  const xAt = index => plotLeft + (plotRight - plotLeft) * index / (PAIR_STAGES.length - 1)
+  const yAt = angle => plotTop + (high - angle) / (high - low) * (plotBottom - plotTop)
+  const description = series.map(({plate, angles}) => plate.home + ' ' + plate.name + ': ' +
+    angles.map((angle, index) => REST_STATE[PAIR_STAGES[index]] + ' ' + (angle === null ? 'unavailable' : angleText(angle))).join(', ')).join('. ')
+  const svg = el('svg', {viewBox: `0 0 ${width} ${height}`, role: 'img', 'aria-label': description})
+  for (let tick = low; tick <= high; tick += step) {
     const y = yAt(tick)
-    const label = document.createElementNS('http://www.w3.org/2000/svg', 'text')
-    label.setAttribute('x', String(leftPad - 8))
-    label.setAttribute('y', String(y + 4))
-    label.setAttribute('text-anchor', 'end')
-    label.setAttribute('fill', '#4e6665')
-    label.setAttribute('font-size', '14')
-    label.textContent = tick.toFixed(0) + '°'
+    svg.appendChild(el('line', {x1: plotLeft, x2: plotRight, y1: y, y2: y,
+      stroke: tick === 0 ? '#81978f' : '#e1ebe5', 'stroke-width': tick === 0 ? 1.35 : 1}))
+    const label = el('text', {x: plotLeft - 10, y: y + 4, 'text-anchor': 'end', fill: '#4e6665'})
+    label.textContent = (tick < 0 ? '−' + Math.abs(tick) : tick) + '°'
     svg.appendChild(label)
-  })
-  marks.forEach((mark, index) => {
-    const label = document.createElementNS('http://www.w3.org/2000/svg', 'text')
-    label.setAttribute('x', String(xAt(index)))
-    label.setAttribute('y', String(topPad + plotH + 24))
-    label.setAttribute('text-anchor', 'middle')
-    label.setAttribute('fill', '#17363b')
-    label.setAttribute('font-size', '14')
+  }
+  PAIR_STAGES.forEach((mark, index) => {
+    const label = el('text', {x: xAt(index), y: plotBottom + 34, 'text-anchor': 'middle', fill: '#17363b'})
     label.textContent = REST_STATE[mark]
     svg.appendChild(label)
   })
-  const colors = ['#2289ae', '#e76714']
-  const caption = document.createElement('p')
-  series.forEach((plate, index) => {
-    const points = plate.frames.map((frame, frameIndex) => {
-      const number = angleNumber(frame.theta)
-      return number === null ? null : [xAt(frameIndex), yAt(number)]
-    }).filter(Boolean)
-    if (points.length > 1) {
-      const line = document.createElementNS('http://www.w3.org/2000/svg', 'polyline')
-      line.setAttribute('points', points.map(point => point.join(',')).join(' '))
-      line.setAttribute('fill', 'none')
-      line.setAttribute('stroke', colors[index])
-      line.setAttribute('stroke-width', '2.4')
-      svg.appendChild(line)
-    }
-    plate.frames.forEach((frame, frameIndex) => {
-      const number = angleNumber(frame.theta)
-      if (number === null) return
-      const dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle')
-      dot.setAttribute('cx', String(xAt(frameIndex)))
-      dot.setAttribute('cy', String(yAt(number)))
-      dot.setAttribute('r', frame.mark === plate.ref ? '6' : '4.5')
-      dot.setAttribute('fill', colors[index])
-      svg.appendChild(dot)
+
+  series.forEach(({angles, color}) => {
+    angles.slice(1).forEach((angle, index) => {
+      const before = angles[index]
+      if (before === null || angle === null || Math.abs(angle - before) > 90) return
+      svg.appendChild(el('line', {x1: xAt(index), y1: yAt(before), x2: xAt(index + 1), y2: yAt(angle),
+        stroke: color, 'stroke-width': 2, 'stroke-dasharray': '5 4'}))
     })
-    const first = angleNumber(plate.frames[0] && plate.frames[0].theta)
-    const last = angleNumber(plate.frames[plate.frames.length - 1] && plate.frames[plate.frames.length - 1].theta)
-    const change = first === null || last === null ? '—' : (last - first).toFixed(1) + '°'
-    caption.textContent += (caption.textContent ? '  ' : '') + plate.home + ' · ' + plate.name + ': start to end ' + change + '.'
   })
-  wrap.append(heading, svg, caption)
+  series.forEach(({plate, angles, color}, seriesIndex) => {
+    angles.forEach((angle, index) => {
+      if (angle === null) return
+      const x = xAt(index)
+      const y = yAt(angle)
+      const other = series[1 - seriesIndex]?.angles[index] ?? null
+      const above = other === null || angle === other ? seriesIndex === 0 : angle > other
+      const ref = PAIR_STAGES[index] === plate.ref
+      svg.appendChild(el('circle', {cx: x, cy: y, r: ref ? 5 : 4, fill: ref ? '#fff' : color, stroke: color, 'stroke-width': 2}))
+      const label = el('text', {x, y: y + (above ? -10 : 18), 'text-anchor': 'middle', fill: color, 'font-weight': '700', class: 'pair-value'})
+      label.textContent = angleText(angle)
+      svg.appendChild(label)
+    })
+  })
+  const plot = document.createElement('div')
+  plot.className = 'pair-plot'
+  plot.appendChild(svg)
+  wrap.appendChild(plot)
   return wrap
 }
+
+function pairMeasurements(left, right) {
+  const details = document.createElement('details')
+  details.className = 'pair-measurements'
+  const summary = document.createElement('summary')
+  summary.textContent = 'Grip-aligned overlays and measurements'
+  const note = document.createElement('p')
+  note.className = 'pair-angle-note'
+  note.textContent = 'Angle difference is the absolute difference from the marked reference. Grip shift (d/H) and visible leftward reach (ℓ/H) use each case’s own image scale H.'
+  const cases = document.createElement('div')
+  cases.className = 'pair-cases'
+  ;[left, right].forEach((plate, index) => {
+    if (!plate) return
+    const item = document.createElement('section')
+    item.className = 'pair-measurement'
+    item.style.setProperty('--pair-series', PAIR_COLORS[index])
+    const title = document.createElement('h4')
+    title.textContent = plate.home + ' · ' + plate.name
+    item.appendChild(title)
+    if (plate.plot) item.appendChild(pairImage(plate.plot, plate.home + ' grip-aligned overlay', 'plot'))
+    if (plate.measured) {
+      const frameLabel = frame => (REST_STATE[frame.mark] || frame.mark) + (frame.mark === plate.ref ? ' (ref.)' : '')
+      const value = (field, frame) => {
+        const number = angleNumber(frame[field])
+        return number === null ? '—' : field === 'delta' ? angleText(number) : number.toFixed(2)
+      }
+      const table = document.createElement('table')
+      table.className = 'pair-measure-table'
+      table.innerHTML = '<thead><tr><th scope="col">Measure</th>' +
+        plate.frames.map(frame => '<th scope="col">' + esc(frameLabel(frame)) + '</th>').join('') +
+        '</tr></thead><tbody><tr><th scope="row">Angle difference</th>' +
+        plate.frames.map(frame => '<td>' + value('delta', frame) + '</td>').join('') +
+        '</tr><tr><th scope="row">Grip shift d/H</th>' +
+        plate.frames.map(frame => '<td>' + value('shift', frame) + '</td>').join('') + '</tr></tbody>'
+      item.appendChild(table)
+      if (angleNumber(plate.reach) !== null) {
+        const reach = document.createElement('p')
+        reach.className = 'pair-angle-note'
+        reach.textContent = 'Reference reach ℓ/H ' + angleNumber(plate.reach).toFixed(2)
+        item.appendChild(reach)
+      }
+    }
+    cases.appendChild(item)
+  })
+  details.append(summary, note, cases)
+  return details
+}
+
 function openPairPop(edge) {
+  hideTip()
   const host = pairHost()
   const key = edge.source + ':' + edge.target
   if (host.dataset.edge === key && !host.hidden) return
@@ -3345,19 +3488,31 @@ function openPairPop(edge) {
   const rightPlate = pairDrawingFor(right)
   const sheet = document.createElement('div')
   sheet.className = 'pair-sheet'
+  sheet.setAttribute('role', 'dialog')
+  sheet.setAttribute('aria-modal', 'true')
+  sheet.setAttribute('aria-labelledby', 'pair-dialog-title')
   const head = document.createElement('div')
   head.className = 'pair-sheet-head'
+  const intro = document.createElement('div')
   const title = document.createElement('h2')
-  title.textContent = displayName(left) + '  ×  ' + displayName(right) + '    ' + edge.cosine.toFixed(3)
+  title.id = 'pair-dialog-title'
+  title.textContent = displayName(left) + ' × ' + displayName(right)
+  const score = document.createElement('p')
+  score.className = 'pair-name-score'
+  score.textContent = 'Action-name cosine ' + edge.cosine.toFixed(3)
+  intro.append(title, score)
   const close = document.createElement('button')
   close.type = 'button'
   close.textContent = 'Close'
   close.onclick = event => { event.stopPropagation(); clearDetail(); closePairPop(); render() }
-  head.append(title, close)
+  head.append(intro, close)
   const cases = document.createElement('div')
   cases.className = 'pair-cases'
-  cases.append(pairFrames(leftPlate), pairFrames(rightPlate))
-  sheet.append(head, cases, angleChart(leftPlate, rightPlate))
+  cases.append(pairFrames(leftPlate, PAIR_COLORS[0]), pairFrames(rightPlate, PAIR_COLORS[1]))
+  const guide = document.createElement('p')
+  guide.className = 'pair-angle-note pair-image-guide'
+  guide.textContent = 'Open an outline or film still to view it at full size.'
+  sheet.append(head, cases, guide, angleChart(leftPlate, rightPlate), pairMeasurements(leftPlate, rightPlate))
   host.replaceChildren(sheet)
   close.focus()
 }
