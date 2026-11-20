@@ -15,45 +15,39 @@
   video{display:block;width:100%;aspect-ratio:2/1;background:#e9f0eb;border:1px solid #d2ded4;border-radius:12px}
   figcaption{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:6px 24px;margin-top:12px;color:#466258;font-size:.9rem}
   a{color:#126958;text-underline-offset:.22em}
-  #workshop-plan{margin-top:clamp(28px,5vw,56px)}
-  #workshop-plan h2{font-size:clamp(1.3rem,3vw,1.85rem);line-height:1.2;margin:0 0 14px}
-  #workshop-plan img{display:block;width:100%;height:auto;background:white;border:1px solid #d2ded4;border-radius:12px}
-  #workshop-plan i{display:inline-block;width:.85em;height:.85em;border-radius:2px;vertical-align:-.08em}
-  .machine{background:#7dc9e9}
-  .part{background:#78d5b2}
-  .video-mark{background:#ffe06a;border:1px solid #172e2b}
-  .range{background:transparent;border:1.5px dashed #e87c3a;height:.72em}
-  .object{background:transparent;border:1.5px dashed #2a2a28;height:.72em}
-  .plan-source{font-size:.8rem;margin:10px 0 0}
+  #pipeline{margin-top:clamp(28px,5vw,56px)}
+  #pipeline h2{font-size:clamp(1.3rem,3vw,1.85rem);line-height:1.2;margin:0 0 14px}
+  #pipeline img{display:block;width:100%;height:auto;background:white;border:1px solid #d2ded4;border-radius:12px}
+  #pipeline p{font-size:.9rem;margin:10px 0 0}
 </style>
 </head>
 <body>
 <main>
   <p class="case"><a href="../spatial/index.html">Atlas of Assembly Space</a> · V22 · Shot S01</p>
   <h1>From video to top view</h1>
-  <figure>
+  <figure id="workshop-plan">
     <video id="intro-video" controls muted playsinline preload="metadata"
-      poster="assets/30_intro_poster.jpg" src="assets/29_video_to_top_view.mp4"
-      aria-label="V22 demonstration of masking, tracking, depth and top-view projection"></video>
-    <figcaption><span>The closing panel is this shot’s local plane, not the workshop.</span>
-      <a href="technical.html">Technical walkthrough</a>
+      poster="assets/33_v22_workshop_video_poster.jpg" src="assets/32_v22_video_to_workshop_plan.mp4"
+      aria-label="V22 demonstration of feature tracking, local top view and workshop plan placement"></video>
+    <figcaption><span>V22 S01 · Local top view and placement on the workshop plan</span>
+      <span><a href="../index.html#robotic-assembly/V22">V22 case record</a> · <a href="technical.html">Technical walkthrough</a></span>
     </figcaption>
   </figure>
-  <section id="workshop-plan" aria-labelledby="plan-title">
-    <h2 id="plan-title">Latest V22 model and tracked range</h2>
+  <section id="pipeline" aria-labelledby="pipeline-title">
+    <h2 id="pipeline-title">Network and processing pipeline</h2>
     <figure>
-      <a href="assets/31_v22_published_plan.png"><img src="assets/31_v22_published_plan.png?v=s01"
-        alt="V22 workshop model. The yellow region is S01 robot 02, the shot in the video, with its placed trajectory drawn in dark ink." width="1800" loading="lazy"></a>
-      <figcaption>
-        <span><i class="video-mark"></i> This video &nbsp; <i class="machine"></i> Machines &nbsp; <i class="part"></i> Parts</span>
-        <span>One surface point is masked, tracked and given depth. The shot footprint is then placed in the marked region.</span>
-      </figcaption>
+      <a href="assets/14_visual_pipeline.svg"><img src="assets/14_visual_pipeline.png"
+        alt="Processing diagram connecting V22 video, SAM2.1 masks, LK tracking, Depth Pro and the two top-view routes"
+        width="2400" height="1308" loading="lazy"></a>
     </figure>
-    <p class="plan-source"><a href="https://github.com/yixumochi/multicam-assembly/commit/7d5bc4b0c32e2d7fc741d8b65013e31084dc63d3">GitHub V22 · 7d5bc4b</a></p>
+    <p><a href="technical.html#networks">SAM2.1 and Depth Pro architectures</a></p>
   </section>
 </main>
 <script>
   const video = document.getElementById('intro-video');
+  if (location.hash === '#workshop-plan') {
+    video.addEventListener('loadedmetadata', () => { video.currentTime = 14.08; }, {once: true});
+  }
   if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
     video.muted = true;
     video.play().catch(() => {});
