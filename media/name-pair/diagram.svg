@@ -1,0 +1,165 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 536" role="img" aria-labelledby="diagram-title diagram-desc">
+  <title id="diagram-title">How a name pair is made</title>
+  <desc id="diagram-desc">Label an event span and give it an English action name. The same all-MiniLM-L6-v2 encoder produces one normalized, 384-dimensional vector per distinct name. WordPiece tokens and positional embeddings pass through six transformer layers. Each layer has 12 attention heads and a feed-forward network of width 1536, with residual connections and layer normalization. Masked mean pooling and L2 normalization make the stored unit vectors. Their dot product gives a cosine score. In this example, V21 Transport held timber and V04 Transport and rotate timber score 0.822. The default comparison uses a minimum cosine of 0.50, requires the names to share no case, and requires eligible drawings for both names.</desc>
+  <style>
+    text { font-family: 'Segoe UI', system-ui, sans-serif; fill: #17363b; }
+    .group-title { font-size: 19px; font-weight: 720; letter-spacing: -.02em; }
+    .label { font-size: 16px; font-weight: 660; }
+    .note { font-size: 14px; fill: #45625f; }
+    .case { font-size: 14px; font-weight: 720; fill: #176581; }
+    .score { font-size: 41px; font-weight: 740; letter-spacing: -.055em; }
+    .flow, .bus, .residual { fill: none; stroke: #3a6266; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+    .flow { marker-end: url(#name-pair-arrow); }
+    .residual { stroke: #678981; stroke-dasharray: 3 3; marker-end: url(#name-pair-arrow); }
+  </style>
+  <defs>
+    <marker id="name-pair-arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="5" markerHeight="5" orient="auto">
+      <path d="M0 0 8 4 0 8Z" fill="#3a6266"/>
+    </marker>
+    <pattern id="feature-grid" width="10" height="10" patternUnits="userSpaceOnUse">
+      <path d="M10 0H0V10" fill="none" stroke="#38766c" stroke-opacity=".33"/>
+    </pattern>
+    <g id="feature-sheet">
+      <path d="M0 7 9 0h66l-9 7Z" fill="#daf2df" stroke="#518073"/>
+      <path d="M66 7 75 0v43l-9 7Z" fill="#90c4ab" stroke="#518073"/>
+      <rect y="7" width="66" height="43" rx="2" fill="#bde5cb" stroke="#518073"/>
+      <rect y="7" width="66" height="43" rx="2" fill="url(#feature-grid)"/>
+    </g>
+    <g id="attention-cell">
+      <rect width="13" height="12" rx="2" fill="#d1e7f2" stroke="#6b9bad"/>
+      <path d="M4 0v12M9 0v12M0 6h13" fill="none" stroke="#6b9bad" stroke-opacity=".40"/>
+    </g>
+    <g id="evidence-frames">
+      <rect x="7" y="0" width="29" height="21" rx="2" fill="#a6cda9" stroke="#558066"/>
+      <rect x="3" y="4" width="29" height="21" rx="2" fill="#e6f3df" stroke="#558066"/>
+      <path d="M8 21l8-9 5 5 6-6M7 22h20" fill="none" stroke="#558066" stroke-linecap="round"/>
+    </g>
+  </defs>
+
+  <rect x=".5" y=".5" width="639" height="535" rx="14" fill="#fffef8" stroke="#d7e4db"/>
+
+  <!-- Two named spans and one shared encoder. -->
+  <rect x="16" y="18" width="199" height="147" rx="11" fill="#f7f3e9" stroke="#e4ddce"/>
+  <text class="group-title" x="30" y="44">Label two spans</text>
+  <text class="case" x="30" y="69">V21</text>
+  <text class="note" x="66" y="69">Transport held timber</text>
+  <path d="M31 86H200M31 86v5m34-5v5m34-5v5m33-5v5m34-5v5m34-5v5" stroke="#8faaa4" fill="none"/>
+  <rect x="51" y="81" width="86" height="10" rx="5" fill="#9ed1a6" stroke="#548369"/>
+  <text class="case" x="30" y="115">V04</text>
+  <text class="note" x="66" y="115">Transport and rotate</text>
+  <text class="note" x="66" y="132">timber</text>
+  <path d="M31 149H200M31 149v5m34-5v5m34-5v5m33-5v5m34-5v5m34-5v5" stroke="#8faaa4" fill="none"/>
+  <rect x="83" y="144" width="93" height="10" rx="5" fill="#b3d9eb" stroke="#5f92a6"/>
+
+  <path class="flow" d="M215 80h19"/>
+  <path class="flow" d="M215 135h19"/>
+  <rect x="235" y="18" width="181" height="147" rx="11" fill="#edf5ef" stroke="#cfe2d4"/>
+  <text class="group-title" text-anchor="middle" x="325.5" y="44">Shared encoder</text>
+  <g transform="translate(277 60)">
+    <use href="#feature-sheet" x="24" y="0"/>
+    <use href="#feature-sheet" x="16" y="6"/>
+    <use href="#feature-sheet" x="8" y="12"/>
+    <use href="#feature-sheet" y="18"/>
+  </g>
+  <text class="note" text-anchor="middle" x="325.5" y="151">all-MiniLM-L6-v2</text>
+
+  <path class="flow" d="M416 80h18"/>
+  <path class="flow" d="M416 135h18"/>
+  <rect x="435" y="18" width="189" height="147" rx="11" fill="#edf5f9" stroke="#d1e3ea"/>
+  <text class="group-title" text-anchor="middle" x="529.5" y="44">Cosine score</text>
+  <g stroke="#699197" stroke-width="1">
+    <rect x="462" y="56" width="13" height="10" rx="2" fill="#8ec69a"/><rect x="479" y="56" width="13" height="10" rx="2" fill="#d2e9d3"/><rect x="496" y="56" width="13" height="10" rx="2" fill="#aad5aa"/>
+    <rect x="550" y="56" width="13" height="10" rx="2" fill="#b6d8e7"/><rect x="567" y="56" width="13" height="10" rx="2" fill="#deebf0"/><rect x="584" y="56" width="13" height="10" rx="2" fill="#95c7dc"/>
+  </g>
+  <circle cx="529.5" cy="61" r="3" fill="#3a6266"/>
+  <text class="score" text-anchor="middle" x="528" y="113">0.822</text>
+  <path d="M459 127h140" stroke="#b8ccd0" stroke-width="5" stroke-linecap="round"/>
+  <path d="M459 127h115" stroke="#287e81" stroke-width="5" stroke-linecap="round"/>
+  <path d="M529 121v12" stroke="#52736c" stroke-width="1.4"/>
+  <text class="note" text-anchor="middle" x="529.5" y="152">Dot product of unit vectors</text>
+
+  <!-- Threshold and eligibility are display rules applied to stored scores. -->
+  <path class="flow" d="M529.5 165v12"/>
+  <rect x="16" y="178" width="608" height="59" rx="10" fill="#f2f7ec" stroke="#d6e2ce"/>
+  <path d="M30 193h25l-9 10v9l-7 4v-13Z" fill="#c1dfb6" stroke="#537a5d" stroke-linejoin="round"/>
+  <text class="label" x="66" y="201">Default filters</text>
+  <text class="note" x="66" y="222">≥ 0.50 · no shared case · drawings for both</text>
+  <path class="flow" d="M370 207h22"/>
+  <use href="#evidence-frames" x="408" y="194"/>
+  <text class="label" x="455" y="213">Compare evidence</text>
+
+  <!-- Encoder architecture at token, layer and unit-vector scale. -->
+  <rect x="16" y="251" width="608" height="269" rx="11" fill="#f7faf6" stroke="#d7e4db"/>
+  <text class="group-title" x="30" y="278">Inside the shared encoder</text>
+  <g transform="translate(45 303)" stroke="#9d8460">
+    <rect width="28" height="16" rx="3" fill="#eedfc0"/>
+    <rect x="33" width="25" height="16" rx="3" fill="#f1e9d5"/>
+    <rect x="63" width="25" height="16" rx="3" fill="#e5cd9c"/>
+    <path d="M6 8h16m16 0h14m16 0h14" stroke-linecap="round"/>
+  </g>
+  <text class="label" text-anchor="middle" x="89" y="352">WordPiece</text>
+  <path class="flow" d="M139 311h26"/>
+
+  <g transform="translate(178 296)">
+    <rect y="7" width="90" height="9" rx="2" fill="#c9dde6" stroke="#779ba9"/>
+    <rect y="19" width="90" height="9" rx="2" fill="#e8d7a7" stroke="#a28d59"/>
+    <path d="M15 7v9m15-9v9m15-9v9m15-9v9m15-9v9M15 19v9m15-9v9m15-9v9m15-9v9m15-9v9" stroke="#7b9b9c" stroke-opacity=".55"/>
+  </g>
+  <text class="label" text-anchor="middle" x="223" y="352">Token + position</text>
+  <path class="flow" d="M281 311h25"/>
+
+  <g fill="#cbe8d4" stroke="#66937d" transform="translate(318 293)">
+    <rect x="20" width="68" height="22" rx="3"/><rect x="16" y="3" width="68" height="22" rx="3"/><rect x="12" y="6" width="68" height="22" rx="3"/>
+    <rect x="8" y="9" width="68" height="22" rx="3"/><rect x="4" y="12" width="68" height="22" rx="3"/><rect y="15" width="68" height="22" rx="3"/>
+    <path d="M10 26h48M20 16v20m14-20v20m14-20v20" stroke-opacity=".44"/>
+  </g>
+  <text class="label" text-anchor="middle" x="361" y="352">BERT layer ×6</text>
+  <path class="flow" d="M418 311h36"/>
+
+  <g transform="translate(465 296)" stroke="#5f92a1">
+    <path d="M0 0h27M0 8h27M0 16h27M29 0l17 8-17 8" stroke-linecap="round" fill="none"/>
+    <rect x="49" y="3" width="64" height="10" rx="2" fill="#b4d9e5"/>
+    <path d="M60 3v10m11-10v10m11-10v10m11-10v10m11-10v10" stroke-opacity=".63"/>
+  </g>
+  <text class="label" text-anchor="middle" x="522" y="352">Masked mean + L2</text>
+  <text class="note" text-anchor="middle" x="522" y="369">384-D unit vector</text>
+
+  <path d="M345 359l-38 18m72-18 37 18" fill="none" stroke="#6e9c86" stroke-width="1.3" stroke-dasharray="3 3"/>
+  <rect x="29" y="378" width="582" height="128" rx="8" fill="#eff6ef" stroke="#cddbce"/>
+  <text class="label" x="42" y="401">One BERT layer</text>
+
+  <!-- Twelve attention heads followed by feed-forward expansion and contraction. -->
+  <path class="residual" d="M43 444v-21h201v9"/>
+  <path class="residual" d="M259 444v-21h276v9"/>
+  <path class="bus" d="M43 444h10m20-17h20v34H73m0-17h24"/>
+  <path class="flow" d="M99 444h14"/>
+  <g text-anchor="middle" class="note">
+    <rect x="54" y="417" width="20" height="20" rx="4" fill="#e0edf4" stroke="#7ca4b5"/><text x="64" y="432">Q</text>
+    <rect x="54" y="434" width="20" height="20" rx="4" fill="#d1e7f2" stroke="#7ca4b5"/><text x="64" y="449">K</text>
+    <rect x="54" y="451" width="20" height="20" rx="4" fill="#bcdcea" stroke="#7ca4b5"/><text x="64" y="466">V</text>
+  </g>
+  <g transform="translate(117 430)">
+    <use href="#attention-cell"/><use href="#attention-cell" x="16"/><use href="#attention-cell" x="32"/><use href="#attention-cell" x="48"/><use href="#attention-cell" x="64"/><use href="#attention-cell" x="80"/>
+    <use href="#attention-cell" y="15"/><use href="#attention-cell" x="16" y="15"/><use href="#attention-cell" x="32" y="15"/><use href="#attention-cell" x="48" y="15"/><use href="#attention-cell" x="64" y="15"/><use href="#attention-cell" x="80" y="15"/>
+  </g>
+  <path class="flow" d="M214 444h16"/>
+  <path class="flow" d="M257 444h36"/>
+  <g fill="#e3f0df" stroke="#6d9b75">
+    <circle cx="244" cy="444" r="11"/>
+    <circle cx="535" cy="444" r="11"/>
+  </g>
+  <path d="M239 444h10m-5-5v10m286-5h10m-5-5v10" fill="none" stroke="#3a6266" stroke-width="1.3" stroke-linecap="round"/>
+  <text class="note" text-anchor="middle" x="163" y="490">12 attention heads</text>
+
+  <g transform="translate(303 432)">
+    <path d="M7 13 61 0m-54 13 54 12m21-25 58 13m-58 12 58-12" stroke="#a48658" stroke-opacity=".65" fill="none"/>
+    <rect y="4" width="14" height="18" rx="3" fill="#ead7ac" stroke="#a48658"/>
+    <rect x="54" y="-2" width="34" height="30" rx="3" fill="#e7c786" stroke="#a48658"/>
+    <path d="M61 4h20M61 11h20M61 18h20" stroke="#a48658" stroke-opacity=".46"/>
+    <rect x="133" y="4" width="14" height="18" rx="3" fill="#ead7ac" stroke="#a48658"/>
+  </g>
+  <path class="flow" d="M459 444h62"/>
+  <path class="flow" d="M548 444h36"/>
+  <text class="note" text-anchor="middle" x="376" y="490">Feed-forward · 384 → 1536 → 384</text>
+  <text class="note" text-anchor="middle" x="535" y="479">Add &amp; norm</text>
+</svg>

@@ -170,13 +170,13 @@ button, input, select { accent-color: var(--blue); }
   .cases button, .pair-row, .pair-row > span { transition: background-color .15s ease, border-color .15s ease; }
 }
 #path-page { background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 16px; }
-.pair-motion { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: 14px; align-items: center; }
-.pair-motion figure { position: relative; margin: 0; overflow: hidden; background: #111; aspect-ratio: 16 / 9; }
-.pair-motion img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; }
-.pair-motion figure > b { position: absolute; left: 10px; bottom: 10px; z-index: 2; padding: 4px 8px; background: rgba(255,254,248,.92); color: var(--ink); font-size: 14px; font-weight: 650; }
-.pair-link { position: relative; display: flex; align-items: center; justify-content: center; min-width: 88px; }
-.pair-link::before { content: ""; position: absolute; left: 0; right: 0; height: 2px; background: var(--blue); }
-.pair-link b { position: relative; z-index: 1; padding: 0 8px; background: #fff; font-size: 22px; font-weight: 650; color: var(--blue); font-variant-numeric: tabular-nums; }
+.name-pair-media { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; gap: clamp(16px, 2.4vw, 32px); margin-top: 18px; }
+.name-pair-media figure { min-width: 0; margin: 0; }
+.name-pair-media h3 { margin: 0 0 8px; font-size: 16px; }
+.name-pair-media img, .name-pair-media video { display: block; width: 100%; height: auto; box-sizing: border-box; border: 1px solid var(--line); border-radius: 6px; }
+.name-pair-media video { aspect-ratio: 16 / 9; background: var(--ink); }
+#study-method .name-pair-media figcaption { margin-top: 10px; color: var(--muted); font-size: 14px; line-height: 1.5; }
+.name-pair-media figcaption a { text-decoration: underline; text-underline-offset: 3px; }
 .rest-plates { display: grid; gap: 18px; margin-top: 14px; }
 .pair-pop { position: fixed; inset: 0; z-index: 40; display: grid; place-items: center; padding: 28px; background: rgba(23, 54, 59, .28); }
 .pair-pop[hidden] { display: none; }
@@ -197,52 +197,9 @@ button, input, select { accent-color: var(--blue); }
 .detail .rest-hit h3 { margin: 0; font-size: 15px; font-weight: 650; }
 .detail .rest-frames { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .detail .rest-plot { grid-column: 1 / -1; }
-.net { width: 100%; height: auto; margin-top: 18px; font-family: Inter, 'Segoe UI', sans-serif; }
-.net .h { font-size: 15px; font-weight: 650; fill: var(--ink); }
-.net text { font-size: 13px; fill: var(--ink); }
-.net .dim { font-size: 11px; fill: var(--muted); }
-.net .idx { font-size: 11px; fill: var(--muted); }
-.net .mid { text-anchor: middle; }
-.net .lab rect { fill: var(--orange-wash); stroke: var(--orange-ink); }
-.net .emb rect { fill: var(--soft); stroke: var(--blue); }
-.net .attn rect { fill: #efe6fb; stroke: #5b3a8c; }
-.net .head rect { fill: #d9c6f5; stroke: #5b3a8c; }
-.net .ffn rect { fill: var(--lime-wash); stroke: #3d6b32; }
-.net .pool rect, .net .pool circle { fill: var(--paper); stroke: var(--ink); }
-.net .out rect { fill: var(--ink); }
-.net .out text { fill: var(--paper); }
-.net .out .idx { fill: var(--muted); }
-.net rect, .net circle { stroke-width: 1.25; }
-.net .panel { fill: #f7f4ea; stroke: var(--line); }
-.net .flow { fill: none; stroke: var(--blue); stroke-width: 1.35; marker-end: url(#arr); }
-.net .skip { fill: none; stroke: var(--orange-ink); stroke-width: 1.2; stroke-dasharray: 4 3; }
-@media (prefers-reduced-motion: no-preference) {
-  .pair-motion img { animation: frame-step 2.4s linear infinite; }
-  .pair-motion img:nth-child(1) { animation-delay: 0s; }
-  .pair-motion img:nth-child(2) { animation-delay: -1.6s; }
-  .pair-motion img:nth-child(3) { animation-delay: -0.8s; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .pair-motion img:nth-child(2) { opacity: 1; }
-}
-@keyframes frame-step {
-  0%, 33.2% { opacity: 1; }
-  33.4%, 100% { opacity: 0; }
-}
-.walk-grid { display: grid; grid-template-columns: minmax(0, 1fr) 168px minmax(0, 1fr); gap: 16px; align-items: center; }
-.walk-shots { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; margin: 0; }
-.walk-shots figure { margin: 0; }
-.walk-shots img { width: 100%; height: auto; display: block; background: #111; }
-.walk-shots figcaption, .walk-side > figcaption span, .walk-score span { font-size: 13px; color: var(--muted); }
-.walk-side { margin: 0; }
-.walk-side > figcaption { display: flex; flex-direction: column; gap: 2px; margin-top: 8px; }
-.walk-side > figcaption b { font-weight: 650; }
-.walk-score { text-align: center; }
-.walk-score b { display: block; font-size: 32px; line-height: 1.1; color: var(--blue); font-variant-numeric: tabular-nums; }
-.walk.is-below .walk-score b { color: var(--muted); }
-.walk-score button { margin-top: 10px; }
 @media (max-width: 900px) {
-  .walk-grid, .pair-motion, .rest-plate { grid-template-columns: 1fr; }
+  .rest-plate { grid-template-columns: 1fr; }
+  .name-pair-media { grid-template-columns: minmax(0, 1fr); }
 }
 
 </style><link rel="stylesheet" href="research.css"><link rel="stylesheet" href="site-header.css?v=1"><script>
@@ -270,83 +227,26 @@ html[data-view="case-area"] body { margin:0; }
 <nav class="page-tabs site-nav" aria-label="Pages"><button type="button" data-page="path" aria-pressed="true">Start here / Methods</button><button type="button" data-page="explorer" aria-pressed="false">Action Relationships</button><button type="button" data-page="cases" aria-pressed="false">Fifteen assembly cases</button><a href="spatial/index.html">Atlas of Assembly Space</a><a href="spatial/compare.html">Compare two cases</a><a href="observation/index.html">Relative position</a><a href="analysis/index.html">Recorded comparison</a></nav>
 <main class="workspace">
 <section id="path-page" aria-label="How a pair is made">
-<div class="study" id="study-start"><p>Follow assembly actions through films, drawings, and spatial tracks.</p><h2>When similar names describe different assembly conditions</h2><p>“Hold timber at joint” and “Position timber at joint” score <b>0.897</b>. Their recorded axes change in opposite directions. Who supports the member, and which adjustments can we actually see?</p><div class="duo"><figure class="side-record"><img class="hero-shot" src="plates/click_rest/071_Robot_V28_Hold_timber_at_joint_b.jpg" alt="Hold timber at joint, reference still"><figcaption>V28 · Hold timber at joint<br><b>Recorded endpoint change: +27.5°</b></figcaption></figure><figure class="side-record"><img class="hero-shot" src="plates/click_rest/001_Mixed_V21_Position_timber_at_joint_b.jpg" alt="Position timber at joint, reference still"><figcaption>V21 · Position timber at joint<br><b>Recorded endpoint change: -2.9°</b></figcaption></figure></div><nav><a href="analysis/index.html#pair-3">Compare both events and six stills →</a><a href="#overview">Explore 15 cases</a><a href="#study-method">Data &amp; methods</a></nav><p class="sub">These are two-dimensional, camera-dependent drawings, not measured forces, clearances or world rotations.</p></div><details id="study-method" class="study"><summary>Methods · how a name pair is made</summary><p id="dataset-meta"></p><p>One vector per English name, not per video event. The method illustration uses V21 and V04; <a href="analysis/index.html#pair-6">comparison #6</a> uses V28 and V04 drawings for the same two names.</p>
-  <div class="pair-motion">
+<div class="study" id="study-start"><p>Follow assembly actions through films, drawings, and spatial tracks.</p><h2>When similar names describe different assembly conditions</h2><p>“Hold timber at joint” and “Position timber at joint” score <b>0.897</b>. Their recorded axes change in opposite directions. Who supports the member, and which adjustments can we actually see?</p><div class="duo"><figure class="side-record"><img class="hero-shot" src="plates/click_rest/071_Robot_V28_Hold_timber_at_joint_b.jpg" alt="Hold timber at joint, reference still"><figcaption>V28 · Hold timber at joint<br><b>Recorded endpoint change: +27.5°</b></figcaption></figure><figure class="side-record"><img class="hero-shot" src="plates/click_rest/001_Mixed_V21_Position_timber_at_joint_b.jpg" alt="Position timber at joint, reference still"><figcaption>V21 · Position timber at joint<br><b>Recorded endpoint change: -2.9°</b></figcaption></figure></div><nav><a href="analysis/index.html#pair-3">Compare both events and six stills →</a><a href="#overview">Explore 15 cases</a><a href="#study-method">Data &amp; methods</a></nav><p class="sub">These are two-dimensional, camera-dependent drawings, not measured forces, clearances or world rotations.</p></div><details id="study-method" class="study"><summary>How a name pair is made</summary>
+  <p id="dataset-meta"></p>
+  <p>Label Studio connects each English action name to annotated spans in the source films. Each unique name has one stored vector.</p>
+  <div class="name-pair-media">
     <figure>
-      <img src="plates/frames/task41_003262.jpg" alt="V21, frame 3262, start of the labeled span">
-      <img src="plates/frames/task41_003330.jpg" alt="V21, frame 3330, middle of the labeled span">
-      <img src="plates/frames/task41_003399.jpg" alt="V21, frame 3399, end of the labeled span">
-      <b>V21 · Transport held timber</b>
+      <h3>From action names to a pair</h3>
+      <a href="media/name-pair/diagram.svg" aria-label="Open the pairing diagram at full size">
+        <img src="media/name-pair/diagram.svg" width="640" height="536" loading="lazy" decoding="async" alt="English action names enter a six-layer MiniLM encoder. Mean pooling and normalization produce one 384-dimensional vector per name. Cosine similarity and display filters select pairs for comparison with source drawings.">
+      </a>
+      <figcaption><a href="media/name-pair/diagram.svg">Full-size diagram</a> · <a href="https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2">Model details</a></figcaption>
     </figure>
-    <div class="pair-link"><b id="path-score"></b></div>
     <figure>
-      <img src="plates/frames/task29_001689.jpg" alt="V04, frame 1689, start of the labeled span">
-      <img src="plates/frames/task29_001726.jpg" alt="V04, frame 1726, middle of the labeled span">
-      <img src="plates/frames/task29_001763.jpg" alt="V04, frame 1763, end of the labeled span">
-      <b>V04 · Transport and rotate timber</b>
+      <h3>Worked example</h3>
+      <video controls playsinline preload="none" width="960" height="540" poster="media/name-pair/name-pair-poster.jpg" aria-label="How a name pair is made, with timber transport in V21 and V04" aria-describedby="name-pair-example">
+        <source src="media/name-pair/name-pair-explainer.mp4" type="video/mp4">
+        <a href="media/name-pair/name-pair-explainer.mp4">Open the short video</a>
+      </video>
+      <figcaption id="name-pair-example">V21 <i>Transport held timber</i> and V04 <i>Transport and rotate timber</i> score <strong id="path-score">0.822</strong>. The <a href="analysis/index.html#pair-6">recorded comparison</a> shows drawings for the same names from V28 and V04.</figcaption>
     </figure>
   </div>
-  <svg class="net" viewBox="0 0 1120 620" role="img" aria-label="Label Studio span and English name through all-MiniLM-L6-v2 to cosine">
-    <defs>
-      <marker id="arr" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-        <path d="M0 0 L8 4 L0 8 Z" fill="#12627d"/>
-      </marker>
-    </defs>
-    <text class="h" x="8" y="18">Label Studio → match</text>
-    <text class="h" x="400" y="18">BertLayer ×6 · heads are inside</text>
-    <g class="lab"><rect x="28" y="30" width="292" height="28" rx="2"/><text class="idx" x="8" y="49">0</text><text x="40" y="49">Label Studio</text></g>
-    <g class="lab"><rect x="28" y="74" width="292" height="46" rx="2"/><text class="idx" x="8" y="93">1</text><text x="40" y="92">Time span</text><text class="dim" x="40" y="110">V21 65.24–68.00 · V04 67.56–70.56</text></g>
-    <g class="lab"><rect x="28" y="136" width="292" height="28" rx="2"/><text class="idx" x="8" y="155">2</text><text x="40" y="155">English action name</text></g>
-    <g class="lab"><rect x="28" y="180" width="292" height="28" rx="2"/><text class="idx" x="8" y="199">3</text><text x="40" y="199">One vector per name</text></g>
-    <g class="emb"><rect x="28" y="224" width="292" height="28" rx="2"/><text class="idx" x="8" y="243">4</text><text x="40" y="243">WordPiece</text><text class="dim" x="236" y="243">30522</text></g>
-    <g class="emb"><rect x="28" y="268" width="292" height="28" rx="2"/><text class="idx" x="8" y="287">5</text><text x="40" y="287">Token + position</text><text class="dim" x="268" y="287">384</text></g>
-    <g class="attn">
-      <rect x="48" y="328" width="292" height="28" rx="2"/>
-      <rect x="44" y="324" width="292" height="28" rx="2"/>
-      <rect x="40" y="320" width="292" height="28" rx="2"/>
-      <rect x="36" y="316" width="292" height="28" rx="2"/>
-      <rect x="32" y="312" width="292" height="28" rx="2"/>
-      <rect x="28" y="308" width="292" height="28" rx="2"/>
-      <text class="idx" x="8" y="327">6</text>
-      <text x="40" y="327">BertLayer ×6</text>
-    </g>
-    <g class="pool"><rect x="28" y="376" width="292" height="28" rx="2"/><text class="idx" x="8" y="395">7</text><text x="40" y="395">Mean pool</text><text class="dim" x="268" y="395">384</text></g>
-    <g class="pool"><rect x="28" y="420" width="292" height="28" rx="2"/><text class="idx" x="8" y="439">8</text><text x="40" y="439">L2 normalize</text></g>
-    <g class="out"><rect x="28" y="464" width="292" height="28" rx="2"/><text class="idx" x="8" y="483">9</text><text x="40" y="483">Cosine · dot product</text></g>
-    <g class="out"><rect x="28" y="508" width="292" height="28" rx="2"/><text class="idx" x="4" y="527">10</text><text x="40" y="527">Keep ≥ 0.50</text><text id="path-keep" x="250" y="527">0.822</text></g>
-    <path class="flow" d="M174 58V74 M174 120V136 M174 164V180 M174 208V224 M174 252V268 M174 296V308 M174 360V376 M174 404V420 M174 448V464 M174 492V508"/>
-    <path class="flow" d="M340 322 H392"/>
-    <rect class="panel" x="392" y="30" width="716" height="560" rx="2"/>
-    <path class="skip" d="M408 48 V548"/>
-    <g class="pool"><rect x="430" y="44" width="650" height="26" rx="2"/><text x="442" y="62">LayerNorm · 384</text></g>
-    <g class="attn"><rect x="430" y="86" width="206" height="30" rx="2"/><text class="mid" x="533" y="106">Q · 384</text></g>
-    <g class="attn"><rect x="652" y="86" width="206" height="30" rx="2"/><text class="mid" x="755" y="106">K · 384</text></g>
-    <g class="attn"><rect x="874" y="86" width="206" height="30" rx="2"/><text class="mid" x="977" y="106">V · 384</text></g>
-    <text class="dim" x="430" y="136">12 heads · softmax(QKᵀ / √32) V</text>
-    <g class="head"><rect x="430" y="144" width="48" height="52" rx="2"/><text class="mid" x="454" y="166">1</text><text class="mid dim" x="454" y="184">32</text></g>
-    <g class="head"><rect x="484" y="144" width="48" height="52" rx="2"/><text class="mid" x="508" y="166">2</text><text class="mid dim" x="508" y="184">32</text></g>
-    <g class="head"><rect x="538" y="144" width="48" height="52" rx="2"/><text class="mid" x="562" y="166">3</text><text class="mid dim" x="562" y="184">32</text></g>
-    <g class="head"><rect x="592" y="144" width="48" height="52" rx="2"/><text class="mid" x="616" y="166">4</text><text class="mid dim" x="616" y="184">32</text></g>
-    <g class="head"><rect x="646" y="144" width="48" height="52" rx="2"/><text class="mid" x="670" y="166">5</text><text class="mid dim" x="670" y="184">32</text></g>
-    <g class="head"><rect x="700" y="144" width="48" height="52" rx="2"/><text class="mid" x="724" y="166">6</text><text class="mid dim" x="724" y="184">32</text></g>
-    <g class="head"><rect x="754" y="144" width="48" height="52" rx="2"/><text class="mid" x="778" y="166">7</text><text class="mid dim" x="778" y="184">32</text></g>
-    <g class="head"><rect x="808" y="144" width="48" height="52" rx="2"/><text class="mid" x="832" y="166">8</text><text class="mid dim" x="832" y="184">32</text></g>
-    <g class="head"><rect x="862" y="144" width="48" height="52" rx="2"/><text class="mid" x="886" y="166">9</text><text class="mid dim" x="886" y="184">32</text></g>
-    <g class="head"><rect x="916" y="144" width="48" height="52" rx="2"/><text class="mid" x="940" y="166">10</text><text class="mid dim" x="940" y="184">32</text></g>
-    <g class="head"><rect x="970" y="144" width="48" height="52" rx="2"/><text class="mid" x="994" y="166">11</text><text class="mid dim" x="994" y="184">32</text></g>
-    <g class="head"><rect x="1024" y="144" width="48" height="52" rx="2"/><text class="mid" x="1048" y="166">12</text><text class="mid dim" x="1048" y="184">32</text></g>
-    <g class="attn"><rect x="430" y="214" width="642" height="26" rx="2"/><text x="442" y="232">Concat · 12 × 32 → 384</text></g>
-    <g class="pool"><circle cx="751" cy="268" r="14"/><text class="mid" x="751" y="272">+</text></g>
-    <text class="dim" x="774" y="272">residual</text>
-    <g class="ffn"><rect x="430" y="300" width="310" height="28" rx="2"/><text x="442" y="319">Linear 384 → 1536</text></g>
-    <g class="ffn"><rect x="762" y="300" width="310" height="28" rx="2"/><text x="774" y="319">GELU</text></g>
-    <g class="ffn"><rect x="430" y="348" width="642" height="28" rx="2"/><text x="442" y="367">Linear 1536 → 384</text></g>
-    <g class="pool"><circle cx="751" cy="412" r="14"/><text class="mid" x="751" y="416">+</text></g>
-    <text class="dim" x="774" y="416">residual · 384</text>
-    <text class="dim" x="430" y="460">Same block, six times. Mean of token vectors, then L2. Cosine is the dot product.</text>
-    <path class="flow" d="M533 116 V144 M755 116 V144 M977 116 V144 M751 196 V214 M751 240 V254 M751 282 V300 M917 328 V348 M751 376 V398"/>
-    <path class="skip" d="M408 48 H430 M408 268 H737 M408 412 H737"/>
-  </svg>
 </details></section>
 <div id="explorer-body" hidden>
 <div class="study-panel">Pairs link similar action names with drawings on both sides. <span id="drawing-status" role="status"></span></div><section class="toolbar" aria-label="Filters"><label class="field">Search action names<input id="q" type="search" placeholder="Try hold, insert or gripper…" autocomplete="off"></label><label class="field"><span class="range-heading">Minimum cosine <output id="threshold-label">0.50</output></span><span class="range-wrap"><small>0.50</small><input aria-label="Minimum cosine" id="threshold" type="range" min="0.50" max="0.95" step="0.01" value="0.50"><small>0.95</small></span></label><label class="field">Name-pair scope<select id="scope"><option value="cross">No shared case</option><option value="all">All name pairs</option><option value="same">At least one shared case</option></select></label><button id="clear">Reset filters</button></section>
@@ -3506,35 +3406,11 @@ function renderInspector(edges){
 }
 function clearDetail(){state.selectedNode=null;state.selectedEdge=null;state.hoverNode=null;state.hoverEdge=null}
 let shownView=null
-const WALK = {
-  left: {name: 'Transport held timber', caseId: 'V21', start: 65.24, end: 68.00, frames: [['task41_003262.jpg', 'f3262 · start'], ['task41_003330.jpg', 'f3330 · middle'], ['task41_003399.jpg', 'f3399 · end']]},
-  right: {name: 'Transport and rotate timber', caseId: 'V04', start: 67.56, end: 70.56, frames: [['task29_001689.jpg', 'f1689 · start'], ['task29_001726.jpg', 'f1726 · middle'], ['task29_001763.jpg', 'f1763 · end']]},
-}
 function walkEdge() {
   return EDGES.find(edge => {
     const names = [displayName(NODES[edge.source]), displayName(NODES[edge.target])]
-    return names.includes(WALK.left.name) && names.includes(WALK.right.name)
+    return names.includes('Transport held timber') && names.includes('Transport and rotate timber')
   })
-}
-function walkSide(spec) {
-  const figure = document.createElement('figure')
-  figure.className = 'walk-side'
-  const shots = document.createElement('div')
-  shots.className = 'walk-shots'
-  spec.frames.forEach(([file, caption]) => {
-    const shot = document.createElement('figure')
-    const img = document.createElement('img')
-    img.src = 'plates/frames/' + file
-    img.alt = spec.caseId + ' ' + spec.name + ', ' + caption
-    const cap = document.createElement('figcaption')
-    cap.textContent = caption
-    shot.append(img, cap)
-    shots.appendChild(shot)
-  })
-  const caption = document.createElement('figcaption')
-  caption.innerHTML = '<b>' + esc(spec.caseId) + ' · ' + esc(spec.name) + '</b><span>' + spec.start.toFixed(2) + '–' + spec.end.toFixed(2) + ' s, the labeled span</span>'
-  figure.append(shots, caption)
-  return figure
 }
 window.addEventListener('hashchange',()=>{if(/^#(overview|analysis|human-led|human-robot|robotic-assembly)/.test(location.hash))showPage('cases');else if(location.hash==='#study-method'){showPage('path');document.getElementById('study-method').open=true}});
 if(location.hash==='#study-method')document.getElementById('study-method').open=true;
@@ -3563,10 +3439,7 @@ function renderPath() {
   const slot = $('path-score')
   if (!slot || slot.dataset.ready === '1') return
   const edge = walkEdge()
-  const text = edge ? edge.cosine.toFixed(3) : ''
-  slot.textContent = text
-  const keep = $('path-keep')
-  if (keep && text) keep.textContent = text
+  if (edge) slot.textContent = edge.cosine.toFixed(3)
   slot.dataset.ready = '1'
 }
 function render(){
