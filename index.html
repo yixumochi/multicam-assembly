@@ -3380,7 +3380,8 @@ function angleChart(left, right) {
   const plotRight = width - 34
   const plotTop = 22
   const plotBottom = height - 48
-  const xAt = index => plotLeft + (plotRight - plotLeft) * index / (PAIR_STAGES.length - 1)
+  const labelGutter = 30
+  const xAt = index => plotLeft + labelGutter + (plotRight - plotLeft - 2 * labelGutter) * index / (PAIR_STAGES.length - 1)
   const yAt = angle => plotTop + (high - angle) / (high - low) * (plotBottom - plotTop)
   const description = series.map(({plate, angles}) => plate.home + ' ' + plate.name + ': ' +
     angles.map((angle, index) => REST_STATE[PAIR_STAGES[index]] + ' ' + (angle === null ? 'unavailable' : angleText(angle))).join(', ')).join('. ')
