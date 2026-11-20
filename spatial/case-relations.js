@@ -25,12 +25,9 @@ function initializeCaseRelations({rows, modes, hasMetres, areaValue, calibration
   }
 
   const defs = svg("defs");
-  for (const [id, size, color] of [["case-grid", 14, "#e0d9c9"], ["case-hatch", 4, "#666456"]]) {
-    const pattern = svg("pattern", {id, width:size, height:size, patternUnits:"userSpaceOnUse"});
-    pattern.append(svg("path", {d:`M 0 ${size} V 0 H ${size}`, fill:"none", stroke:color, "stroke-width":.48}));
-    if (id === "case-hatch") pattern.setAttribute("patternTransform", "rotate(35)");
-    defs.append(pattern);
-  }
+  const grid = svg("pattern", {id:"case-grid", width:28, height:28, patternUnits:"userSpaceOnUse"});
+  grid.append(svg("path", {d:"M 0 28 V 0 H 28", fill:"none", stroke:"#e7efe9"}));
+  defs.append(grid);
   drawing.append(defs, svg("rect", {x:14,y:58,width:932,height:691,fill:"url(#case-grid)","aria-hidden":"true"}));
   const outlines = svg("g", {"aria-hidden":"true"});
   const lines = svg("g", {"aria-hidden":"true"});
@@ -95,21 +92,25 @@ function initializeCaseRelations({rows, modes, hasMetres, areaValue, calibration
       group.append(svg("text", {x:labelX,y:y-8,class:"case-node-label"}, caseLabel));
       const short = key => area(row,key).toFixed(1);
       if (hasMetres(row)) {
-        group.append(svg("text", {x:labelX,y:y+11,class:"case-node-values"}, `A ${short("activity")}   F ${short("object")}`));
-        group.append(svg("text", {x:labelX,y:y+25,class:"case-node-values"}, `H ${short("human")}   R ${short("machine")}`));
+        const areaLabel = svg("text", {x:labelX,y:y+11,class:"case-node-values"});
+        areaLabel.append(svg("tspan", {}, `A ${short("activity")}`),
+          svg("tspan", {dx:8,class:"case-value-footprint"}, `F ${short("object")}`));
+        const rolesLabel = svg("text", {x:labelX,y:y+25,class:"case-node-values"});
+        rolesLabel.append(svg("tspan", {class:"case-value-human"}, `H ${short("human")}`),
+          svg("tspan", {dx:8,class:"case-value-machine"}, `R ${short("machine")}`));
+        group.append(areaLabel, rolesLabel);
+      }
+      if (r) {
+        const layers = [["object","footprint",0],["human","human",-1],["machine","machine",1]]
+          .map(([key, name, sign]) => ({name, sign, extent:radius(area(row,key))}))
+          .filter(layer => layer.extent > 0)
+          .sort((a,b) => b.extent-a.extent);
+        for (const {name, sign, extent} of layers) {
+          const gap = Math.max(0,r-extent);
+          group.append(svg("circle", {cx:x+sign*.75*gap,cy:y-sign*.13*gap,r:extent,class:`case-node-${name}`}));
+        }
       }
       group.append(svg("circle", {cx:x,cy:y,r:r || 8,class:"case-node-activity"}));
-      if (r) {
-        const footprint = radius(area(row,"object"));
-        group.append(svg("circle", {cx:x,cy:y,r:footprint,class:"case-node-footprint"}));
-        for (const [role, sign] of [["human",-1],["machine",1]]) {
-          const extent = radius(area(row,role));
-          if (!extent) continue;
-          const gap = Math.max(0,r-extent);
-          group.append(svg("circle", {cx:x+sign*.75*gap,cy:y-sign*.13*gap,r:extent,class:`case-node-${role}`}));
-        }
-        group.append(svg("circle", {cx:x,cy:y,r:footprint,fill:"url(#case-hatch)",class:"case-node-hatch"}));
-      }
       group.append(svg("circle", {cx:x,cy:y,r:Math.max(12,r)+7,class:"case-node-focus"}));
       group.addEventListener("click", () => chooseCase(row.case));
       group.addEventListener("keydown", event => {
