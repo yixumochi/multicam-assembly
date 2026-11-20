@@ -22,33 +22,12 @@
 .assembly-atlas details { font-size: 13px; }
 .assembly-atlas details summary { color: var(--plate-blue); cursor: pointer; }
 
-.assembly-atlas-header, .assembly-atlas-main, .assembly-atlas-nav {
+.assembly-atlas-main {
   max-width: 1440px;
   margin-inline: auto;
   padding-inline: clamp(16px, 3vw, 44px);
 }
 
-.assembly-atlas-header {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 10px 20px;
-  padding-block: clamp(18px, 3vw, 35px) 21px;
-  border-bottom: 1px solid var(--plate-rule);
-}
-.assembly-atlas-header h1 {
-  margin: 0;
-  font-size: clamp(29px, 4vw, 52px);
-  line-height: 1.05;
-  letter-spacing: -.045em;
-}
-.assembly-atlas-header a { font-size: 13px; text-underline-offset: 3px; }
-.assembly-atlas-series { margin: 0 0 7px; color: var(--plate-blue); font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
-.assembly-atlas-nav { display: flex; flex-wrap: wrap; gap: 4px 22px; border-bottom: 1px solid var(--plate-rule); }
-.assembly-atlas-nav a { display: inline-flex; align-items: center; min-height: 44px; padding: 7px 2px; border-bottom: 3px solid transparent; font-size: 14px; font-weight: 650; text-decoration: none; }
-.assembly-atlas-nav a[aria-current="page"] { border-bottom-color: var(--plate-blue); color: var(--plate-ink); }
-.assembly-atlas-nav a:hover { text-decoration: underline; text-underline-offset: 4px; }
 .assembly-atlas-main { padding-block: 24px 42px; }
 .case-relations-layout { display: grid; grid-template-columns: minmax(280px, .86fr) minmax(0, 2fr); align-items: start; gap: clamp(20px, 3.4vw, 48px); }
 .case-relations-sidebar { padding-top: 2px; }
