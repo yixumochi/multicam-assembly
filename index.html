@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>MultiCam · Assembly records</title>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>MultiCam · Timber Assembly in Motion</title>
 <style>
 :root{--ink:#213846;--muted:#657783;--line:#e1e7e9;--blue:#087e9c;--soft:#eaf5f7;--orange:#be641e;--green:#087e9c;--green-soft:#eaf5f7}*{box-sizing:border-box}body{margin:0;background:#f5f7f8;color:var(--ink);font:14px/1.5 'Segoe UI',Arial,sans-serif}button,input,select{font:inherit;color:inherit}button,a,input,select{outline-offset:4px}button{cursor:pointer}a{color:var(--blue);text-decoration:none}a:hover{text-decoration:underline}button{border:1px solid var(--line);background:white;border-radius:7px;padding:8px 12px}button:hover{border-color:#9eafb7;background:#f3f7f8}button:disabled{opacity:.4;cursor:default}[hidden],.hidden{display:none!important}
 .masthead{padding:27px 36px 24px;background:#fff;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:24px;align-items:center}.eyebrow{font-size:11px;letter-spacing:1.8px;font-weight:700;color:var(--blue);text-transform:uppercase}h1{font-size:30px;letter-spacing:-.8px;font-weight:650;margin:4px 0}p{margin:6px 0;color:var(--muted)}.meta{display:flex;gap:27px}.meta strong{font-size:25px;font-weight:600;display:block}.meta span{font-size:11px;letter-spacing:.6px;color:var(--muted)}.subnav{font-size:12px;display:flex;gap:20px;margin-top:10px}.workspace{max-width:1800px;margin:auto;padding:24px 36px}.toolbar{display:grid;grid-template-columns:minmax(200px,1.3fr) minmax(190px,1fr) minmax(180px,1fr) auto;gap:22px;align-items:end;background:#fff;border:1px solid var(--line);padding:20px;border-radius:10px}.field{display:flex;flex-direction:column;gap:8px;font-size:12px;font-weight:600}.field input[type=search],.field select{height:40px;width:100%;padding:0 10px;border:1px solid #d6dfe3;border-radius:6px;background:white;font-weight:400}.range-heading{display:flex;justify-content:space-between}.range-heading output{font-size:17px;color:var(--blue);line-height:18px;font-variant-numeric:tabular-nums}.range-wrap{height:40px;display:flex;align-items:center;gap:10px}.range-wrap small{font-weight:400;color:var(--muted)}input[type=range]{accent-color:var(--blue);width:100%}.filter-bottom{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:15px 0 20px}.filter-bottom>span{color:var(--muted);font-size:12px}.cases{display:flex;gap:6px;flex-wrap:wrap}.cases button{font-size:12px;padding:5px 10px}.cases button.on{background:var(--ink);color:white;border-color:var(--ink)}.small-note{font-size:12px;color:var(--muted)}
@@ -307,9 +307,9 @@ html[data-view="case-area"] body { margin:0; }
 </style></head><body>
 <header class="masthead">
   <div class="mast-copy">
-    <div class="eyebrow">MultiCam / Research explorer</div>
-    <h1>Assembly in 15 cases</h1>
-    <p>Trace similar action names to films, drawings and plan footprints.</p>
+    <div class="eyebrow">MultiCam</div>
+    <h1>Timber Assembly in Motion</h1>
+    <p>Follow assembly actions through films, drawings, and spatial tracks.</p>
   </div>
   <div class="mast-side">
     <canvas class="print-art" id="print-art" width="620" height="200" aria-hidden="true"></canvas>
@@ -317,7 +317,7 @@ html[data-view="case-area"] body { margin:0; }
   </div>
 </header>
 <main class="workspace">
-<nav class="page-tabs" aria-label="Pages"><button type="button" data-page="path" aria-pressed="true">Start here / Methods</button><button type="button" data-page="explorer" aria-pressed="false">Explorer</button><button type="button" data-page="cases" aria-pressed="false">Fifteen assembly cases</button><a href="spatial/index.html">Atlas of Assembly Space</a><a href="spatial/compare.html">Compare two cases</a><a href="observation/index.html">Relative position</a><a href="analysis/index.html">Recorded comparison</a></nav>
+<nav class="page-tabs" aria-label="Pages"><button type="button" data-page="path" aria-pressed="true">Start here / Methods</button><button type="button" data-page="explorer" aria-pressed="false">Action Relationships</button><button type="button" data-page="cases" aria-pressed="false">Fifteen assembly cases</button><a href="spatial/index.html">Atlas of Assembly Space</a><a href="spatial/compare.html">Compare two cases</a><a href="observation/index.html">Relative position</a><a href="analysis/index.html">Recorded comparison</a></nav>
 <section id="path-page" aria-label="How a pair is made">
 <div class="study" id="study-start"><p class="eyeline">Field notes / 01 · One comparison to start</p><h2>When similar names describe different assembly conditions</h2><p>“Hold timber at joint” and “Position timber at joint” score <b>0.897</b>. Their recorded axes change in opposite directions. Who supports the member, and which adjustments can we actually see?</p><div class="duo"><figure class="side-record"><img class="hero-shot" src="plates/click_rest/071_Robot_V28_Hold_timber_at_joint_b.jpg" alt="Hold timber at joint, reference still"><figcaption>V28 · Hold timber at joint<br><b>Recorded endpoint change: +27.5°</b></figcaption></figure><figure class="side-record"><img class="hero-shot" src="plates/click_rest/001_Mixed_V21_Position_timber_at_joint_b.jpg" alt="Position timber at joint, reference still"><figcaption>V21 · Position timber at joint<br><b>Recorded endpoint change: -2.9°</b></figcaption></figure></div><nav><a href="analysis/index.html#pair-3">Compare both events and six stills →</a><a href="#overview">Explore 15 cases</a><a href="#study-method">Data &amp; methods</a></nav><p class="sub">These are two-dimensional, camera-dependent drawings, not measured forces, clearances or world rotations.</p></div><details id="study-method" class="study"><summary>Methods · how a name pair is made</summary><p>One vector per English name, not per video event. The method illustration uses V21 and V04; <a href="analysis/index.html#pair-6">comparison #6</a> uses V28 and V04 drawings for the same two names.</p>
   <div class="pair-motion">
@@ -398,11 +398,11 @@ html[data-view="case-area"] body { margin:0; }
   </svg>
 </details></section>
 <div id="explorer-body" hidden>
-<div class="study-panel"><b>Explorer · one node per name.</b> 239 names / 536 source events. Default: ≥0.50, no shared case. The separate <a href="analysis/index.html">431-row comparison export</a> uses home-case entries, not this filter. <label class="study-filter"><input type="checkbox" id="require-plate" checked>Only pairs with eligible drawings on both sides</label><span id="scope-count" aria-live="polite"></span></div><section class="toolbar" aria-label="Filters"><label class="field">Search action names<input id="q" type="search" placeholder="Try hold, insert or gripper…" autocomplete="off"></label><label class="field"><span class="range-heading">Minimum cosine <output id="threshold-label">0.50</output></span><span class="range-wrap"><small>0.50</small><input aria-label="Minimum cosine" id="threshold" type="range" min="0.50" max="0.95" step="0.01" value="0.50"><small>0.95</small></span></label><label class="field">Name-pair scope<select id="scope"><option value="cross">No shared case</option><option value="all">All name pairs</option><option value="same">At least one shared case</option></select></label><button id="clear">Reset filters</button></section>
+<div class="study-panel">Pairs link similar action names with drawings on both sides. <span id="drawing-status" role="status"></span></div><section class="toolbar" aria-label="Filters"><label class="field">Search action names<input id="q" type="search" placeholder="Try hold, insert or gripper…" autocomplete="off"></label><label class="field"><span class="range-heading">Minimum cosine <output id="threshold-label">0.50</output></span><span class="range-wrap"><small>0.50</small><input aria-label="Minimum cosine" id="threshold" type="range" min="0.50" max="0.95" step="0.01" value="0.50"><small>0.95</small></span></label><label class="field">Name-pair scope<select id="scope"><option value="cross">No shared case</option><option value="all">All name pairs</option><option value="same">At least one shared case</option></select></label><button id="clear">Reset filters</button></section>
 <nav class="filter-bottom" aria-label="Filter by case"><span>CASE</span><div id="vlist" class="cases"></div></nav>
-<div class="content"><section class="main-panel"><div class="panel-head"><div><h2 id="view-title">Case relationships</h2><div id="counts" class="counts" aria-live="polite"></div></div><nav class="tabs" aria-label="Explorer views"><button data-view="map" aria-pressed="true">Case map</button><button data-view="pairs" aria-pressed="false">Pairs</button><button data-view="network" aria-pressed="false">Connections</button></nav></div><div class="contextline"><span id="context-note"></span><span id="pair-chip" class="pair-chip" hidden></span></div>
-<div id="pairs-view"><div class="pair-head"><span>Action A / cases</span><span>Cosine</span><span>Action B / cases</span></div><div id="pair-list"></div><div class="pager"><span id="page-status"></span><div><select id="page-size" aria-label="Pairs per page"><option value="20">20 / page</option><option value="50">50 / page</option><option value="all">Show all</option></select><button id="prev" aria-label="Previous page">←</button><button id="next" aria-label="Next page">→</button></div></div></div>
-<div id="map-view" class="view-content">
+<div class="content"><section class="main-panel"><div class="panel-head"><div><h2 id="view-title">Action-name connections</h2><div id="counts" class="counts" aria-live="polite"></div></div><nav class="tabs" aria-label="Action relationship views"><button data-view="network" aria-pressed="true">Connections</button><button data-view="pairs" aria-pressed="false">Pairs</button><button data-view="map" aria-pressed="false">Case map</button></nav></div><div class="contextline"><span id="context-note"></span><span id="pair-chip" class="pair-chip" hidden></span></div>
+<div id="pairs-view" hidden><div class="pair-head"><span>Action A / cases</span><span>Cosine</span><span>Action B / cases</span></div><div id="pair-list"></div><div class="pager"><span id="page-status"></span><div><select id="page-size" aria-label="Pairs per page"><option value="20">20 / page</option><option value="50">50 / page</option><option value="all">Show all</option></select><button id="prev" aria-label="Previous page">←</button><button id="next" aria-label="Next page">→</button></div></div></div>
+<div id="map-view" class="view-content" hidden>
   <div class="map-legend" aria-label="Case map legend">
     <span class="legend-item"><span class="legend-size" aria-hidden="true"><i></i><i></i></span> Dot area · number of pairs</span>
     <span class="legend-item"><span class="legend-ramp" aria-hidden="true"></span> Highest cosine · 0.50–0.95</span>
@@ -417,9 +417,9 @@ html[data-view="case-area"] body { margin:0; }
     <button id="open-pairs">Read these pairs →</button>
   </div>
 </div>
-<div id="network-view" class="view-content" hidden><div class="network-tools"><label for="sort">Order</label><select id="sort"><option value="v">By installation</option><option value="component">Connected group at 0.65</option></select><button id="export">Export connections SVG</button></div><div class="feather-legend" aria-label="Connections legend"><span><i class="dot-sky"></i> Manual</span><span><i class="dot-lime"></i> Mixed</span><span><i class="dot-orange"></i> Robot</span><span><i class="arc-sample"></i> Stored pair</span></div><div class="network-scroll"><svg id="diagram" xmlns="http://www.w3.org/2000/svg"></svg></div><p id="wheel-prompt" class="wheel-prompt">Please click a dot.</p></div>
+<div id="network-view" class="view-content"><div class="network-tools"><label for="sort">Order</label><select id="sort"><option value="v">By installation</option><option value="component">Connected group at 0.65</option></select><button id="export">Export connections SVG</button></div><div class="feather-legend" aria-label="Connections legend"><span><i class="dot-sky"></i> Manual</span><span><i class="dot-lime"></i> Mixed</span><span><i class="dot-orange"></i> Robot</span><span><i class="arc-sample"></i> Stored pair</span></div><div class="network-scroll"><svg id="diagram" xmlns="http://www.w3.org/2000/svg"></svg></div><p id="wheel-prompt" class="wheel-prompt">Please click a dot.</p></div>
 </section><aside class="detail" id="detail" tabindex="-1" aria-label="Selected pair or action"></aside></div>
-<details class="help"><summary>How to read this explorer · data and scope</summary><p id="method-note"></p><p>All qualifying pairs remain available; pagination is for browsing, not a Top-K selection. “No shared case” keeps names whose case sets do not overlap. It is narrower than all possible cross-case event comparisons. Connected groups at 0.65 are graph components, not the agglomerative clusters reported elsewhere.</p><p>This explorer compares text only. A high cosine is a reason to inspect a pair, not confirmation of the same physical operation, geometry or direction. No new model inference or training is performed here.</p></details>
+<details class="help"><summary>How action pairs are selected</summary><p id="method-note"></p><p>All qualifying pairs remain available; pagination is for browsing, not a Top-K selection. “No shared case” keeps names whose case sets do not overlap. It is narrower than all possible cross-case event comparisons. Connected groups at 0.65 are graph components, not the agglomerative clusters reported elsewhere.</p><p>Precomputed cosine scores measure similarity between action names. Use the drawings to compare the physical operations, geometry and direction.</p><p>The separate <a href="analysis/index.html">431-row comparison export</a> uses case-specific records.</p></details>
 </div>
 <section id="cases-page" hidden><style>
   #cases-page{ --ink:#213846; --muted:#657783; --line:#e1e7e9; --paper:#f5f7f8; --card:#fff; --machine:#7dc9e9; --human:#e87c3a; --parts:#78d5b2; --shadow:none; }
@@ -2893,7 +2893,7 @@ const V24_MOTION_PLATES = [
   }
 ];
 // Presentation layer. Stored vectors, name strings and cosine scores are unchanged.
-let view = 'pairs', page = 0, pageSize = 20
+let view = 'network', page = 0, pageSize = 20
 const $ = id => document.getElementById(id)
 const esc = text => String(text).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))
 const displayName = node => node.action_name.replace(/^ACTION\s*\|\s*/i, '')
@@ -2903,28 +2903,21 @@ let REST_READY = false
 function pairDrawingFor(node) {
   return REST_BY_NAME?.get(displayName(node)) || null
 }
-function hasLabeledOutline(node) {
-  if (pairDrawingFor(node)) return true
-  const name = displayName(node)
-  return MOTION_PLATES.some(plate => plate.names.includes(name))
-}
 function eligibleEdges() {
+  if (!REST_READY) return []
   const query = state.query.trim().toLowerCase()
-  return scopedEdges().filter(e => {
-    const a=NODES[e.source], b=NODES[e.target]
-    if ($('require-plate').checked && (DROP_NAMES.has(displayName(a)) || DROP_NAMES.has(displayName(b)))) return false
-    if ($('require-plate').checked && (!REST_READY || !hasLabeledOutline(a) || !hasLabeledOutline(b))) return false
-    return (!query || a.action_name.toLowerCase().includes(query) || b.action_name.toLowerCase().includes(query)) &&
+  return scopedEdges().filter(({source, target}) => {
+    const a = NODES[source]
+    const b = NODES[target]
+    return pairDrawingFor(a) && pairDrawingFor(b) &&
+      (!query || a.action_name.toLowerCase().includes(query) || b.action_name.toLowerCase().includes(query)) &&
       (!state.selectedV || a.v_ids.includes(state.selectedV) || b.v_ids.includes(state.selectedV))
   })
 }
 function currentEdges(base) {
   const pair = state.selectedPair
-  const pairs = base.filter(edge => !pair || edgeTouchesPair(edge, pair.a, pair.b))
-  const visible = view === 'network'
-    ? pairs.filter(({source, target}) => pairDrawingFor(NODES[source]) && pairDrawingFor(NODES[target]))
-    : pairs
-  return visible.sort((a,b)=>b.cosine-a.cosine || NODES[a.source].action_name.localeCompare(NODES[b.source].action_name))
+  return base.filter(edge => !pair || edgeTouchesPair(edge, pair.a, pair.b))
+    .sort((a,b)=>b.cosine-a.cosine || NODES[a.source].action_name.localeCompare(NODES[b.source].action_name))
 }
 function nodeHTML(node) {
   return '<span class="pair-name">'+esc(displayName(node))+'</span><span class="pair-meta">'+node.v_ids.map(v=>'<span class="pill">'+esc(v)+'</span>').join('')+'<span>'+node.events.length+' event'+(node.events.length===1?'':'s')+'</span></span>'
@@ -3666,20 +3659,18 @@ function render(){
   document.querySelector('.content').classList.toggle('show-plates', view==='network')
   document.querySelector('.content').classList.toggle('has-pick', view==='network' && (state.selectedNode !== null || !!state.selectedEdge))
   document.querySelectorAll('[data-view]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.view===view)))
-  $('view-title').textContent={pairs:'Action-name pairs',map:'Case relationships',network:'Name connections'}[view]
+  $('view-title').textContent={pairs:'Action-name pairs',map:'Case relationships',network:'Action-name connections'}[view]
   const names=new Set(edges.flatMap(e=>[e.source,e.target]))
   $('counts').textContent=edges.length+' name pairs · '+names.size+' linked names · cosine ≥ '+state.threshold.toFixed(2)
   $('context-note').textContent=view==='pairs'?'Sorted by highest cosine · select a row to inspect':view==='map'?'Select a dot to compare the action names in two cases':''
-  $('scope-count').textContent = view === 'network'
-    ? (REST_READY ? 'Connections show pairs with drawings in both panels.' : 'Connections need the drawing index.')
-    : (REST_READY ? edges.length+' visible with the current filters. At the default threshold and scope, 645 pairs meet the text criteria; 373 also have eligible drawings.' : 'Drawing index unavailable or loading; turn off the drawing filter to browse text-only relationships.')
+  $('drawing-status').textContent = REST_READY ? '' : (REST_BY_NAME ? 'The drawing index is unavailable.' : 'Loading the drawing index…')
   $('threshold-label').textContent=state.threshold.toFixed(2)
   renderCaseFilters();renderPairChip();renderInspector(edges)
   if(view==='pairs')renderPairs(edges)
   if(view==='map'){renderHeatmap(base);renderMatrix(edges)}
   if(view==='network'){
     renderDiagram(edges)
-    if(pageTab==='explorer' && shownView!=='network') requestAnimationFrame(()=>$('diagram').scrollIntoView({block:'start',inline:'nearest'}))
+    if(pageTab==='explorer' && shownView && shownView!=='network') requestAnimationFrame(()=>$('diagram').scrollIntoView({block:'start',inline:'nearest'}))
   }
   shownView=view
 }
@@ -3694,12 +3685,11 @@ function exportSvg(){
 }
 $('dataset-meta').innerHTML='<div><strong>'+NODES.length+'</strong><span>ACTION NAMES</span></div><div><strong>'+DATA.meta.event_count+'</strong><span>EVENTS</span></div><div><strong>'+CASES.length+'</strong><span>CASES</span></div>'
 $('method-note').textContent=DATA.meta.grain+' '+DATA.meta.cosine+' '+DATA.meta.edge_floor_note
-$('require-plate').onchange=()=>{page=0;clearDetail();render()};
 $('q').oninput=e=>{state.query=e.target.value;page=0;clearDetail();render()}
 $('threshold').oninput=()=>{state.threshold=thresholdValue();page=0;clearDetail();render()}
 $('scope').onchange=e=>{state.scope=e.target.value;page=0;clearDetail();render()}
 $('sort').onchange=e=>{state.sort=e.target.value;state.collapsed.clear();render()}
-$('clear').onclick=()=>{$('require-plate').checked=true;clearDetail();state.selectedV=null;state.selectedPair=null;state.query='';state.threshold=.50;state.scope='cross';state.collapsed.clear();$('q').value='';$('threshold').value='.50';$('scope').value='cross';page=0;render()}
+$('clear').onclick=()=>{clearDetail();state.selectedV=null;state.selectedPair=null;state.query='';state.threshold=.50;state.scope='cross';state.collapsed.clear();$('q').value='';$('threshold').value='.50';$('scope').value='cross';page=0;render()}
 document.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>{view=b.dataset.view;render()})
 $('prev').onclick=()=>{page--;render()};$('next').onclick=()=>{page++;render()}
 $('page-size').onchange=e=>{pageSize=e.target.value==='all'?'all':Number(e.target.value);page=0;render()}
@@ -3711,9 +3701,6 @@ const methodPanel=document.getElementById('study-method');
 methodPanel.addEventListener('toggle',()=>{if(methodPanel.open && location.hash==='#study-method')methodPanel.scrollIntoView({block:'start'})});
 drawPrintArt()
 renderPath()
-loadRest(() => {
-  if (!/^#(overview|human-led|human-robot|robotic-assembly|analysis)/.test(location.hash)) showPage('path')
-  render()
-})
+loadRest(render)
 
 </script><script>if (/^#(overview|human-led|human-robot|robotic-assembly|analysis)/.test(location.hash)) showPage('cases');</script></body></html>
