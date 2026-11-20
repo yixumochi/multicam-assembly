@@ -2900,9 +2900,12 @@ const displayName = node => node.action_name.replace(/^ACTION\s*\|\s*/i, '')
 let DROP_NAMES = new Set()
 let KEEP_NAMES = new Set()
 let REST_READY = false
+function pairDrawingFor(node) {
+  return REST_BY_NAME?.get(displayName(node)) || null
+}
 function hasLabeledOutline(node) {
+  if (pairDrawingFor(node)) return true
   const name = displayName(node)
-  if (REST_BY_NAME && REST_BY_NAME.has(name)) return true
   return MOTION_PLATES.some(plate => plate.names.includes(name))
 }
 function eligibleEdges() {
@@ -2915,10 +2918,13 @@ function eligibleEdges() {
       (!state.selectedV || a.v_ids.includes(state.selectedV) || b.v_ids.includes(state.selectedV))
   })
 }
-function currentEdges() {
+function currentEdges(base) {
   const pair = state.selectedPair
-  return eligibleEdges().filter(edge => !pair || edgeTouchesPair(edge, pair.a, pair.b))
-    .sort((a,b)=>b.cosine-a.cosine || NODES[a.source].action_name.localeCompare(NODES[b.source].action_name))
+  const pairs = base.filter(edge => !pair || edgeTouchesPair(edge, pair.a, pair.b))
+  const visible = view === 'network'
+    ? pairs.filter(({source, target}) => pairDrawingFor(NODES[source]) && pairDrawingFor(NODES[target]))
+    : pairs
+  return visible.sort((a,b)=>b.cosine-a.cosine || NODES[a.source].action_name.localeCompare(NODES[b.source].action_name))
 }
 function nodeHTML(node) {
   return '<span class="pair-name">'+esc(displayName(node))+'</span><span class="pair-meta">'+node.v_ids.map(v=>'<span class="pill">'+esc(v)+'</span>').join('')+'<span>'+node.events.length+' event'+(node.events.length===1?'':'s')+'</span></span>'
@@ -3523,8 +3529,8 @@ function openPairPop(edge) {
   host.hidden = false
   const left = NODES[edge.source]
   const right = NODES[edge.target]
-  const leftPlate = REST_BY_NAME.get(displayName(left)) || null
-  const rightPlate = REST_BY_NAME.get(displayName(right)) || null
+  const leftPlate = pairDrawingFor(left)
+  const rightPlate = pairDrawingFor(right)
   const sheet = document.createElement('div')
   sheet.className = 'pair-sheet'
   const head = document.createElement('div')
@@ -3652,7 +3658,9 @@ function renderPath() {
   slot.dataset.ready = '1'
 }
 function render(){
-  const base=eligibleEdges(),edges=currentEdges();lastEdges=edges
+  const base = eligibleEdges()
+  const edges = currentEdges(base)
+  lastEdges = edges
   if(state.selectedEdge && !edges.includes(state.selectedEdge))clearDetail()
   $('pairs-view').hidden=view!=='pairs';$('map-view').hidden=view!=='map';$('network-view').hidden=view!=='network'
   document.querySelector('.content').classList.toggle('show-plates', view==='network')
@@ -3662,7 +3670,9 @@ function render(){
   const names=new Set(edges.flatMap(e=>[e.source,e.target]))
   $('counts').textContent=edges.length+' name pairs · '+names.size+' linked names · cosine ≥ '+state.threshold.toFixed(2)
   $('context-note').textContent=view==='pairs'?'Sorted by highest cosine · select a row to inspect':view==='map'?'Select a dot to compare the action names in two cases':''
-  $('scope-count').textContent=REST_READY ? edges.length+' visible with the current filters. At the default threshold and scope, 645 pairs meet the text criteria; 373 also have eligible drawings.' : 'Drawing index unavailable or loading; turn off the drawing filter to browse text-only relationships.';
+  $('scope-count').textContent = view === 'network'
+    ? (REST_READY ? 'Connections show pairs with drawings in both panels.' : 'Connections need the drawing index.')
+    : (REST_READY ? edges.length+' visible with the current filters. At the default threshold and scope, 645 pairs meet the text criteria; 373 also have eligible drawings.' : 'Drawing index unavailable or loading; turn off the drawing filter to browse text-only relationships.')
   $('threshold-label').textContent=state.threshold.toFixed(2)
   renderCaseFilters();renderPairChip();renderInspector(edges)
   if(view==='pairs')renderPairs(edges)
