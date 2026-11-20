@@ -1,0 +1,649 @@
+{
+  "case": "V22",
+  "shot": "S01",
+  "object_id": "S01_robot_02",
+  "feature_id": 80,
+  "selection_rule": "Within chosen existing object, maximum cached consistent-frame count; smallest ID breaks ties. Illustration only; tracker unchanged.",
+  "records": [
+    {
+      "frame": 1932,
+      "fid": 80,
+      "uv": [
+        458.1557,
+        199.03065
+      ],
+      "supported": true,
+      "camera_status": "background_pose_supported",
+      "xyz": [
+        -0.23465,
+        -0.72188,
+        4.4241
+      ],
+      "local_plan": [
+        0.62008,
+        0.22955
+      ],
+      "drawing_lift_xyz": [
+        -0.0663982983516666,
+        -0.21571961908249998,
+        2.735655
+      ],
+      "drawing_plan": [
+        -0.886685889117693,
+        -1.2899409689295125
+      ]
+    },
+    {
+      "frame": 1942,
+      "fid": 80,
+      "uv": [
+        469.87247,
+        196.20059
+      ],
+      "supported": true,
+      "camera_status": "background_pose_supported",
+      "xyz": [
+        -0.10032,
+        -0.72454,
+        4.31885
+      ],
+      "local_plan": [
+        0.75442,
+        0.12426
+      ],
+      "drawing_lift_xyz": [
+        -0.030783808980166603,
+        -0.22432191662616666,
+        2.735655
+      ],
+      "drawing_plan": [
+        -0.8519813136815895,
+        -1.2981442378322623
+      ]
+    },
+    {
+      "frame": 1950,
+      "fid": 80,
+      "uv": [
+        488.0,
+        195.0
+      ],
+      "supported": true,
+      "camera_status": "prompt_reference_not_scored",
+      "xyz": [
+        0.07052,
+        -0.66116,
+        3.88162
+      ],
+      "local_plan": [
+        0.92488,
+        -0.31191
+      ],
+      "drawing_lift_xyz": [
+        0.024316933333333332,
+        -0.22797125000000001,
+        2.735655
+      ],
+      "drawing_plan": [
+        -0.7983049936494616,
+        -1.3106758692862277
+      ]
+    },
+    {
+      "frame": 1952,
+      "fid": 80,
+      "uv": [
+        493.67218,
+        194.65936
+      ],
+      "supported": true,
+      "camera_status": "background_pose_supported",
+      "xyz": [
+        0.11527,
+        -0.66493,
+        3.85546
+      ],
+      "local_plan": [
+        0.96965,
+        -0.33812
+      ],
+      "drawing_lift_xyz": [
+        0.04155818619766675,
+        -0.22900666502133338,
+        2.735655
+      ],
+      "drawing_plan": [
+        -0.7815096320568343,
+        -1.3145953054898012
+      ]
+    },
+    {
+      "frame": 1962,
+      "fid": 80,
+      "uv": [
+        526.58484,
+        194.79178
+      ],
+      "supported": true,
+      "camera_status": "background_pose_supported",
+      "xyz": [
+        0.3592,
+        -0.59434,
+        3.41509
+      ],
+      "local_plan": [
+        1.21315,
+        -0.77733
+      ],
+      "drawing_lift_xyz": [
+        0.14160005607799997,
+        -0.22860415898233336,
+        2.735655
+      ],
+      "drawing_plan": [
+        -0.6840660857856845,
+        -1.337231534767438
+      ]
+    },
+    {
+      "frame": 1972,
+      "fid": 80,
+      "uv": [
+        571.19141,
+        196.39694
+      ],
+      "supported": true,
+      "camera_status": "background_pose_supported",
+      "xyz": [
+        0.73482,
+        -0.5915,
+        3.54545
+      ],
+      "local_plan": [
+        1.58876,
+        -0.64694
+      ],
+      "drawing_lift_xyz": [
+        0.2771869296928334,
+        -0.22372508789366666,
+        2.735655
+      ],
+      "drawing_plan": [
+        -0.5520081950405835,
+        -1.3678386623731273
+      ]
+    },
+    {
+      "frame": 1982,
+      "fid": 80,
+      "uv": [
+        619.79962,
+        193.2888
+      ],
+      "supported": true,
+      "camera_status": "background_pose_supported",
+      "xyz": [
+        0.88321,
+        -0.48576,
+        2.78455
+      ],
+      "local_plan": [
+        1.73651,
+        -1.40609
+      ],
+      "drawing_lift_xyz": [
+        0.4249372549456667,
+        -0.23317264203999996,
+        2.735655
+      ],
+      "drawing_plan": [
+        -0.40807798100143106,
+        -1.401436107116817
+      ]
+    },
+    {
+      "frame": 1992,
+      "fid": 80,
+      "uv": [
+        662.37042,
+        185.33786
+      ],
+      "supported": true,
+      "camera_status": "background_pose_supported",
+      "xyz": [
+        1.07866,
+        -0.50058,
+        2.61084
+      ],
+      "local_plan": [
+        1.93202,
+        -1.58001
+      ],
+      "drawing_lift_xyz": [
+        0.5543361681389999,
+        -0.25734045177966663,
+        2.735655
+      ],
+      "drawing_plan": [
+        -0.2819972973033773,
+        -1.431123831999283
+      ]
+    },
+    {
+      "frame": 2002,
+      "fid": 80,
+      "uv": [
+        715.89581,
+        174.0451
+      ],
+      "supported": true,
+      "camera_status": "background_pose_supported",
+      "xyz": [
+        1.34038,
+        -0.53912,
+        2.49733
+      ],
+      "local_plan": [
+        2.19394,
+        -1.69411
+      ],
+      "drawing_lift_xyz": [
+        0.7170328356728333,
+        -0.29166611328833336,
+        2.735655
+      ],
+      "drawing_plan": [
+        -0.12346593622660035,
+        -1.468516236248216
+      ]
+    },
+    {
+      "frame": 2012,
+      "fid": 80,
+      "uv": [
+        766.61627,
+        171.59795
+      ],
+      "supported": true,
+      "camera_status": "background_pose_supported",
+      "xyz": [
+        1.50446,
+        -0.52178,
+        2.31299
+      ],
+      "local_plan": [
+        2.35791,
+        -1.87815
+      ],
+      "drawing_lift_xyz": [
+        0.8712035912298333,
+        -0.2991045112141667,
+        2.735655
+      ],
+      "drawing_plan": [
+        0.026714534887479213,
+        -1.503533563465558
+      ]
+    },
+    {
+      "frame": 2022,
+      "fid": 80,
+      "uv": [
+        825.94373,
+        169.76605
+      ],
+      "supported": true,
+      "camera_status": "background_pose_supported",
+      "xyz": [
+        1.94331,
+        -0.56745,
+        2.47627
+      ],
+      "local_plan": [
+        2.79701,
+        -1.71561
+      ],
+      "drawing_lift_xyz": [
+        1.0515363274368332,
+        -0.30467278498583333,
+        2.735655
+      ],
+      "drawing_plan": [
+        0.20237445539141896,
+        -1.5444412641377099
+      ]
+    },
+    {
+      "frame": 2032,
+      "fid": 80,
+      "uv": [
+        873.68182,
+        173.70406
+      ],
+      "supported": true,
+      "camera_status": "background_pose_supported",
+      "xyz": [
+        2.64187,
+        -0.633,
+        2.95722
+      ],
+      "local_plan": [
+        3.49596,
+        -1.23575
+      ],
+      "drawing_lift_xyz": [
+        1.1966418214356667,
+        -0.29270274415633335,
+        2.735655
+      ],
+      "drawing_plan": [
+        0.34369158580568493,
+        -1.5770853233634239
+      ]
+    },
+    {
+      "frame": 2042,
+      "fid": 80,
+      "uv": [
+        902.68268,
+        181.60457
+      ],
+      "supported": true,
+      "camera_status": "background_pose_supported",
+      "xyz": [
+        2.92586,
+        -0.58989,
+        3.04463
+      ],
+      "local_plan": [
+        3.77972,
+        -1.14768
+      ],
+      "drawing_lift_xyz": [
+        1.2847933188393332,
+        -0.2686882222851667,
+        2.735655
+      ],
+      "drawing_plan": [
+        0.4295127881854137,
+        -1.596639235670626
+      ]
+    },
+    {
+      "frame": 2052,
+      "fid": 80,
+      "uv": [
+        899.17108,
+        187.23337
+      ],
+      "supported": true,
+      "camera_status": "background_pose_supported",
+      "xyz": [
+        2.3031,
+        -0.4529,
+        2.41095
+      ],
+      "local_plan": [
+        3.15616,
+        -1.77912
+      ],
+      "drawing_lift_xyz": [
+        1.2741194009526664,
+        -0.2515788279918333,
+        2.735655
+      ],
+      "drawing_plan": [
+        0.41908652443404426,
+        -1.5939399560437677
+      ]
+    },
+    {
+      "frame": 2062,
+      "fid": 80,
+      "uv": [
+        887.45068,
+        191.46497
+      ],
+      "supported": true,
+      "camera_status": "background_pose_supported",
+      "xyz": [
+        2.17082,
+        -0.4089,
+        2.32863
+      ],
+      "local_plan": [
+        3.02364,
+        -1.86074
+      ],
+      "drawing_lift_xyz": [
+        1.2384938777726668,
+        -0.23871638610516668,
+        2.735655
+      ],
+      "drawing_plan": [
+        0.38436385668017226,
+        -1.58566362304947
+      ]
+    },
+    {
+      "frame": 2072,
+      "fid": 80,
+      "uv": [
+        857.62091,
+        194.81364
+      ],
+      "supported": true,
+      "camera_status": "background_pose_supported",
+      "xyz": [
+        2.15505,
+        -0.43863,
+        2.52326
+      ],
+      "local_plan": [
+        3.00806,
+        -1.6666
+      ],
+      "drawing_lift_xyz": [
+        1.1478228117178333,
+        -0.228537712962,
+        2.735655
+      ],
+      "drawing_plan": [
+        0.29602955409399445,
+        -1.564973056200876
+      ]
+    },
+    {
+      "frame": 2082,
+      "fid": 80,
+      "uv": [
+        824.88165,
+        198.30101
+      ],
+      "supported": true,
+      "camera_status": "background_pose_supported",
+      "xyz": [
+        1.80794,
+        -0.37635,
+        2.30992
+      ],
+      "local_plan": [
+        2.66059,
+        -1.87893
+      ],
+      "drawing_lift_xyz": [
+        1.0483080113675,
+        -0.2179374449871667,
+        2.735655
+      ],
+      "drawing_plan": [
+        0.19908042164854034,
+        -1.542273866360311
+      ]
+    },
+    {
+      "frame": 2092,
+      "fid": 80,
+      "uv": [
+        789.58984,
+        202.01897
+      ],
+      "supported": true,
+      "camera_status": "background_pose_supported",
+      "xyz": [
+        1.31151,
+        -0.29145,
+        1.86811
+      ],
+      "local_plan": [
+        2.16367,
+        -2.31935
+      ],
+      "drawing_lift_xyz": [
+        0.9410344374946665,
+        -0.20663627180516667,
+        2.735655
+      ],
+      "drawing_plan": [
+        0.09457276708450346,
+        -1.5178069906453446
+      ]
+    },
+    {
+      "frame": 2102,
+      "fid": 80,
+      "uv": [
+        753.62067,
+        205.74159
+      ],
+      "supported": true,
+      "camera_status": "background_pose_supported",
+      "xyz": [
+        1.18973,
+        -0.28985,
+        1.91688
+      ],
+      "local_plan": [
+        2.04189,
+        -2.27056
+      ],
+      "drawing_lift_xyz": [
+        0.8317019488765001,
+        -0.1953209340095,
+        2.735655
+      ],
+      "drawing_plan": [
+        -0.011940366050586404,
+        -1.4928738774809145
+      ]
+    },
+    {
+      "frame": 2112,
+      "fid": 80,
+      "uv": [
+        720.50415,
+        208.58023
+      ],
+      "supported": false,
+      "camera_status": "background_pose_supported",
+      "xyz": null,
+      "local_plan": null,
+      "drawing_lift_xyz": [
+        0.7310404227424999,
+        -0.18669255655483333,
+        2.735655
+      ],
+      "drawing_plan": [
+        -0.11000304927871546,
+        -1.4699478075743466
+      ]
+    },
+    {
+      "frame": 2122,
+      "fid": 80,
+      "uv": [
+        702.59808,
+        214.37961
+      ],
+      "supported": true,
+      "camera_status": "background_pose_supported",
+      "xyz": [
+        0.92279,
+        -0.22098,
+        1.8296
+      ],
+      "local_plan": [
+        1.77457,
+        -2.35674
+      ],
+      "drawing_lift_xyz": [
+        0.6766128339359999,
+        -0.16906466445049995,
+        2.735655
+      ],
+      "drawing_plan": [
+        -0.16304779525529842,
+        -1.4573369872492874
+      ]
+    },
+    {
+      "frame": 2132,
+      "fid": 80,
+      "uv": [
+        704.32977,
+        215.77524
+      ],
+      "supported": true,
+      "camera_status": "background_pose_supported",
+      "xyz": [
+        0.93844,
+        -0.23954,
+        1.83733
+      ],
+      "local_plan": [
+        1.79033,
+        -2.34931
+      ],
+      "drawing_lift_xyz": [
+        0.6818765077215001,
+        -0.164822484242,
+        2.735655
+      ],
+      "drawing_plan": [
+        -0.15792810902959353,
+        -1.458458067444671
+      ]
+    },
+    {
+      "frame": 2142,
+      "fid": 80,
+      "uv": [
+        704.32745,
+        215.76492
+      ],
+      "supported": true,
+      "camera_status": "background_pose_supported",
+      "xyz": [
+        0.87211,
+        -0.22227,
+        1.70449
+      ],
+      "local_plan": [
+        1.72388,
+        -2.48186
+      ],
+      "drawing_lift_xyz": [
+        0.6818694558108332,
+        -0.164853853086,
+        2.735655
+      ],
+      "drawing_plan": [
+        -0.15793492375070403,
+        -1.4584569909624023
+      ]
+    }
+  ],
+  "drawing_fixed_depth": 2.735655,
+  "drawing_fixed_focal": 900,
+  "notes": "Strict per-keyframe geometry and diagram branch are separate columns; not accuracy against ground truth."
+}
