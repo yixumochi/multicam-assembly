@@ -6,23 +6,21 @@
 <title>Atlas of Assembly Space</title>
 <link rel="stylesheet" href="atlas.css?v=guide2">
 <link rel="stylesheet" href="case-relations.css?v=12">
-<link rel="stylesheet" href="../site-header.css?v=1">
 <script src="area-calibration.js" defer></script>
 <script src="case-relations.js?v=5" defer></script>
-<script src="atlas.js?v=workshop-boundaries1" defer></script>
+<script src="atlas.js?v=mode-distribution1" defer></script>
 </head>
 <body class="assembly-atlas">
-<header class="site-header">
+<header class="assembly-atlas-header">
   <div>
-    <p class="site-header-series">Fifteen assembly cases</p>
+    <p class="assembly-atlas-series">Fifteen assembly cases</p>
     <h1 id="atlas-title">Atlas of Assembly Space</h1>
   </div>
-  <a href="../index.html#overview" class="site-header-back" aria-label="Back to the assembly pages">Back</a>
+  <a href="../index.html#overview">Back to the assembly pages</a>
 </header>
-<nav class="site-nav" aria-label="Assembly space">
+<nav class="assembly-atlas-nav" aria-label="Assembly space">
   <a href="index.html" aria-current="page">Atlas of Assembly Space</a>
   <a href="compare.html" id="compare-tab-link">Compare two cases</a>
-  <a href="../video-to-top-view/">From video to top view</a>
 </nav>
 <main class="assembly-atlas-main">
   <section id="atlas" class="case-area" aria-labelledby="atlas-title">
@@ -61,6 +59,21 @@
         </div>
       </section>
       <p class="note">A is the area covered during assembly. F is the finished footprint. ≈ marks areas scaled using published dimensions. <a href="../index.html#overview">Source case sheets</a></p>
+      <section id="across-modes" class="mode-distribution" aria-labelledby="mode-distribution-title">
+        <div class="mode-distribution-heading">
+          <h2 id="mode-distribution-title">Across assembly modes</h2>
+          <p class="mode-distribution-finding"></p>
+        </div>
+        <div class="mode-distribution-chart" role="group" aria-label="Activity-to-footprint ratios for all 15 cases"></div>
+        <p class="mode-distribution-key">
+          <span>A/F = activity area ÷ footprint · Log scale</span>
+          <span><i class="mode-distribution-dot" data-role="human" aria-hidden="true"></i>Human</span>
+          <span><i class="mode-distribution-dot" data-role="machine" aria-hidden="true"></i>Machine</span>
+          <span><i class="mode-distribution-dot" data-role="part" aria-hidden="true"></i>Parts</span>
+          <span><i class="mode-legend-median" aria-hidden="true"></i>Median</span>
+        </p>
+        <p class="mode-distribution-detail note" aria-live="polite">Dot color shows the role with the largest recorded coverage.</p>
+      </section>
     </div>
   </section>
 

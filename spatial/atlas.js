@@ -285,6 +285,98 @@
     return url;
   }
 
+  function renderModeDistribution({rows, modes}) {
+    const section = atlas.querySelector("#across-modes");
+    const plot = section.querySelector(".mode-distribution-chart");
+    const detail = section.querySelector(".mode-distribution-detail");
+    const roles = {human:"Human", machine:"Machine", part:"Parts"};
+    const groups = [
+      ["human-led", "Human-led"], ["robotic-assembly", "Robot-led"], ["human-robot", "Mixed"]
+    ];
+    const eligible = rows.filter(row => Number.isFinite(row.ratio_activity_over_object) && row.ratio_activity_over_object > 0);
+    if (!eligible.length) {
+      section.hidden = true;
+      return;
+    }
+    const cases = eligible.map(row => {
+      const largest = Math.max(...Object.keys(roles).map(role => row[role + "_area_m2"]));
+      const leading = Object.keys(roles).filter(role => row[role + "_area_m2"] === largest);
+      return {...row, largestRole: leading.length === 1 && largest > 0 ? leading[0] : null};
+    });
+    const caseInfo = new Map(cases.map(row => [row.case, row]));
+    const partCount = cases.filter(row => row.largestRole === "part").length;
+    section.querySelector(".mode-distribution-finding").textContent =
+      `Parts have the largest recorded coverage in ${partCount} of ${cases.length} cases.`;
+
+    const ratios = eligible.map(row => row.ratio_activity_over_object);
+    const from = Math.min(0, Math.floor(Math.log2(Math.min(...ratios))));
+    const to = Math.max(1, Math.ceil(Math.log2(Math.max(...ratios))));
+    const ticks = Array.from({length:to - from + 1}, (_, index) => 2 ** (from + index));
+    const position = value => `${100 * (Math.log2(value) - from) / (to - from)}%`;
+    const axis = element("div", "mode-distribution-axis");
+    for (const value of ticks) {
+      const tick = element("span", "", value + "×");
+      tick.style.setProperty("--position", position(value));
+      axis.append(tick);
+    }
+    const axisRow = element("div", "mode-distribution-row mode-distribution-axis-row");
+    axisRow.append(element("span", "mode-axis-name", "A/F"), axis);
+    plot.append(axisRow);
+
+    for (const [id, label] of groups) {
+      const group = modes.find(mode => mode.mode === id);
+      const members = (group?.cases ?? []).map(id => caseInfo.get(id)).filter(Boolean)
+        .sort((a,b) => a.ratio_activity_over_object - b.ratio_activity_over_object);
+      if (!members.length) continue;
+      const middle = Math.floor(members.length / 2);
+      const median = members.length % 2 ? members[middle].ratio_activity_over_object :
+        (members[middle - 1].ratio_activity_over_object + members[middle].ratio_activity_over_object) / 2;
+      const row = element("div", "mode-distribution-row");
+      row.dataset.mode = id;
+      const name = element("div", "mode-distribution-label");
+      name.append(element("h3", "", label), element("span", "", `Median ${median.toFixed(2)}×`));
+      const track = element("div", "mode-distribution-track");
+      for (const value of ticks) {
+        const grid = element("span", "mode-distribution-guide");
+        grid.style.setProperty("--position", position(value));
+        track.append(grid);
+      }
+      const mark = element("span", "mode-distribution-median");
+      mark.dataset.median = String(median);
+      mark.style.setProperty("--position", position(median));
+      track.append(mark);
+
+      const lastByLane = [];
+      for (const member of members) {
+        const ratio = member.ratio_activity_over_object;
+        const percentage = parseFloat(position(ratio));
+        let lane = lastByLane.findIndex(previous => percentage - previous >= 12);
+        if (lane === -1) lane = lastByLane.length;
+        lastByLane[lane] = percentage;
+        const pin = element("a", "mode-distribution-pin");
+        pin.href = caseUrl(member);
+        pin.dataset.modeCase = member.case;
+        pin.dataset.role = member.largestRole || "tied";
+        pin.style.setProperty("--position", position(ratio));
+        pin.style.setProperty("--lane", lane);
+        pin.classList.toggle("mode-pin-at-end", percentage > 87);
+        const description = member.largestRole
+          ? `${roles[member.largestRole]} · ${readableShare(shareOfActivity(member, member.largestRole + "_area_m2"))} of A`
+          : "No unique largest role";
+        const readout = `${member.case} · ${label} · A/F ${multiplier(member)} · ${description}`;
+        pin.title = readout;
+        pin.setAttribute("aria-label", readout + " · Open case sheet");
+        pin.append(element("span", "mode-distribution-dot"), element("span", "mode-distribution-code", member.case));
+        pin.addEventListener("pointerenter", () => { detail.textContent = readout; });
+        pin.addEventListener("focus", () => { detail.textContent = readout; });
+        track.append(pin);
+      }
+      track.style.setProperty("--lanes", lastByLane.length);
+      row.append(name, track);
+      plot.append(row);
+    }
+  }
+
   function readAtlas({rows, modes}) {
     const byId = new Map(rows.map(row => [row.case, row]));
     const compareTab = document.getElementById("compare-tab-link");
@@ -319,6 +411,7 @@
     }
     openLinkedCase();
     window.addEventListener("hashchange", openLinkedCase);
+    renderModeDistribution({rows, modes});
   }
 
   function rowLayout(label, left, middle, right) {
@@ -579,6 +672,9 @@
     }
     atlas.querySelector("#atlas-status").hidden = true;
     atlas.querySelector("#atlas-content").hidden = false;
+    if (!comparisonPage && location.hash === "#across-modes") {
+      atlas.querySelector("#across-modes").scrollIntoView();
+    }
   }
 
   load().catch(error => {
