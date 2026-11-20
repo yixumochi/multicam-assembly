@@ -1,4 +1,4 @@
-function initializeCaseRelations({rows, modes, hasMetres, areaValue, calibration, readableArea, chooseCase, chooseRelation}) {
+function initializeCaseRelations({rows, modes, hasMetres, areaValue, calibration, readableArea, chooseCase, comparisonUrl}) {
   const section = document.querySelector(".case-relations");
   const drawing = section.querySelector("svg");
   const buttons = [...section.querySelectorAll(".case-relations-questions [data-relation-question]")];
@@ -15,7 +15,6 @@ function initializeCaseRelations({rows, modes, hasMetres, areaValue, calibration
   ];
   const nodes = new Map();
   let question = "all";
-  let currentRelation = null;
 
   function svg(tag, attributes = {}, content) {
     const element = document.createElementNS("http://www.w3.org/2000/svg", tag);
@@ -135,19 +134,19 @@ function initializeCaseRelations({rows, modes, hasMetres, areaValue, calibration
       const [x,y] = [area(a,key),area(b,key)];
       return Math.max(x,y) > 0 && Math.abs(x-y) <= threshold*Math.max(x,y);
     };
-    let finding;
+    let matched = false;
     if (topic === "spread" && similar("object",.20)) {
       const sizes = [area(a,"activity"),area(b,"activity")];
       const ratio = Math.max(...sizes) / Math.min(...sizes);
-      if (Number.isFinite(ratio) && ratio >= 1.5) finding = `${a.case} and ${b.case} have similar footprints (${display(a,"object")} and ${display(b,"object")}). Their recorded activity areas are ${display(a,"activity")} and ${display(b,"activity")}, a ${ratio.toFixed(1)}× difference.`;
+      matched = Number.isFinite(ratio) && ratio >= 1.5;
     }
     if (topic === "roles" && similar("object",.20) && similar("activity",.15)) {
-      finding = `${a.case} and ${b.case} cover similar total areas (${display(a,"activity")} and ${display(b,"activity")}). Human coverage is ${display(a,"human")} and ${display(b,"human")}, machine coverage is ${display(a,"machine")} and ${display(b,"machine")}, respectively.`;
+      matched = true;
     }
     if (topic === "parts" && similar("part",.15)) {
-      finding = `Part coverage is similar (${display(a,"part")} in ${a.case}, ${display(b,"part")} in ${b.case}). Human coverage is ${display(a,"human")} and ${display(b,"human")}, machine coverage is ${display(a,"machine")} and ${display(b,"machine")}, respectively.`;
+      matched = true;
     }
-    return finding ? {ids, finding} : null;
+    return matched;
   }
 
   function curve(a,b) {
@@ -164,48 +163,31 @@ function initializeCaseRelations({rows, modes, hasMetres, areaValue, calibration
     return `M ${start} ${a.y} C ${middle} ${a.y} ${middle} ${b.y} ${end} ${b.y}`;
   }
 
-  function indicateRelation() {
-    const id = currentRelation?.ids.join("-");
-    for (const element of section.querySelectorAll("[data-atlas-relation]")) {
-      const active = element.dataset.atlasRelation === id;
-      element.classList.toggle("is-selected", active);
-      if (element instanceof HTMLButtonElement) element.setAttribute("aria-pressed", active);
-    }
-  }
-
   function showConnections(topic) {
     question = topic;
     clearButton.hidden = topic === "all";
     for (const button of buttons) button.setAttribute("aria-pressed", button.dataset.relationQuestion === topic);
     lines.replaceChildren();
-    for (const relation of relations[topic] ?? []) {
-      const {ids} = relation;
+    for (const ids of relations[topic] ?? []) {
       const key = ids.join("-");
-      const line = svg("g", {class:"case-connection","data-atlas-relation":key});
+      const line = svg("a", {class:"case-connection","data-atlas-relation":key,href:comparisonUrl(ids),tabindex:"-1"});
       const d = curve(...ids.map(id => nodes.get(id)));
       line.append(svg("path", {d,class:"case-connection-hit"}), svg("path", {d,class:"case-connection-line"}));
-      line.addEventListener("click", () => chooseRelation(relation));
       lines.append(line);
     }
-    indicateRelation();
   }
 
   const relations = Object.fromEntries(Object.entries(pairs).map(([topic, items]) => [
-    topic, items.map(ids => relationFor(ids, topic)).filter(Boolean)
+    topic, items.filter(ids => relationFor(ids, topic))
   ]));
   for (const [topic, examples] of Object.entries(relations)) {
     const pairList = section.querySelector(`[data-theme-pairs="${topic}"]`);
-    for (const relation of examples) {
-      const pairButton = document.createElement("button");
-      pairButton.type = "button";
-      pairButton.textContent = relation.ids.join(" ↔ ");
-      pairButton.dataset.atlasRelation = relation.ids.join("-");
-      pairButton.setAttribute("aria-pressed", "false");
-      pairButton.addEventListener("click", () => {
-        showConnections(topic);
-        chooseRelation(relation);
-      });
-      pairList.append(pairButton);
+    for (const ids of examples) {
+      const link = document.createElement("a");
+      link.href = comparisonUrl(ids);
+      link.textContent = ids.join(" ↔ ");
+      link.dataset.atlasRelation = ids.join("-");
+      pairList.append(link);
     }
   }
   for (const button of buttons) button.addEventListener("click", () => {
@@ -220,11 +202,9 @@ function initializeCaseRelations({rows, modes, hasMetres, areaValue, calibration
   showConnections("spread");
 
   return {
-    update(selected, relation) {
+    update(selected) {
       const picked = selected.filter(Boolean);
-      currentRelation = relation;
       for (const [id, node] of nodes) node.element.setAttribute("aria-pressed", picked.includes(id));
-      indicateRelation();
       status.textContent = picked.length === 2 ? `${picked.join(" and ")} selected. Compare them below.` :
         picked.length ? `${picked[0]} selected. Choose a second case.` : "Select two cases on the atlas to compare them.";
     }

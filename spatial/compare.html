@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Compare two cases · Atlas of Assembly Space</title>
+<link rel="stylesheet" href="atlas.css?v=guide2">
+<link rel="stylesheet" href="case-relations.css?v=10">
+<link rel="stylesheet" href="compare-cases.css?v=1">
+<script src="area-calibration.js" defer></script>
+<script src="atlas.js?v=compare-tab1" defer></script>
+</head>
+<body class="assembly-atlas">
+<header class="assembly-atlas-header">
+  <div>
+    <p class="assembly-atlas-series">Fifteen assembly cases</p>
+    <h1>Compare two cases</h1>
+  </div>
+  <a href="../index.html#overview">Back to the assembly pages</a>
+</header>
+<nav class="assembly-atlas-nav" aria-label="Assembly space">
+  <a href="index.html">Atlas of Assembly Space</a>
+  <a href="compare.html" aria-current="page">Compare two cases</a>
+</nav>
+<main id="atlas" class="assembly-atlas-main case-area" data-compare-page>
+  <p id="atlas-status" role="status">Loading the 15 case measurements…</p>
+  <div id="atlas-content" hidden>
+    <div class="compare-selectors">
+      <label for="compare-first">Left case<select id="compare-first"></select></label>
+      <span class="compare-arrow" aria-hidden="true">↔</span>
+      <label for="compare-second">Right case<select id="compare-second"></select></label>
+    </div>
+    <p id="compare-empty" class="note" hidden>Choose two cases to open their comparison.</p>
+    <section id="atlas-pair-detail" aria-labelledby="atlas-pair-heading" hidden>
+      <div class="compare-plate-heading">
+        <h2 id="atlas-pair-heading"></h2>
+        <div class="compare-scale">
+          <p id="atlas-plan-note" class="note"></p>
+          <label><input id="atlas-common" type="checkbox" checked> Shared metre scale</label>
+        </div>
+      </div>
+      <div class="compare-matrix" id="compare-matrix"></div>
+      <section class="compare-findings" aria-labelledby="compare-findings-title">
+        <h3 id="compare-findings-title">Findings</h3>
+        <p id="compare-findings"></p>
+      </section>
+      <details class="compare-method">
+        <summary>How to read the measurements</summary>
+        <p>F is the finished footprint and A is recorded assembly activity. Each role pie divides its recorded area by A. Role areas can overlap. The Top Views show recorded movement coverage. For access and clearance, check the full assembly sequence.</p>
+        <p>The bars in the finished member row show each case’s share of the pair’s total for that metric. Dimensions follow the Rhino axes. Member surface area includes contact faces. ≈ marks a rounded model dimension or an area scaled from a published dimension.</p>
+      </details>
+    </section>
+  </div>
+</main>
+</body>
+</html>

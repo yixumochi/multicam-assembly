@@ -1,12 +1,12 @@
 (() => {
   const atlas = document.getElementById("atlas");
+  const comparisonPage = atlas.hasAttribute("data-compare-page");
   const casePage = new URL("../index.html", location.href);
   const metric = row => row.unit === "mm_to_m";
   const calibration = row => metric(row) ? undefined : areaCalibration[row.case];
   const hasMetres = row => metric(row) || Boolean(calibration(row));
   const unit = row => hasMetres(row) ? "m²" : "model units²";
   const scale = reference => reference.referenceMetres / reference.bounds[reference.axis];
-  const areaFields = ["activity", "object", "human", "machine", "part"].map(key => key + "_area_m2");
   const areaValue = (row, field) => {
     const reference = calibration(row);
     return reference ? row[field] * scale(reference) ** 2 : row[field];
@@ -34,31 +34,6 @@
   function svgElement(tag, attributes) {
     const node = document.createElementNS(svgNamespace, tag);
     for (const [name, value] of Object.entries(attributes)) node.setAttribute(name, value);
-    return node;
-  }
-
-  function axis(maximum, label, intervals = 4) {
-    const node = element("div", "atlas-axis");
-    for (let tick = 0; tick <= intervals; tick++) {
-      const suffix = label === "%" ? label : tick === intervals ? " " + label : "";
-      const mark = element("span", "", (maximum * tick / intervals).toLocaleString("en") + suffix);
-      mark.style.setProperty("--tick", `${100 * tick / intervals}%`);
-      node.append(mark);
-    }
-    return node;
-  }
-
-  function bars(maximum, fields) {
-    const node = element("div", "atlas-bars");
-    for (const {key, label, value, caption} of fields) {
-      const line = element("div", "atlas-bar-line");
-      const track = element("span", "atlas-track");
-      const fill = element("span", "atlas-fill " + key);
-      fill.style.width = (Number.isFinite(value) ? 100 * value / maximum : 0) + "%";
-      track.append(fill);
-      line.append(element("b", "atlas-bar-label", label), track, element("span", "atlas-value", caption));
-      node.append(line);
-    }
     return node;
   }
 
@@ -94,7 +69,7 @@
     return margin > 0 ? [left - margin, top - margin, width + margin * 2, height + margin * 2] : viewBox;
   }
 
-  function filledCoverage(geometry, actions, layers, caseId) {
+  function filledCoverage(geometry, actions, layers, caseId, mergeRoles) {
     const byRole = new Map();
     for (const action of actions) {
       if (!layers.has(action.role) || (action.poly?.length ?? 0) < 3) continue;
@@ -104,7 +79,8 @@
       },0);
       if (!Number.isFinite(signedArea) || signedArea === 0) continue;
       const ring = signedArea > 0 ? action.poly : [...action.poly].reverse();
-      byRole.set(action.role, (byRole.get(action.role) || "") + `M ${coordinates(ring)} Z `);
+      const role = mergeRoles ? "activity" : action.role;
+      byRole.set(role, (byRole.get(role) || "") + `M ${coordinates(ring)} Z `);
     }
     for (const [role, d] of byRole) {
       geometry.append(svgElement("path", {d,class:"atlas-coverage-fill","data-coverage-layer":role,"fill-rule":"nonzero"}));
@@ -118,14 +94,18 @@
     }
   }
 
-  function renderPlan(row, {plan, data, viewBox, metres, outline}, shared, layers) {
-    const switchable = !layers;
-    const panel = element("article", "atlas-card");
-    const title = caseHeading(row, true);
+  const planLayers = {
+    footprint: [],
+    activity: ["human","machine","part"],
+    parts: ["part"],
+    operators: ["human","machine"]
+  };
+
+  function renderPlan(row, {plan, data, viewBox, metres, outline}, shared, mode, label) {
     const [left, top, width, height] = viewBox;
     const canvas = svgElement("svg", {
       viewBox: shared ? `0 0 ${shared.width} ${shared.height}` : viewBox.join(" "),
-      role: "img", "aria-label": row.case + " original top drawing and activity coverage"
+      class:"atlas-coverage-canvas", role:"img", "aria-label":row.case + " Top View · " + label
     });
     const geometry = svgElement("g", {});
     if (shared) {
@@ -135,20 +115,12 @@
     }
     const backdrop = plan.querySelector("image").cloneNode(true);
     backdrop.setAttribute("href", new URL(backdrop.getAttribute("href"), casePage).href);
-    backdrop.setAttribute("opacity", switchable ? (outline ? "0.48" : "0.7") : "1");
+    backdrop.setAttribute("opacity", mode === "footprint" ? "0.9" : outline ? "0.5" : "0.7");
     geometry.classList.add("atlas-coverage-plan");
     backdrop.classList.add("atlas-coverage-drawing");
-    if (switchable) {
-      for (const [mode, roles] of [["operators", ["human","machine"]], ["parts", ["part"]]]) {
-        const layer = svgElement("g", {"data-study-layer":mode});
-        filledCoverage(layer, data.actions, new Set(roles), row.case);
-        geometry.append(layer);
-      }
-    } else {
-      filledCoverage(geometry, data.actions, layers, row.case);
-    }
+    filledCoverage(geometry, data.actions, new Set(planLayers[mode]), row.case, mode === "activity");
     geometry.append(backdrop);
-    if (switchable && outline) geometry.append(svgElement("path", {
+    if (outline) geometry.append(svgElement("path", {
       d:`M ${coordinates(outline)} Z`, class:"atlas-object-outline"
     }));
     canvas.append(geometry);
@@ -161,17 +133,14 @@
       label.textContent = length + " m";
       canvas.append(label);
     }
-    panel.append(title, canvas);
-    return panel;
+    return canvas;
   }
 
-  function caseHeading(row, compact = false) {
-    const heading = element("h4");
-    const link = element("a", "", compact ? row.case : row.case + " case sheet");
-    if (compact) link.setAttribute("aria-label", row.case + " case sheet");
+  function caseLink(row) {
+    const link = element("a", "", row.case);
+    link.setAttribute("aria-label", row.case + " case sheet");
     link.href = caseUrl(row);
-    heading.append(link);
-    return heading;
+    return link;
   }
 
   function modelNumber(value, unit, approximate = false) {
@@ -188,25 +157,20 @@
   }
 
   function metricCard(row, metrics, plan) {
-    const card = element("article", "atlas-card");
-    card.append(caseHeading(row, true));
+    const card = element("div", "compare-model-card");
     if (plan.iso) {
       const figure = element("figure", "pair-study-iso");
       const image = element("img");
       image.src = new URL(plan.iso, casePage).href;
       image.alt = row.case + " isometric view from Fifteen assembly cases";
+      image.loading = "lazy";
       const pose = metrics?.dimensionPose ? ` (${metrics.dimensionPose})` : "";
       const height = metrics?.dimensions ? " · Height " + modelNumber(metrics.dimensions[2], "m", true) + pose : "";
       figure.append(image, element("figcaption", "", "ISO" + height));
       card.append(figure);
     }
     const facts = element("dl", "pair-study-facts");
-    for (const [name, value] of [["Main members", modelNumber(metrics?.members, "pcs")],
-      ["Dimensions (X × Y × Z)", modelDimensions(metrics)],
-      ["Solid member volume", modelNumber(metrics?.volume, "m³", metrics?.approximate)],
-      ["Member surface area", modelNumber(metrics?.surface, "m²", metrics?.approximate)]]) {
-      facts.append(element("dt", "", name), element("dd", "", value));
-    }
+    facts.append(element("dt", "", "Dimensions (X × Y × Z)"), element("dd", "", modelDimensions(metrics)));
     card.append(facts);
     if (metrics?.members) {
       const details = element("details", "note pair-study-model-source");
@@ -238,363 +202,313 @@
     return pie;
   }
 
-  function coveragePie(row, key, label) {
-    const field = key + "_area_m2";
-    const share = shareOfActivity(row, field);
-    const item = element("figure", "atlas-coverage-pie");
-    item.dataset.coverageRole = key;
-    const pie = pieGraphic([[share,"atlas-pie-slice"]]);
-    const caption = element("figcaption");
-    caption.append(element("span", "atlas-pie-label", label),
-      element("strong", "atlas-share-value", readableShare(share)),
-      element("span", "atlas-share-area", readableArea(row, field)));
-    if (!Number.isFinite(share) || share < 0 || share > 100) pie.setAttribute("hidden", "");
-    item.append(pie, caption);
-    return item;
-  }
+  const studyRows = [
+    {mode:"footprint", name:"Finished footprint", keys:["object"], tolerance:.20},
+    {mode:"activity", name:"Total activity area", keys:["activity"], tolerance:.15},
+    {mode:"parts", name:"Parts & access", keys:["part"], tolerance:.15},
+    {mode:"operators", name:"Human & machine", keys:["human","machine"]}
+  ];
 
-  function renderMemberPie(container, pair, metrics) {
-    const counts = metrics.map(item => item?.members);
-    container.hidden = !counts.every(count => Number.isFinite(count) && count > 0);
-    container.replaceChildren();
-    if (container.hidden) return;
-    const total = counts[0] + counts[1];
-    const shares = [100*counts[0]/total,100*counts[1]/total];
-    const colors = ["atlas-member-first", "atlas-member-second"];
-    const figure = element("figure", "atlas-member-pie atlas-coverage-pie");
-    const caption = element("figcaption");
-    caption.append(element("b", "", "Main members · share of both counts"));
-    pair.forEach((row, index) => caption.append(element("span", "atlas-member-key " + colors[index],
-      `${row.case} · ${counts[index]} pcs · ${readableShare(shares[index])}`)));
-    figure.append(pieGraphic(shares.map((share,index) => [share,"atlas-pie-slice " + colors[index]])), caption);
-    container.append(figure);
-  }
-
-  const summaryRowsByPair = {
-    "V01-V24": ["Footprint", "Parts", "Main members"],
-    "V11-V26": ["Footprint", "Total activity", "Parts"],
-    "V20-V22": ["Total activity", "Human", "Machine"],
-    "V04-V28": ["Footprint", "Total activity", "Parts"],
-    "V27-V29": ["Parts", "Human", "Machine"]
+  const findingsByPair = {
+    "V01-V24":"The finished footprints are close. V01’s recorded assembly area is 4.3× V24’s, and its part tracks cover 5.5× as much ground. The finished V24 model has 338 members versus 58 in V01.",
+    "V11-V26":"The footprints are close, while V11 covers more ground during assembly. Its part tracks account for most of the recorded work area. V26’s largest recorded layer is machine movement.",
+    "V20-V22":"The total activity areas are close. The plans show different uses of that space. V20 records human movement alongside the shell and V22 records machine movement around the pod.",
+    "V04-V28":"The total activity areas are close. Parts cover a larger share of that area in V28, while the human and machine layers are both present in V04. The layers show where each type of movement concentrates.",
+    "V27-V29":"The part movement areas are close. V27 records more human coverage and V29 records more machine coverage. The operator plans show where each case uses the space around its parts."
   };
 
-  function renderPairSummary(container, pair, metrics, plans, conclusion) {
-    const comparableArea = pair.every(hasMetres);
-    const area = key => row => comparableArea ? areaValue(row, key + "_area_m2") : NaN;
-    const rows = {
-      "Footprint": ["footprint",area("object"),"m²","M3 6h22v16H3z"],
-      "Total activity": ["ink",area("activity"),"m²","M7 7Q1 10 5 17Q8 23 17 21Q27 19 24 11Q22 4 16 7Q12 9 7 7Z"],
-      "Activity per footprint": ["ink",row => row.ratio_activity_over_object,"×","M4 4h20v20H4z M10 10h8v8h-8z"],
-      "Human": ["human",area("human"),"m²","M14 3a3 3 0 1 0 0 6a3 3 0 0 0 0-6 M14 10v7 M7 13h14 M14 17l-5 8 M14 17l5 8"],
-      "Machine": ["machine",area("machine"),"m²","M4 24h14 M8 24v-5l7-8 M15 11l5 4 M20 15v4 M22 17h-4 M15 9a2 2 0 1 0 .01 0"],
-      "Parts": ["part",area("part"),"m²","M3 16l16-9 4 5-16 9z M7 21v3l16-9v-3 M3 16v3l4 5 M7 6h17 M21 3l3 3-3 3"],
-      "Main members": ["ink",(row,item) => item?.members,"pcs","M4 5h8v7H4z M16 5h8v7h-8z M4 16h8v7H4z M16 16h8v7h-8z"]
-    };
-    const key = pair.map(row => row.case).sort().join("-");
-    const fallback = comparableArea ? ["Footprint", "Total activity", "Parts"] : ["Activity per footprint", "Main members"];
-    const selection = summaryRowsByPair[key] ?? fallback;
-    const svg = svgElement("svg", {viewBox:`0 0 760 ${164 + selection.length * 48}`, role:"img", class:"pair-summary-graphic",
-      "aria-label":`Comparison of ${pair[0].case} and ${pair[1].case}`, "aria-describedby":"pair-summary-description"});
-    const description = svgElement("desc", {id:"pair-summary-description"});
-    const readout = [conclusion, "Bars compare the two cases within each row."];
-    svg.append(description);
-    plans.forEach((plan, index) => {
-      if (plan.iso) svg.append(svgElement("image", {x:index ? 422 : 28,y:4,width:310,height:146,
-        href:new URL(plan.iso,casePage).href}));
-    });
-    svg.append(svgElement("path", {d:"M 28 158 H 338 M 422 158 H 732",class:"pair-summary-rule"}));
-    for (const [index, label] of selection.entries()) {
-      const [color, measure, unitName, icon] = rows[label];
-      const y = 187 + index * 48;
-      const line = svgElement("g", {"data-summary-metric":label,"data-summary-tone":color});
-      const values = pair.map((row,index) => measure(row,metrics[index]));
-      const peak = Math.max(...values.filter(Number.isFinite),0);
-      line.append(svgElement("path", {d:icon,transform:`translate(366 ${y-14})`,class:"pair-summary-icon"}));
-      values.forEach((value,index) => {
-        const x = index ? 422 : 28;
-        line.append(svgElement("rect", {x,y:y-9,width:310,height:18,rx:2,class:"pair-summary-track"}));
-        if (Number.isFinite(value) && value > 0) {
-          const width = 310*value/peak;
-          line.append(svgElement("rect", {x:index ? x : 338-width,y:y-9,width,height:18,rx:2,class:"pair-summary-value"}));
-        } else if (!Number.isFinite(value)) {
-          line.append(svgElement("path", {d:`M ${x+134} ${y} h42`,class:"pair-summary-missing"}));
-        }
-      });
-      readout.push(`${label}: ${pair.map((row,index) => `${row.case} ${modelNumber(values[index],unitName,unitName === "m²" && calibration(row))}`).join(", ")}.`);
-      svg.append(line);
-    }
-    description.textContent = readout.join(" ");
-    container.replaceChildren(svg);
+  function compareUrl(cases) {
+    const url = new URL("compare.html", location.href);
+    cases.forEach((id, index) => { if (id) url.searchParams.set(index ? "second" : "first", id); });
+    return url;
   }
 
-  function start(source, {rows, modes}, registered, modelMetrics, outlines) {
-    const metricLimit = Math.ceil(Math.max(20, ...rows.filter(hasMetres)
-      .flatMap(row => areaFields.map(field => areaValue(row, field)))) / 20) * 20;
-    const modelLimit = row => Math.ceil(Math.max(10, ...areaFields.map(field => row[field])) / 10) * 10;
-    const first = atlas.querySelector("#compare-first");
-    const second = atlas.querySelector("#compare-second");
-    const question = atlas.querySelector("#compare-question");
-    const roleChoice = atlas.querySelector("#compare-role");
-    const roleControl = atlas.querySelector("#compare-role-control");
-    const areaStudy = atlas.querySelector("#atlas-area-study");
-    const coveragePlans = atlas.querySelector("#compare-coverage");
-    const layerButtons = [...atlas.querySelectorAll("[data-study-mode]")];
-    const modelCards = atlas.querySelector("#compare-models");
-    const memberPie = atlas.querySelector("#compare-member-pie");
-    const summary = atlas.querySelector("#compare-summary");
-    const planCache = new Map();
-    const planFor = row => {
-      if (!planCache.has(row.case)) planCache.set(row.case, getPlan(source, row, registered, outlines));
-      return planCache.get(row.case);
-    };
-    const byId = new Map(rows.map(row => [row.case, row]));
-    const compareLayers = [...atlas.querySelectorAll(".atlas-layers input[value]")];
-    const picked = [first, second];
-    const detail = atlas.querySelector("#atlas-pair-detail");
-    for (const select of picked) {
-      select.add(new Option("Choose a case", ""));
-      for (const row of rows) select.add(new Option(row.case, row.case));
-    }
-    let selectedRelation = null;
-    let lastPair = "";
-    let studyLayer = "operators";
-
-    const roleNames = {human:"Human", machine:"Machine", part:"Parts"};
-    const roleAdvice = {
-      human:"Follow the paths people use to approach and move alongside the assembly.",
-      machine:"Follow how far the machine moves around the object.",
-      part:"Follow the routes parts take as they enter and turn near the object."
-    };
-    const conclusions = {
-      "V01-V24":"V01 uses more recorded assembly space at a similar footprint. V24 has more modeled members. Check the range of part handling separately from the member count.",
-      "V11-V26":"The finished footprints are close. V11 records more total and part activity, and machine coverage is the larger measured layer in V26. The two layouts call for different checks around the finished object.",
-      "V20-V22":"The cases cover almost the same total area. V20 records human movement and V22 records machine movement. The top views show which routes to check in each layout.",
-      "V04-V28":"The total activity areas are close. Parts cover a larger share of A in V28, so its part routes are especially useful for reading the extent of the work area.",
-      "V27-V29":"Part coverage is close in square metres. Human coverage is larger in V27, and machine coverage is larger in V29. Read the part routes together with the different operator routes."
-    };
-    const fieldRows = (row, specs) => specs.map(([field, key, label]) => ({
-      key, label, value:areaValue(row, field + "_area_m2"), caption:readableArea(row, field + "_area_m2")
-    }));
-
-    function setStudyLayer(mode) {
-      studyLayer = mode;
-      for (const button of layerButtons) button.setAttribute("aria-pressed", String(button.dataset.studyMode === mode));
-      for (const layer of coveragePlans.querySelectorAll("[data-study-layer]")) {
-        layer.toggleAttribute("hidden", layer.dataset.studyLayer !== mode);
-      }
-      for (const plan of coveragePlans.querySelectorAll(".atlas-coverage-canvas")) {
-        const subject = mode === "parts" ? "part movement" : "human and machine coverage";
-        plan.setAttribute("aria-label", plan.dataset.case + " Top View with " + subject);
-      }
-      atlas.querySelector("#coverage-overlap-key").hidden = mode === "parts" ||
-        !coveragePlans.querySelector('[data-coverage-layer="overlap"]');
-    }
-
-    function studyPlan(row, plan, shared) {
-      const card = renderPlan(row, plan, shared);
-      const drawing = card.querySelector("svg");
-      drawing.classList.add("atlas-coverage-canvas");
-      drawing.dataset.case = row.case;
-      for (const [mode, roles] of [["operators", ["human","machine"]], ["parts", ["part"]]]) {
-        const pies = element("div", "atlas-coverage-pies");
-        pies.dataset.studyLayer = mode;
-        for (const role of roles) pies.append(coveragePie(row, role, roleNames[role]));
-        card.append(pies);
-      }
-      return card;
-    }
-
-    function renderComparison() {
-      const pair = picked.map(select => byId.get(select.value));
-      for (const select of picked) {
-        const other = select === first ? second : first;
-        for (const option of select.options) option.disabled = Boolean(option.value) && option.value === other.value;
-      }
-      relationAtlas.update(picked.map(select => select.value), selectedRelation);
-      roleControl.hidden = question.value !== "role";
-      detail.hidden = !pair.every(Boolean);
-      if (detail.hidden) return;
-      const compareBars = atlas.querySelector("#compare-bars");
-      const plans = atlas.querySelector("#compare-plans");
-      compareBars.replaceChildren();
-      plans.replaceChildren();
-      const findings = atlas.querySelector("#compare-findings");
-      const selectedRole = roleChoice.value;
-      const field = selectedRole + "_area_m2";
-      const metricPair = pair.every(hasMetres);
-      const roleShare = row => shareOfActivity(row, field);
-      const roleMode = question.value === "role";
-      const studyMode = question.value === "summary";
-      const pairKey = pair.map(row => row.case).join("-");
-      if (pairKey !== lastPair) studyLayer = "operators";
-      lastPair = pairKey;
-      compareBars.classList.toggle("pair-study-bars", studyMode);
-      atlas.querySelector("#atlas-pair-key").hidden = !studyMode;
-      areaStudy.hidden = !studyMode;
-      plans.hidden = studyMode;
-      for (const input of compareLayers) {
-        input.closest("label").hidden = roleMode || studyMode;
-        input.disabled = roleMode || studyMode;
-      }
-      let fieldsFor;
-      let extent;
-      let axisUnit;
-      let intervals = 4;
-      if (studyMode) {
-        findings.textContent = selectedRelation?.finding || (metricPair
-          ? `${pair[0].case} recorded ${readableArea(pair[0], "activity_area_m2")} of activity and ${pair[1].case} recorded ${readableArea(pair[1], "activity_area_m2")}. Compare their A/F and role coverage below.`
-          : "A/F is comparable across units. Each case uses its own area scale below.");
-        const peak = Math.max(...pair.flatMap(row => [areaValue(row,"object_area_m2"), areaValue(row,"activity_area_m2")]));
-        const step = peak <= 5 ? 1 : peak <= 10 ? 2 : peak <= 25 ? 5 : peak <= 50 ? 10 : 20;
-        intervals = Math.max(1, Math.ceil(peak / step));
-        extent = metricPair ? intervals * step : null;
-        axisUnit = "m²";
-        fieldsFor = row => fieldRows(row, [["object", "footprint", "F"], ["activity", "activity", "A"]]);
-      } else if (question.value === "ratio") {
-        const ratio = row => row.ratio_activity_over_object;
-        const [higher, lower] = [...pair].sort((left,right) => ratio(right)-ratio(left));
-        const answer = ratio(higher) === ratio(lower)
-          ? "Both cases have the same A/F."
-          : `${higher.case} spreads further relative to its finished size (${multiplier(higher)} vs ${multiplier(lower)}).`;
-        const footprint = metricPair
-          ? ` Compare their finished footprints too (${readableArea(higher,"object_area_m2")} vs ${readableArea(lower,"object_area_m2")}).` : "";
-        findings.textContent = answer + footprint;
-        extent = Math.ceil(Math.max(...pair.map(ratio)) / 4) * 4;
-        axisUnit = "×";
-        fieldsFor = row => [{key:"activity", label:"A/F", value:ratio(row), caption:multiplier(row)}];
-      } else if (roleMode) {
-        const [higher, lower] = [...pair].sort((left,right) => roleShare(right)-roleShare(left));
-        const percentage = row => readableShare(roleShare(row));
-        const answer = roleShare(higher) === roleShare(lower)
-          ? `${roleNames[selectedRole]} tracks cover the same share in both cases (${percentage(higher)}).`
-          : `${roleNames[selectedRole]} tracks cover a larger share in ${higher.case} (${percentage(higher)} vs ${percentage(lower)} in ${lower.case}).`;
-        findings.textContent = answer + " " + roleAdvice[selectedRole];
-        extent = 100;
-        axisUnit = "%";
-        fieldsFor = row => [{key:"activity",label:"A %",value:roleShare(row),caption:percentage(row)}];
-      } else {
-        const area = row => areaValue(row,"activity_area_m2");
-        const [larger, smaller] = [...pair].sort((left,right) => area(right)-area(left));
-        findings.textContent = metricPair
-          ? (area(larger) === area(smaller)
-            ? "Both cases cover the same area during assembly."
-            : `${larger.case} covers more area during assembly (${readableArea(larger,"activity_area_m2")} vs ${readableArea(smaller,"activity_area_m2")}).`)
-          : "Switch to the relative-size question to compare cases with different units.";
-        extent = metricPair ? metricLimit : null;
-        axisUnit = "m²";
-        fieldsFor = row => [{key:"activity",label:"A",value:area(row),caption:readableArea(row,"activity_area_m2")}];
-      }
-      const planData = pair.map(row => {
-        const plan = planFor(row);
-        return studyMode ? {...plan, viewBox:areaPlanBox(plan)} : plan;
-      });
-      const common = atlas.querySelector("#atlas-common");
-      const canShare = planData.every(plan => plan.metres);
-      common.disabled = !canShare;
-      common.closest("label").hidden = studyMode && !canShare;
-      const shared = canShare && common.checked ? {
-        width:Math.max(...planData.map(plan => plan.viewBox[2]*plan.metres)),
-        height:Math.max(...planData.map(plan => plan.viewBox[3]*plan.metres))
-      } : null;
-      const layers = new Set(roleMode ? [selectedRole] : compareLayers.filter(input => input.checked).map(input => input.value));
-      atlas.querySelector("#atlas-plan-note").textContent = "Original Top Views · " + (shared ? "Shared metre scale" : "Fitted separately");
-      coveragePlans.replaceChildren();
-      modelCards.replaceChildren();
-      const metrics = pair.map(row => modelMetrics[row.case]);
-      pair.forEach((row, index) => {
-        const card = element("article", "atlas-card");
-        const maximum = extent || (hasMetres(row) ? metricLimit : modelLimit(row));
-        card.append(caseHeading(row, studyMode), bars(maximum, fieldsFor(row)), axis(maximum, extent ? axisUnit : unit(row), extent ? intervals : 4));
-        compareBars.append(card);
-        if (studyMode) {
-          const ratios = element("p", "atlas-pair-ratio");
-          ratios.append(element("span", "", "A/F  " + multiplier(row)),
-            element("span", "atlas-inverse-ratio", "F/A  " + readableShare(shareOfActivity(row, "object_area_m2"))));
-          card.append(ratios);
-          const plan = planData[index];
-          coveragePlans.append(studyPlan(row, plan, shared));
-          modelCards.append(metricCard(row,metrics[index],plan));
-        } else {
-          plans.append(renderPlan(row, planData[index], shared, layers));
-        }
-      });
-      if (studyMode) {
-        setStudyLayer(studyLayer);
-        const key = pair.map(row => row.case).sort().join("-");
-        const conclusion = conclusions[key] || pair.map(row =>
-          `${row.case} records ${readableArea(row,"activity_area_m2")} of activity for a footprint of ${readableArea(row,"object_area_m2")}.`).join(" ");
-        renderMemberPie(memberPie,pair,metrics);
-        renderPairSummary(summary,pair,metrics,planData,conclusion);
-      }
-    }
-
-    const relationAtlas = initializeCaseRelations({rows, modes, hasMetres, areaValue, calibration, readableArea,
+  function readAtlas({rows, modes}) {
+    const ids = new Set(rows.map(row => row.case));
+    const compareTab = document.getElementById("compare-tab-link");
+    let selected = [];
+    const relations = initializeCaseRelations({
+      rows, modes, hasMetres, areaValue, calibration, readableArea,
+      comparisonUrl: ids => compareUrl(ids).href,
       chooseCase(id) {
-        selectedRelation = null;
-        question.value = "summary";
-        const complete = Boolean(first.value && second.value);
-        if (complete || id === first.value || id === second.value) {
-          first.value = id;
-          second.value = "";
-        } else if (!first.value) {
-          first.value = id;
+        if (selected.includes(id)) {
+          selected = [];
+        } else if (selected.length) {
+          location.assign(compareUrl([selected[0], id]).href);
+          return;
         } else {
-          second.value = id;
+          selected = [id];
         }
-        renderComparison();
-        if (!detail.hidden) atlas.querySelector("#atlas-pair-heading").focus();
-      },
-      chooseRelation(relation) {
-        selectedRelation = relation;
-        question.value = "summary";
-        first.value = relation.ids[0];
-        second.value = relation.ids[1];
-        renderComparison();
-        atlas.querySelector("#atlas-pair-heading").focus();
+        updateSelection();
       }
     });
+    function updateSelection() {
+      relations.update(selected);
+      compareTab.href = compareUrl(selected).href;
+    }
     function openLinkedCase() {
       const id = location.hash.slice(1);
-      if (byId.has(id)) {
-        first.value = id;
-        second.value = "";
-        question.value = "summary";
-        selectedRelation = null;
-      }
-      renderComparison();
+      selected = ids.has(id) ? [id] : [];
+      updateSelection();
     }
     openLinkedCase();
     window.addEventListener("hashchange", openLinkedCase);
-    for (const select of picked) select.addEventListener("change", () => {
-      selectedRelation = null;
-      renderComparison();
+  }
+
+  function rowLayout(label, left, middle, right) {
+    const row = element("div", "compare-row");
+    label.classList.add("compare-row-label");
+    left.classList.add("compare-left");
+    middle.classList.add("compare-middle");
+    right.classList.add("compare-right");
+    row.append(label, left, middle, right);
+    return row;
+  }
+
+  function comparisonLabel(study, pair) {
+    const header = element("div", "");
+    header.append(element("h3", "", study.name));
+    if (study.tolerance && pair.every(hasMetres)) {
+      const field = study.keys[0] + "_area_m2";
+      const values = pair.map(row => areaValue(row, field));
+      const similar = Math.abs(values[0] - values[1]) <= study.tolerance * Math.max(...values);
+      const badge = element("span", "compare-badge", similar ? "Similar" : "Different");
+      badge.dataset.similar = String(similar);
+      header.append(badge);
+    }
+    return header;
+  }
+
+  function bindHighlights(controls, plan) {
+    let locked = "";
+    for (const [button, layer] of controls) {
+      const highlight = () => { plan.dataset.emphasis = layer; };
+      const restore = () => { plan.dataset.emphasis = locked; };
+      button.addEventListener("pointerenter", highlight);
+      button.addEventListener("pointerleave", restore);
+      button.addEventListener("focus", highlight);
+      button.addEventListener("blur", restore);
+      button.addEventListener("click", () => {
+        locked = locked === layer ? "" : layer;
+        for (const [peer, key] of controls) peer.setAttribute("aria-pressed", String(key === locked));
+        restore();
+      });
+    }
+  }
+
+  function chartButton(row, key) {
+    const button = element("button", "compare-chart-button");
+    button.type = "button";
+    button.dataset.coverageRole = key;
+    button.setAttribute("aria-pressed", "false");
+    button.setAttribute("aria-label", row.case + " " + {
+      object:"finished footprint", activity:"total activity and footprint",
+      part:"part movement", human:"human coverage", machine:"machine coverage"
+    }[key]);
+    return button;
+  }
+
+  function measureTrack(fraction) {
+    const track = element("span", "compare-measure-track");
+    if (Number.isFinite(fraction)) {
+      const fill = element("span", "compare-measure-fill");
+      fill.style.width = fraction + "%";
+      track.append(fill);
+    } else {
+      track.dataset.unverified = "";
+    }
+    return track;
+  }
+
+  function coverageChart(row, key, footprintMax) {
+    const chart = chartButton(row, key);
+    const field = key + "_area_m2";
+    if (key === "object") {
+      const area = areaValue(row, field);
+      chart.classList.add("compare-footprint-chart");
+      const exact = readableArea(row, field);
+      chart.append(measureTrack(footprintMax > 0 ? 100 * area / footprintMax : NaN),
+        element("strong", "compare-chart-value", exact));
+      chart.setAttribute("aria-label", chart.getAttribute("aria-label") + ", " + exact);
+      return chart;
+    }
+    const activity = key === "activity";
+    const share = shareOfActivity(row, activity ? "object_area_m2" : field);
+    const pie = pieGraphic([[share,"atlas-pie-slice"]]);
+    if (!Number.isFinite(share) || share < 0 || share > 100) pie.setAttribute("hidden", "");
+    const label = {activity:"F / A", part:"Parts", human:"Human", machine:"Machine"}[key];
+    chart.append(element("span", "compare-chart-label", label), pie,
+      element("strong", "compare-chart-share", readableShare(share)),
+      element("span", "compare-chart-value", readableArea(row, field)));
+    if (activity) chart.append(element("span", "compare-chart-ratio", "A/F " + multiplier(row)));
+    chart.setAttribute("aria-label", chart.getAttribute("aria-label") +
+      `, ${readableArea(row, field)}, ${readableShare(share)} ${activity ? "F over A" : "of A"}`);
+    return chart;
+  }
+
+  function studyRow(study, pair, plans, shared) {
+    const {mode, name, keys} = study;
+    const label = comparisonLabel(study, pair);
+    const middle = element("div", "compare-charts");
+    const footprintMax = pair.every(hasMetres) ? Math.max(...pair.map(row => areaValue(row,"object_area_m2"))) : NaN;
+    const sides = pair.map((row, index) => {
+      const plan = renderPlan(row, plans[index], shared, mode, name);
+      const side = element("div", "compare-plan");
+      side.append(plan);
+      const charts = element("div", "compare-case-charts");
+      const controls = keys.map(key => [coverageChart(row, key, footprintMax), key]);
+      for (const [chart] of controls) charts.append(chart);
+      bindHighlights(controls, plan);
+      middle.append(charts);
+      return side;
     });
-    for (const control of [question,roleChoice]) control.addEventListener("change", renderComparison);
-    for (const button of layerButtons) button.addEventListener("click", () => setStudyLayer(button.dataset.studyMode));
-    atlas.querySelector(".atlas-layers").addEventListener("change", renderComparison);
-    atlas.querySelector("#atlas-status").hidden = true;
-    atlas.querySelector("#atlas-content").hidden = false;
+    const row = rowLayout(label, sides[0], middle, sides[1]);
+    row.dataset.compareRow = mode;
+    return row;
+  }
+
+  function modelComparison(pair, metrics, plans) {
+    const label = element("div", "");
+    label.append(element("h3", "", "Finished members"));
+    const measures = [
+      {name:"Main members", unit:"pcs", value:item => item?.members, featured:true},
+      {name:"Height", unit:"m", value:item => item?.dimensions?.[2], approximate:true},
+      {name:"Solid volume", unit:"m³", value:item => item?.volume},
+      {name:"Member surface", unit:"m²", value:item => item?.surface}
+    ];
+    const middle = element("div", "compare-model-metrics");
+    middle.append(element("p", "compare-metric-caption", "Share of the pair"));
+    for (const {name, unit, value, featured, approximate} of measures) {
+      const values = metrics.map(value);
+      const total = values.every(Number.isFinite) ? values[0] + values[1] : NaN;
+      const measure = element("div", "compare-measure");
+      if (featured) measure.classList.add("compare-measure-featured");
+      const pairValues = element("div", "compare-measure-values");
+      values.forEach((amount, index) => {
+        const fraction = total > 0 ? 100 * amount / total : NaN;
+        const item = element("div", "compare-measure-value");
+        const isApproximate = approximate || (unit !== "pcs" && metrics[index]?.approximate);
+        const exact = modelNumber(amount, unit, isApproximate);
+        if (Number.isFinite(fraction)) {
+          item.append(element("strong", "", readableShare(fraction)));
+        } else {
+          item.append(element("strong", "", "—"));
+        }
+        item.append(measureTrack(fraction), element("span", "compare-chart-value", exact));
+        item.setAttribute("aria-label", pair[index].case + ": " + exact);
+        pairValues.append(item);
+      });
+      measure.append(element("h4", "", name), pairValues);
+      middle.append(measure);
+    }
+    const cards = pair.map((row, index) => metricCard(row, metrics[index], plans[index]));
+    const row = rowLayout(label, cards[0], middle, cards[1]);
+    row.dataset.compareRow = "model";
+    return row;
+  }
+
+  function caseFindings(pair) {
+    const key = pair.map(row => row.case).sort().join("-");
+    if (findingsByPair[key]) return findingsByPair[key];
+    if (!pair.every(hasMetres)) {
+      return pair.map(row => `${row.case} records activity across ${multiplier(row)} its finished footprint.`).join(" ");
+    }
+    const [first, second] = pair;
+    const area = (row, kind) => readableArea(row, kind + "_area_m2");
+    const [greater] = [...pair].sort((a,b) => areaValue(b,"part_area_m2") - areaValue(a,"part_area_m2"));
+    const partNote = areaValue(first,"part_area_m2") === areaValue(second,"part_area_m2")
+      ? "Recorded part coverage is equal." : `${greater.case} records the wider part movement area.`;
+    return `The finished footprints are ${area(first,"object")} for ${first.case} and ${area(second,"object")} for ${second.case}. Total activity covers ${area(first,"activity")} and ${area(second,"activity")}, respectively. ${partNote}`;
+  }
+
+  function readComparison(source, rows, registered, modelMetrics, outlines) {
+    const picked = ["#compare-first","#compare-second"].map(selector => atlas.querySelector(selector));
+    const byId = new Map(rows.map(row => [row.case, row]));
+    const planCache = new Map();
+    const matrix = atlas.querySelector("#compare-matrix");
+    const detail = atlas.querySelector("#atlas-pair-detail");
+    const common = atlas.querySelector("#atlas-common");
+    const defaults = ["V01","V24"];
+    const params = new URLSearchParams(location.search);
+    const initial = params.has("first") || params.has("second") ? [params.get("first"),params.get("second")] : defaults;
+
+    for (const [index, select] of picked.entries()) {
+      select.add(new Option("Choose a case", ""));
+      for (const row of rows) select.add(new Option(row.case, row.case));
+      const id = initial[index];
+      if (byId.has(id) && (index === 0 || id !== initial[0])) select.value = id;
+      select.addEventListener("change", () => {
+        history.replaceState(null, "", compareUrl(picked.map(input => input.value)));
+        renderComparison();
+      });
+    }
+    common.addEventListener("change", renderComparison);
+
+    function renderComparison() {
+      const pair = picked.map(select => byId.get(select.value));
+      for (const [index, select] of picked.entries()) {
+        const other = picked[1-index].value;
+        for (const option of select.options) option.disabled = Boolean(option.value) && option.value === other;
+      }
+      detail.hidden = !pair.every(Boolean);
+      atlas.querySelector("#compare-empty").hidden = !detail.hidden;
+      if (detail.hidden) {
+        document.title = "Compare two cases · Atlas of Assembly Space";
+        return;
+      }
+      const title = pair.map(row => row.case).join(" ↔ ");
+      document.title = title + " · Compare two cases";
+      atlas.querySelector("#atlas-pair-heading").textContent = title;
+      const plans = pair.map(row => {
+        if (!planCache.has(row.case)) {
+          const plan = getPlan(source, row, registered, outlines);
+          planCache.set(row.case, {...plan, viewBox:areaPlanBox(plan)});
+        }
+        return planCache.get(row.case);
+      });
+      const canShare = plans.every(plan => plan.metres);
+      common.disabled = !canShare;
+      common.closest("label").hidden = !canShare;
+      const shared = canShare && common.checked ? {
+        width:Math.max(...plans.map(plan => plan.viewBox[2] * plan.metres)),
+        height:Math.max(...plans.map(plan => plan.viewBox[3] * plan.metres))
+      } : null;
+      atlas.querySelector("#atlas-plan-note").textContent = shared ? "Top Views share a metre scale" : "Top Views fitted separately";
+      const chartLabels = element("div", "compare-chart-headings");
+      chartLabels.append(...pair.map(row => element("span", "", row.case)));
+      const heading = rowLayout(element("div", ""), caseLink(pair[0]), chartLabels, caseLink(pair[1]));
+      heading.classList.add("compare-matrix-heading");
+      const metrics = pair.map(row => modelMetrics[row.case]);
+      matrix.replaceChildren(heading, ...studyRows.map(study => studyRow(study, pair, plans, shared)),
+        modelComparison(pair, metrics, plans));
+      atlas.querySelector("#compare-findings").textContent = caseFindings(pair);
+    }
+    renderComparison();
   }
 
   async function load() {
-    const [response, registration, modelMetrics, outlines] = await Promise.all([
-      fetch(casePage),
-      fetch("case_area_comparison.csv").catch(() => null),
-      fetch("case-model-metrics.json?v=2").then(result => result.ok ? result.json() : {}).catch(() => ({})),
-      fetch("case-plan-outlines.json?v=1").then(result => result.ok ? result.json() : {}).catch(() => ({}))
-    ]);
+    const response = await fetch(casePage);
     if (!response.ok) throw new Error("Case page: " + response.status);
     const source = document.createElement("template");
     source.innerHTML = await response.text();
-    const areaData = JSON.parse(source.content.querySelector("#ma-data").textContent);
-    const registered = new Set();
-    if (registration?.ok) {
-      for (const line of (await registration.text()).split(/\r?\n/)) {
-        const caseId = line.match(/^"?(V\d+)"?,/)?.[1];
-        if (caseId && line.includes('"registered metric union"')) registered.add(caseId);
+    const data = JSON.parse(source.content.querySelector("#ma-data").textContent);
+    if (comparisonPage) {
+      const [registration, modelMetrics, outlines] = await Promise.all([
+        fetch("case_area_comparison.csv").then(response => response.ok ? response.text() : "").catch(() => ""),
+        fetch("case-model-metrics.json?v=2").then(response => response.ok ? response.json() : {}).catch(() => ({})),
+        fetch("case-plan-outlines.json?v=1").then(response => response.ok ? response.json() : {}).catch(() => ({}))
+      ]);
+      const registered = new Set();
+      for (const line of registration.split(/\r?\n/)) {
+        const id = line.match(/^"?(V\d+)"?,/)?.[1];
+        if (id && line.includes('"registered metric union"')) registered.add(id);
       }
+      readComparison(source.content, data.rows, registered, modelMetrics, outlines);
+    } else {
+      readAtlas(data);
     }
-    start(source.content, areaData, registered, modelMetrics, outlines);
+    atlas.querySelector("#atlas-status").hidden = true;
+    atlas.querySelector("#atlas-content").hidden = false;
   }
 
   load().catch(error => {
