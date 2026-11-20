@@ -108,19 +108,30 @@
 
 #compare-bars .atlas-fill.footprint { background: var(--plate-footprint); }
 #compare-bars .atlas-fill.activity { background: var(--plate-ink); }
-#compare-operators .atlas-fill.human { background: var(--plate-human); }
-#compare-operators .atlas-fill.machine { background: var(--plate-machine); }
-#compare-parts .atlas-fill.part { background: var(--plate-part); }
 #compare-bars .atlas-pair-ratio { display: flex; flex-wrap: wrap; gap: 4px 16px; margin: 9px 0 0; font-size: 13px; font-weight: 650; }
 .atlas-inverse-ratio { color: var(--atlas-muted); }
-.atlas-share-chart .atlas-bar-line { min-height: 25px; }
-.atlas-share-chart .atlas-track { background: repeating-linear-gradient(to right, #edf3ef 0 calc(25% - 1px), #cfddd5 calc(25% - 1px) 25%); }
-.atlas-share-area { margin-left: 6px; color: var(--atlas-muted); }
+
+.atlas-coverage-pies { display: flex; flex-wrap: wrap; gap: 12px clamp(8px, 3vw, 32px); margin: 10px 0 14px; }
+.atlas-coverage-pie { display: flex; align-items: center; gap: clamp(5px, 1vw, 12px); margin: 0; }
+.pair-study-section .atlas-coverage-pie .atlas-pie-svg {
+  flex: none;
+  width: clamp(54px, 8vw, 82px);
+  aspect-ratio: 1;
+  background: transparent;
+}
+.atlas-pie-base { fill: #edf3ef; stroke: var(--plate-rule); }
+.atlas-pie-slice { stroke: white; stroke-width: 1; }
+[data-coverage-role="human"] .atlas-pie-slice { fill: var(--plate-human); }
+[data-coverage-role="machine"] .atlas-pie-slice { fill: var(--plate-machine); }
+[data-coverage-role="part"] .atlas-pie-slice { fill: var(--plate-part); }
+.atlas-coverage-pie figcaption { display: grid; gap: 1px; margin: 0; font-variant-numeric: tabular-nums; }
+.atlas-pie-label { color: var(--atlas-muted); font-size: 12px; }
+.atlas-share-value { color: var(--plate-ink); font-size: clamp(16px, 2vw, 22px); line-height: 1.15; }
+.atlas-share-area { color: var(--atlas-muted); font-size: 11px; white-space: nowrap; }
 
 .pair-study-title { margin: 0 0 9px; color: var(--plate-ink); font-size: clamp(17px, 2vw, 21px); }
 .pair-study-section { border-top: 1px solid var(--plate-rule); margin-top: 22px; padding-top: 16px; }
 .pair-study-section > .note { margin: 0 0 12px; }
-.pair-study-section .atlas-axis { margin: 0 122px 8px 36px; }
 .pair-study-section .atlas-card svg { aspect-ratio: 16 / 10; background: #fffef8; }
 #compare-parts svg .role-highlight { stroke: var(--plate-part); stroke-width: 4px; }
 #compare-parts svg .role-endpoint { fill: var(--plate-ink); stroke: white; }
@@ -137,6 +148,4 @@
   .case-relations-drawing .case-node-label { font-size: 31px; }
   .case-relations-drawing .case-node-values { display: none; }
   .case-relations :is(.case-relations-questions, .case-relations-pairs) button { min-height: 44px; }
-  .pair-study-section .atlas-axis { margin: 0 95px 8px 31px; }
-  .atlas-share-area { display: block; margin-left: 0; }
 }

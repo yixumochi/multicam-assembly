@@ -48,19 +48,13 @@
 
   function bars(maximum, fields) {
     const node = element("div", "atlas-bars");
-    for (const {key, label, value, caption, absolute} of fields) {
+    for (const {key, label, value, caption} of fields) {
       const line = element("div", "atlas-bar-line");
       const track = element("span", "atlas-track");
       const fill = element("span", "atlas-fill " + key);
       fill.style.width = (Number.isFinite(value) ? 100 * value / maximum : 0) + "%";
       track.append(fill);
-      const readout = element("span", "atlas-value");
-      if (absolute) {
-        readout.append(element("strong", "atlas-share-value", caption), element("span", "atlas-share-area", absolute));
-      } else {
-        readout.textContent = caption;
-      }
-      line.append(element("b", "atlas-bar-label", label), track, readout);
+      line.append(element("b", "atlas-bar-label", label), track, element("span", "atlas-value", caption));
       node.append(line);
     }
     return node;
@@ -188,6 +182,30 @@
     return chosen || candidates.sort((a,b) => travel(b)-travel(a)).find(action => travel(action) > 0);
   }
 
+  function coveragePie(row, key, label) {
+    const field = key + "_area_m2";
+    const share = shareOfActivity(row, field);
+    const item = element("figure", "atlas-coverage-pie");
+    item.dataset.coverageRole = key;
+    const pie = svgElement("svg", {viewBox:"0 0 80 80",class:"atlas-pie-svg","aria-hidden":"true"});
+    pie.append(svgElement("circle", {cx:40,cy:40,r:36,class:"atlas-pie-base"}));
+    if (share === 100) {
+      pie.append(svgElement("circle", {cx:40,cy:40,r:36,class:"atlas-pie-slice"}));
+    } else if (share > 0 && share < 100) {
+      const theta = 2 * Math.PI * share / 100;
+      const x = 40 + 36*Math.sin(theta);
+      const y = 40 - 36*Math.cos(theta);
+      pie.append(svgElement("path", {class:"atlas-pie-slice",d:`M 40 40 L 40 4 A 36 36 0 ${share > 50 ? 1 : 0} 1 ${x} ${y} Z`}));
+    }
+    const caption = element("figcaption");
+    caption.append(element("span", "atlas-pie-label", label),
+      element("strong", "atlas-share-value", readableShare(share)),
+      element("span", "atlas-share-area", readableArea(row, field)));
+    if (!Number.isFinite(share) || share < 0 || share > 100) pie.setAttribute("hidden", "");
+    item.append(pie, caption);
+    return item;
+  }
+
   function start(source, {rows, modes}, registered, modelMetrics) {
     const metricLimit = Math.ceil(Math.max(20, ...rows.filter(hasMetres)
       .flatMap(row => areaFields.map(field => areaValue(row, field)))) / 20) * 20;
@@ -227,17 +245,12 @@
       key, label, value:areaValue(row, field + "_area_m2"), caption:readableArea(row, field + "_area_m2")
     }));
 
-    function studyPlan(row, plan, shared, layers, fields, maximum, highlighted) {
+    function studyPlan(row, plan, shared, layers, highlighted) {
       const card = renderPlan(row, plan, shared, new Set(layers), highlighted);
       card.querySelector("svg image").setAttribute("opacity", "0.84");
-      const shares = fields.map(([key, label]) => {
-        const field = key + "_area_m2";
-        const value = shareOfActivity(row, field);
-        return {key, label:label + "/A", value, caption:readableShare(value), absolute:readableArea(row, field)};
-      });
-      const plot = bars(maximum, shares);
-      plot.classList.add("atlas-share-chart");
-      card.querySelector("svg").before(plot, axis(maximum, "%"));
+      const pies = element("div", "atlas-coverage-pies");
+      for (const key of layers) pies.append(coveragePie(row, key, roleNames[key]));
+      card.querySelector("svg").before(pies);
       if (highlighted) {
         const timing = element("p", "note pair-study-timing");
         const marks = [highlighted.start, highlighted.end];
@@ -348,9 +361,6 @@
         modelReading.textContent = `V24 has ${(counts[1]/counts[0]).toFixed(1)} times as many modeled main members. V01 covers ${(
           areaValue(byId.get("V01"), "activity_area_m2")/areaValue(byId.get("V24"), "activity_area_m2")).toFixed(1)} times the recorded activity area.`;
       }
-      const coveragePeak = Math.max(100, ...pair.flatMap(row => ["human", "machine", "part"]
-        .map(key => shareOfActivity(row, key + "_area_m2")).filter(Number.isFinite)));
-      const coverageMaximum = 25 * Math.ceil(coveragePeak/25);
       pair.forEach((row, index) => {
         const card = element("article", "atlas-card");
         const maximum = extent || (hasMetres(row) ? metricLimit : modelLimit(row));
@@ -362,9 +372,8 @@
             element("span", "atlas-inverse-ratio", "F/A  " + readableShare(shareOfActivity(row, "object_area_m2"))));
           card.append(ratios);
           const plan = planData[index];
-          operatorPlans.append(studyPlan(row, plan, shared, ["human","machine"],
-            [["human","H"], ["machine","R"]], coverageMaximum));
-          partPlans.append(studyPlan(row, plan, shared, ["part"], [["part","P"]], coverageMaximum, partExample(row,plan)));
+          operatorPlans.append(studyPlan(row, plan, shared, ["human","machine"]));
+          partPlans.append(studyPlan(row, plan, shared, ["part"], partExample(row,plan)));
           modelCards.append(metricCard(row,modelMetrics[row.case]));
         } else {
           plans.append(renderPlan(row, planData[index], shared, layers));
