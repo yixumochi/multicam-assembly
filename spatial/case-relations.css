@@ -109,6 +109,11 @@
 #compare-bars .atlas-fill.footprint { background: var(--plate-footprint); }
 #compare-bars .atlas-fill.activity { background: var(--plate-ink); }
 #compare-bars .atlas-pair-ratio { display: flex; flex-wrap: wrap; gap: 4px 16px; margin: 9px 0 0; font-size: 13px; font-weight: 650; }
+#compare-bars.pair-study-bars .atlas-bar-line { min-height: 22px; }
+#compare-bars.pair-study-bars .atlas-track { height: 11px; }
+#compare-bars.pair-study-bars .atlas-axis { display: block; position: relative; height: 20px; margin-top: 4px; border-top: 1px solid var(--plate-rule); }
+.pair-study-bars .atlas-axis span { position: absolute; left: var(--tick); transform: translateX(-50%); white-space: nowrap; }
+.pair-study-bars .atlas-axis span::before { display: block; width: 1px; height: 3px; margin: 0 auto; background: var(--plate-rule); content: ""; }
 .atlas-inverse-ratio { color: var(--atlas-muted); }
 
 .atlas-coverage-pies { display: flex; flex-wrap: wrap; gap: 12px clamp(8px, 3vw, 32px); margin: 10px 0 14px; }
@@ -133,6 +138,16 @@
 .pair-study-section { border-top: 1px solid var(--plate-rule); margin-top: 22px; padding-top: 16px; }
 .pair-study-section > .note { margin: 0 0 12px; }
 .pair-study-section .atlas-card svg { aspect-ratio: 4 / 3; background: #fffef8; }
+.pair-coverage-toolbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 16px; margin-bottom: 12px; }
+.pair-coverage-toolbar .pair-study-title { margin: 0; }
+.pair-layer-switch { display: inline-flex; gap: 3px; padding: 3px; background: #edf3ef; border: 1px solid var(--plate-rule); border-radius: 6px; }
+.pair-layer-switch button { padding: 7px 11px; border: 1px solid transparent; border-radius: 4px; background: transparent; color: var(--plate-ink); font: inherit; font-size: 13px; cursor: pointer; }
+.pair-layer-switch button[aria-pressed="true"] { color: white; background: var(--plate-ink); }
+.pair-layer-switch button[aria-pressed="false"]:hover { border-color: var(--plate-ink); }
+#compare-coverage + .note { margin: 8px 0 0; }
+#compare-coverage .atlas-coverage-canvas { border: 1px solid var(--plate-rule); box-sizing: border-box; }
+#compare-coverage .atlas-coverage-pies { gap: 8px clamp(8px, 2vw, 24px); margin: 10px 0 0; }
+.atlas-object-outline { fill: none; stroke: var(--plate-ink); stroke-width: 1.8px; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
 .atlas-coverage-fill { stroke: none; fill-opacity: 1; }
 .atlas-coverage-plan { isolation: isolate; }
 .atlas-coverage-drawing { mix-blend-mode: multiply; }
@@ -153,8 +168,9 @@
 .atlas-member-pie .atlas-pie-slice { fill: var(--member-color); }
 .atlas-member-key { font-size: 13px; }
 .atlas-member-key::before { display: inline-block; width: 8px; height: 8px; margin-right: 6px; background: var(--member-color); content: ""; }
-.pair-summary-graphic { display: block; width: min(100%, 960px); height: auto; margin: 0 auto; background: white; }
-.pair-summary-icon { fill: none; stroke: var(--plate-ink); stroke-width: 1.8px; stroke-linecap: round; stroke-linejoin: round; }
+.pair-summary-graphic { display: block; width: min(100%, 800px); height: auto; margin: 0 auto; background: white; }
+.pair-summary-icon { fill: none; stroke: var(--summary-tone, var(--plate-ink)); stroke-width: 2px; stroke-linecap: round; stroke-linejoin: round; }
+[data-summary-tone="footprint"] .pair-summary-icon { fill: var(--plate-footprint); stroke: var(--plate-ink); }
 .pair-summary-rule { stroke: var(--plate-rule); stroke-width: 1px; }
 .pair-summary-track { fill: #edf3ef; }
 .pair-summary-value { fill: var(--summary-tone, var(--plate-ink)); }
@@ -169,4 +185,5 @@
   .case-relations-drawing .case-node-label { font-size: 31px; }
   .case-relations-drawing .case-node-values { display: none; }
   .case-relations :is(.case-relations-questions, .case-relations-pairs) button { min-height: 44px; }
+  .pair-layer-switch button { min-height: 40px; }
 }

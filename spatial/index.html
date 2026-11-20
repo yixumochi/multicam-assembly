@@ -44,12 +44,12 @@ details summary { cursor: pointer; color: var(--blue); }
 </style>
 <link rel="stylesheet" href="../research.css">
 <link rel="stylesheet" href="atlas.css?v=guide2">
-<link rel="stylesheet" href="case-relations.css?v=7">
+<link rel="stylesheet" href="case-relations.css?v=8">
 <link rel="stylesheet" href="role-analysis.css?v=atlas3">
 <script src="area-calibration.js" defer></script>
 <script src="role-analysis.js?v=atlas3" defer></script>
 <script src="case-relations.js?v=2" defer></script>
-<script src="atlas.js?v=pair-coverage1" defer></script>
+<script src="atlas.js?v=pair-focus1" defer></script>
 </head>
 <body>
 <header>
@@ -193,14 +193,16 @@ details summary { cursor: pointer; color: var(--blue); }
           </div>
           <p id="atlas-plan-note" class="note"></p>
           <div id="atlas-area-study" hidden>
-            <section class="pair-study-section" aria-labelledby="pair-operators-title">
-              <h4 id="pair-operators-title" class="pair-study-title">Human and machine coverage · Pie charts</h4>
-              <p class="note">Each pie shows one role’s share of A. Dark teal marks human–machine overlap.</p>
-              <div id="compare-operators" class="atlas-pair"></div>
-            </section>
-            <section class="pair-study-section" aria-labelledby="pair-parts-title">
-              <h4 id="pair-parts-title" class="pair-study-title">Part movement · Pie charts</h4>
-              <div id="compare-parts" class="atlas-pair"></div>
+            <section class="pair-study-section" aria-labelledby="pair-coverage-title">
+              <div class="pair-coverage-toolbar">
+                <h4 id="pair-coverage-title" class="pair-study-title">Where assembly happens</h4>
+                <div class="pair-layer-switch" role="group" aria-label="Activity shown on both plans">
+                  <button type="button" data-study-mode="operators" aria-pressed="true" aria-controls="compare-coverage">Human &amp; machine</button>
+                  <button type="button" data-study-mode="parts" aria-pressed="false" aria-controls="compare-coverage">Parts</button>
+                </div>
+              </div>
+              <div id="compare-coverage" class="atlas-pair"></div>
+              <p class="note">Pies show each role’s share of total activity. <span id="coverage-overlap-key" hidden>Dark teal marks human–machine overlap.</span></p>
             </section>
             <section class="pair-study-section" aria-labelledby="pair-model-title">
               <h4 id="pair-model-title" class="pair-study-title">Finished members in Rhino</h4>
