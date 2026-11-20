@@ -54,6 +54,7 @@
 }
 .compare-plan .atlas-coverage-canvas[data-emphasis]:not([data-emphasis=""]) { outline: 2px solid var(--plate-blue); outline-offset: 1px; }
 .compare-plan .atlas-object-outline { stroke-width: 1.5px; }
+.compare-plan .atlas-object-outline[data-boundary="occluded"] { stroke-dasharray: 3 2; }
 .atlas-footprint-frame {
   fill: none;
   stroke: var(--plate-ink);

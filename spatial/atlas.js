@@ -56,8 +56,9 @@
     const sheet = outlines[row.case];
     const registeredSheet = sheet?.plan === data.plan?.split("?")[0] ? sheet : null;
     const outline = registeredSheet?.points ?? null;
+    const occluded = registeredSheet?.occluded;
     const preview = registeredSheet?.preview;
-    return {plan, data, viewBox, iso, outline, preview, metres: nativeMetresPerPixel(row, data, granted)};
+    return {plan, data, viewBox, iso, outline, occluded, preview, metres: nativeMetresPerPixel(row, data, granted)};
   }
 
   function areaPlanBox({data, viewBox, outline}) {
@@ -130,7 +131,26 @@
     operators: ["human","machine"]
   };
 
-  function renderPlan(row, {plan, data, viewBox, metres, outline, preview}, shared, mode, label) {
+  function drawOutline(geometry, outline, occluded) {
+    const [start, end] = occluded ?? [];
+    const visible = occluded ? [...outline.slice(end), ...outline.slice(0, start + 1)] : outline;
+    geometry.append(svgElement("path", {
+      d:`M ${coordinates(visible)}${occluded ? "" : " Z"}`, class:"atlas-object-outline",
+      "data-boundary":"trace"
+    }));
+    if (occluded) {
+      const hiddenEdge = svgElement("path", {
+        d:`M ${coordinates(outline.slice(start, end + 1))}`, class:"atlas-object-outline",
+        "data-boundary":"occluded"
+      });
+      const title = svgElement("title", {});
+      title.textContent = "Approximate edge behind the robot";
+      hiddenEdge.append(title);
+      geometry.append(hiddenEdge);
+    }
+  }
+
+  function renderPlan(row, {plan, data, viewBox, metres, outline, occluded, preview}, shared, mode, label) {
     const [left, top, width, height] = viewBox;
     const canvas = svgElement("svg", {
       viewBox: shared ? `0 0 ${shared.width} ${shared.height}` : viewBox.join(" "),
@@ -151,10 +171,7 @@
     backdrop.classList.add("atlas-coverage-drawing");
     filledCoverage(geometry, data.actions, new Set(planLayers[mode]), row.case, mode === "activity");
     geometry.append(backdrop);
-    if (outline) geometry.append(svgElement("path", {
-      d:`M ${coordinates(outline)} Z`, class:"atlas-object-outline",
-      "data-boundary":"trace"
-    }));
+    if (outline) drawOutline(geometry, outline, occluded);
     const frame = footprintFrame({data, outline});
     if (frame && (mode === "footprint" || !outline)) {
       const padding = mode === "footprint" ? Math.max(frame.width, frame.height) * .055 : 0;
@@ -549,7 +566,7 @@
       const [registration, modelMetrics, outlines] = await Promise.all([
         fetch("case_area_comparison.csv").then(response => response.ok ? response.text() : "").catch(() => ""),
         fetch("case-model-metrics.json?v=2").then(response => response.ok ? response.json() : {}).catch(() => ({})),
-        fetch("case-plan-outlines.json?v=2").then(response => response.ok ? response.json() : {}).catch(() => ({}))
+        fetch("case-plan-outlines.json?v=3").then(response => response.ok ? response.json() : {}).catch(() => ({}))
       ]);
       const registered = new Set();
       for (const line of registration.split(/\r?\n/)) {
