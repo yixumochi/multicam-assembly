@@ -171,6 +171,15 @@ button, input, select { accent-color: var(--blue); }
 }
 #path-page { background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 16px; }
 .name-pair-media { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; gap: clamp(16px, 2.4vw, 32px); margin-top: 18px; }
+.v22-method { scroll-margin-top: 92px; }
+.v22-method > h2 { margin: 0 0 8px; }
+.v22-method-context { margin: 0 0 10px; color: var(--muted); }
+.v22-method .name-pair-media { margin: 14px 0 18px; }
+.v22-method .name-pair-media .v22-method-still,
+.v22-method .name-pair-media video { aspect-ratio: 2 / 1; object-fit: contain; background: var(--ink); }
+.v22-method figure figcaption { margin-top: 8px; color: var(--muted); font-size: 14px; line-height: 1.5; }
+.v22-method-flow { margin: 16px 0 0; }
+.v22-method-flow img { display: block; width: 100%; height: auto; border: 1px solid var(--line); border-radius: 6px; }
 .name-pair-media figure { min-width: 0; margin: 0; }
 .name-pair-media h3 { margin: 0 0 8px; font-size: 16px; }
 .name-pair-media img, .name-pair-media video { display: block; width: 100%; height: auto; box-sizing: border-box; border: 1px solid var(--line); border-radius: 6px; }
@@ -258,9 +267,40 @@ html[data-view="case-area"] body { margin:0; }
 <nav class="page-tabs site-nav" aria-label="Pages"><button type="button" data-page="path" aria-pressed="true">Start here / Methods</button><button type="button" data-page="explorer" aria-pressed="false">Action Relationships</button><button type="button" data-page="cases" aria-pressed="false">Fifteen assembly cases</button><a href="spatial/index.html">Atlas of Assembly Space</a><a href="spatial/compare.html">Compare two cases</a><a href="observation/index.html">Relative position</a><a href="analysis/index.html">Recorded comparison</a></nav>
 <main class="workspace">
 <section id="path-page" aria-label="How a pair is made">
-<div class="study" id="study-start"><p>Follow assembly actions through films, drawings, and spatial tracks.</p><h2>When similar names describe different assembly conditions</h2><p>“Hold timber at joint” and “Position timber at joint” score <b>0.897</b>. Their recorded axes change in opposite directions. Who supports the member, and which adjustments can we actually see?</p><div class="duo"><figure class="side-record"><img class="hero-shot" src="plates/click_rest/071_Robot_V28_Hold_timber_at_joint_b.jpg" alt="Hold timber at joint, reference still"><figcaption>V28 · Hold timber at joint<br><b>Recorded endpoint change: +27.5°</b></figcaption></figure><figure class="side-record"><img class="hero-shot" src="plates/click_rest/001_Mixed_V21_Position_timber_at_joint_b.jpg" alt="Position timber at joint, reference still"><figcaption>V21 · Position timber at joint<br><b>Recorded endpoint change: -2.9°</b></figcaption></figure></div><nav><a href="analysis/index.html#pair-3">Compare both events and six stills →</a><a href="#overview">Explore 15 cases</a><a href="#study-method">Data &amp; methods</a></nav><p class="sub">These are two-dimensional, camera-dependent drawings, not measured forces, clearances or world rotations.</p></div><details id="study-method" class="study"><summary>How a name pair is made</summary>
+<div class="study" id="study-start"><p>Follow assembly actions through films, drawings, and spatial tracks.</p><h2>When similar names describe different assembly conditions</h2><p>“Hold timber at joint” and “Position timber at joint” score <b>0.897</b>. Their recorded axes change in opposite directions. Who supports the member, and which adjustments can we actually see?</p><div class="duo"><figure class="side-record"><img class="hero-shot" src="plates/click_rest/071_Robot_V28_Hold_timber_at_joint_b.jpg" alt="Hold timber at joint, reference still"><figcaption>V28 · Hold timber at joint<br><b>Recorded endpoint change: +27.5°</b></figcaption></figure><figure class="side-record"><img class="hero-shot" src="plates/click_rest/001_Mixed_V21_Position_timber_at_joint_b.jpg" alt="Position timber at joint, reference still"><figcaption>V21 · Position timber at joint<br><b>Recorded endpoint change: -2.9°</b></figcaption></figure></div><nav><a href="analysis/index.html#pair-3">Compare both events and six stills →</a><a href="#overview">Explore 15 cases</a><a href="#v22-method">Read a V22 shot</a><a href="#study-method">Data &amp; methods</a></nav><p class="sub">These are two-dimensional, camera-dependent drawings, not measured forces, clearances or world rotations.</p></div><section class="study v22-method" id="v22-method" aria-labelledby="v22-method-title">
+  <h2 id="v22-method-title">One V22 shot, two ways to read it</h2>
+  <p class="v22-method-context">Semiramis · V22 S01 · 77.3–85.7 s</p>
+  <p>The action label describes what happens. The spatial track shows where it happens on the workshop plan.</p>
+  <div class="name-pair-media">
+    <figure>
+      <h3>Action and relationship</h3>
+      <img class="v22-method-still" src="runs/v22_corrected_spatial_motion_v1/shots/S01/F1932.jpg" width="960" height="540"
+        loading="lazy" decoding="async" alt="V22 S01 source frame showing a robot holding a timber panel">
+      <figcaption>A robot holds a timber panel. Read the shot in terms of the actor, the action and the part it acts on.</figcaption>
+    </figure>
+    <figure>
+      <h3>Movement and position</h3>
+      <video controls playsinline preload="none" width="1280" height="640"
+        poster="video-to-top-view/assets/33_v22_workshop_video_poster.jpg"
+        aria-label="V22 S01 video tracking, local top view and workshop plan placement">
+        <source src="video-to-top-view/assets/32_v22_video_to_workshop_plan.mp4" type="video/mp4">
+      </video>
+      <figcaption>Track a point on the robot in the same clip, then see how its path is placed on the workshop plan.
+        <a href="video-to-top-view/">Open the video walkthrough</a>.
+      </figcaption>
+    </figure>
+  </div>
+  <figure class="v22-method-flow">
+    <a href="video-to-top-view/assets/14_visual_pipeline.svg" aria-label="Open the full-size V22 processing diagram">
+      <img src="video-to-top-view/assets/14_visual_pipeline.png" width="2400" height="1308" loading="lazy" decoding="async"
+        alt="V22 video frames processed with SAM2.1, feature tracking and Depth Pro, then used for local projection and workshop placement">
+    </a>
+    <figcaption><a href="video-to-top-view/technical.html#networks">SAM2.1 and Depth Pro architectures</a></figcaption>
+  </figure>
+</section>
+<details id="study-method" class="study"><summary>How a name pair is made</summary>
   <p id="dataset-meta"></p>
-  <p>Label Studio connects each English action name to annotated spans in the source films. Each unique name has one stored vector.</p>
+  <p>Action labels also let us compare events across cases. Label Studio connects each English action name to annotated spans in the source films. Each unique name has one stored vector.</p>
   <div class="name-pair-media">
     <figure>
       <h3>From action names to a pair</h3>
@@ -3568,7 +3608,7 @@ function walkEdge() {
     return names.includes('Transport held timber') && names.includes('Transport and rotate timber')
   })
 }
-window.addEventListener('hashchange',()=>{if(/^#(overview|analysis|human-led|human-robot|robotic-assembly)/.test(location.hash))showPage('cases');else if(location.hash==='#study-method'){showPage('path');document.getElementById('study-method').open=true}});
+window.addEventListener('hashchange',()=>{if(/^#(overview|analysis|human-led|human-robot|robotic-assembly)/.test(location.hash))showPage('cases');else if(location.hash==='#study-method'){showPage('path');document.getElementById('study-method').open=true}else if(location.hash==='#v22-method'){showPage('path');document.getElementById('v22-method').scrollIntoView({block:'start'})}});
 if(location.hash==='#study-method')document.getElementById('study-method').open=true;
 let pageTab = 'path'
 function showPage(name) {
