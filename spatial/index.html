@@ -44,12 +44,12 @@ details summary { cursor: pointer; color: var(--blue); }
 </style>
 <link rel="stylesheet" href="../research.css">
 <link rel="stylesheet" href="atlas.css?v=guide2">
-<link rel="stylesheet" href="case-relations.css?v=5">
+<link rel="stylesheet" href="case-relations.css?v=6">
 <link rel="stylesheet" href="role-analysis.css?v=atlas3">
 <script src="area-calibration.js" defer></script>
 <script src="role-analysis.js?v=atlas3" defer></script>
 <script src="case-relations.js?v=2" defer></script>
-<script src="atlas.js?v=pair-pies1" defer></script>
+<script src="atlas.js?v=pair-synthesis1" defer></script>
 </head>
 <body>
 <header>
@@ -195,19 +195,23 @@ details summary { cursor: pointer; color: var(--blue); }
           <div id="atlas-area-study" hidden>
             <section class="pair-study-section" aria-labelledby="pair-operators-title">
               <h4 id="pair-operators-title" class="pair-study-title">Human and machine coverage · Pie charts</h4>
-              <p class="note">The whole pie is the case’s total activity area A. The colored slice shows one role’s coverage. Role areas can overlap.</p>
+              <p class="note">Each pie shows one role’s share of total activity A. Role areas can overlap.</p>
               <div id="compare-operators" class="atlas-pair"></div>
             </section>
             <section class="pair-study-section" aria-labelledby="pair-parts-title">
               <h4 id="pair-parts-title" class="pair-study-title">Part movement · Pie charts</h4>
-              <p class="note">The colored slice shows the part coverage as a share of A. Markers 1 and 2 identify the start and end of one recorded movement.</p>
               <div id="compare-parts" class="atlas-pair"></div>
             </section>
             <section class="pair-study-section" aria-labelledby="pair-model-title">
               <h4 id="pair-model-title" class="pair-study-title">Finished members in Rhino</h4>
-              <p class="note">The count and volume cover the modeled main members shown below. Surface area sums their individual faces, including contact faces.</p>
+              <p class="note">Dimensions follow the Rhino model axes. Surface area includes contact faces.</p>
               <div id="compare-models" class="atlas-pair"></div>
-              <p id="compare-model-reading" class="note" hidden></p>
+              <div id="compare-member-pie" hidden></div>
+            </section>
+            <section class="pair-study-section" aria-labelledby="pair-summary-title">
+              <h4 id="pair-summary-title" class="pair-study-title">Comparison summary</h4>
+              <p id="compare-conclusion" class="spatial-takeaway"></p>
+              <div id="compare-summary"></div>
             </section>
           </div>
           <div id="compare-plans" class="atlas-pair"></div>

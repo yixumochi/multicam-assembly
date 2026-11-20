@@ -74,12 +74,13 @@
     const plan = article.querySelector('.plan[data-layer="all"] svg');
     const data = JSON.parse(article.querySelector('script[type="application/json"]').textContent);
     const viewBox = plan.getAttribute("viewBox").split(/\s+/).map(Number);
-    return {plan, data, viewBox, metres: nativeMetresPerPixel(row, data, granted)};
+    const iso = article.querySelector('img[src*="_model_iso."]')?.getAttribute("src");
+    return {plan, data, viewBox, iso, metres: nativeMetresPerPixel(row, data, granted)};
   }
 
-  function renderPlan(row, {plan, data, viewBox, metres}, shared, layers, highlighted) {
+  function renderPlan(row, {plan, data, viewBox, metres}, shared, layers, {highlighted, routesOnly = false} = {}) {
     const panel = element("article", "atlas-card");
-    const title = caseHeading(row);
+    const title = caseHeading(row, routesOnly);
     const [left, top, width, height] = viewBox;
     const canvas = svgElement("svg", {
       viewBox: shared ? `0 0 ${shared.width} ${shared.height}` : viewBox.join(" "),
@@ -93,18 +94,26 @@
     }
     const backdrop = plan.querySelector("image").cloneNode(true);
     backdrop.setAttribute("href", new URL(backdrop.getAttribute("href"), casePage).href);
-    backdrop.setAttribute("opacity", "0.55");
+    backdrop.setAttribute("opacity", routesOnly ? "1" : "0.55");
     geometry.append(backdrop);
-    for (const action of data.actions) {
-      if (!layers.has(action.role) || !action.poly?.length) continue;
-      geometry.append(svgElement("polygon", {
-        points:coordinates(action.poly), fill:action.color, "fill-opacity":0.18, stroke:action.color
-      }));
-      if (action.line?.length > 1) geometry.append(svgElement("polyline", {
-        points:coordinates(action.line), fill:"none", stroke:action.color
-      }));
+    if (routesOnly) {
+      for (const role of layers) {
+        const runs = data.actions.filter(action => action.role === role && action.line?.length > 1);
+        if (runs.length) geometry.append(svgElement("path", {class:"atlas-route", "data-route-role":role,
+          d:runs.map(action => "M " + action.line.map(point => point.join(",")).join(" L ")).join(" ")}));
+      }
+    } else {
+      for (const action of data.actions) {
+        if (!layers.has(action.role) || !action.poly?.length) continue;
+        geometry.append(svgElement("polygon", {
+          points:coordinates(action.poly), fill:action.color, "fill-opacity":0.18, stroke:action.color
+        }));
+        if (action.line?.length > 1) geometry.append(svgElement("polyline", {
+          points:coordinates(action.line), fill:"none", stroke:action.color
+        }));
+      }
     }
-    if (data.object_range) {
+    if (!routesOnly && data.object_range) {
       const [minX, minY, maxX, maxY] = data.object_range;
       geometry.append(svgElement("rect", {
         x:Math.min(minX,maxX), y:Math.min(minY,maxY), width:Math.abs(maxX-minX), height:Math.abs(maxY-minY),
@@ -138,7 +147,8 @@
       label.textContent = length + " m";
       canvas.append(label);
     }
-    panel.append(title, canvas, element("p", "note", shared ? "Shared metre scale" : "Fit to saved plan · " + (metric(row) ? "metric case" : "model units")));
+    panel.append(title, canvas);
+    if (!routesOnly) panel.append(element("p", "note", shared ? "Shared metre scale" : "Fit to saved plan · " + (metric(row) ? "metric case" : "model units")));
     return panel;
   }
 
@@ -148,38 +158,77 @@
     return ordered.length % 2 ? ordered[middle] : (ordered[middle - 1] + ordered[middle]) / 2;
   }
 
-  function caseHeading(row) {
+  function caseHeading(row, compact = false) {
     const heading = element("h4");
-    const link = element("a", "", row.case + " case sheet");
+    const link = element("a", "", compact ? row.case : row.case + " case sheet");
+    if (compact) link.setAttribute("aria-label", row.case + " case sheet");
     link.href = caseUrl(row);
     heading.append(link);
     return heading;
   }
 
-  function metricCard(row, metrics) {
-    const card = element("article", "atlas-card");
-    const facts = element("dl", "pair-study-facts");
-    const number = (value, unit, approximate = false) => Number.isFinite(value)
-      ? (approximate ? "≈" : "") + value.toLocaleString("en", {maximumFractionDigits:unit === "m³" ? 3 : 1}) + " " + unit
+  function modelNumber(value, unit, approximate = false) {
+    return Number.isFinite(value)
+      ? (approximate ? "≈" : "") + value.toLocaleString("en", {maximumFractionDigits:unit === "m³" ? 3 : 2}) + " " + unit
       : "Unverified";
-    for (const [name, value] of [["Main members", number(metrics?.members, "pcs")],
-      ["Solid member volume", number(metrics?.volume, "m³", metrics?.approximate)],
-      ["Member surface area", number(metrics?.surface, "m²", metrics?.approximate)]]) {
+  }
+
+  function modelDimensions(metrics) {
+    const dimensions = metrics?.dimensions;
+    if (!dimensions) return "Unverified";
+    return "≈" + dimensions.map(value => value.toFixed(2)).join(" × ") + " m" +
+      (metrics.dimensionPose ? ` (${metrics.dimensionPose})` : "");
+  }
+
+  function metricCard(row, metrics, plan) {
+    const card = element("article", "atlas-card");
+    card.append(caseHeading(row, true));
+    if (plan.iso) {
+      const figure = element("figure", "pair-study-iso");
+      const image = element("img");
+      image.src = new URL(plan.iso, casePage).href;
+      image.alt = row.case + " isometric view from Fifteen assembly cases";
+      const pose = metrics?.dimensionPose ? ` (${metrics.dimensionPose})` : "";
+      const height = metrics?.dimensions ? " · Height " + modelNumber(metrics.dimensions[2], "m", true) + pose : "";
+      figure.append(image, element("figcaption", "", "ISO" + height));
+      card.append(figure);
+    }
+    const facts = element("dl", "pair-study-facts");
+    for (const [name, value] of [["Main members", modelNumber(metrics?.members, "pcs")],
+      ["Dimensions (X × Y × Z)", modelDimensions(metrics)],
+      ["Solid member volume", modelNumber(metrics?.volume, "m³", metrics?.approximate)],
+      ["Member surface area", modelNumber(metrics?.surface, "m²", metrics?.approximate)]]) {
       facts.append(element("dt", "", name), element("dd", "", value));
     }
-    card.append(caseHeading(row), facts);
-    if (metrics) card.append(element("p", "note", metrics.scope), element("p", "note pair-study-model-source", metrics.file));
+    card.append(facts);
+    if (metrics?.members) {
+      const details = element("details", "note pair-study-model-source");
+      details.append(element("summary", "", "Model scope"), element("p", "", metrics.scope), element("p", "", metrics.file));
+      card.append(details);
+    } else if (metrics) {
+      card.append(element("p", "note", metrics.scope));
+    }
     return card;
   }
 
-  function partExample(row, plan) {
-    const [x, y, width, height] = plan.viewBox;
-    const visible = point => point[0] >= x && point[0] <= x+width && point[1] >= y && point[1] <= y+height;
-    const candidates = plan.data.actions.filter(action => action.role === "part" && action.line?.length > 1 &&
-      action.end.time > action.start.time && [action.line[0], action.line.at(-1)].every(visible));
-    const chosen = candidates.find(action => action.id === {V01:"065", V24:"102"}[row.case]);
-    const travel = ({line}) => Math.hypot(line.at(-1)[0]-line[0][0], line.at(-1)[1]-line[0][1]);
-    return chosen || candidates.sort((a,b) => travel(b)-travel(a)).find(action => travel(action) > 0);
+  function pieGraphic(shares) {
+    const pie = svgElement("svg", {viewBox:"0 0 80 80",class:"atlas-pie-svg","aria-hidden":"true"});
+    pie.append(svgElement("circle", {cx:40,cy:40,r:36,class:"atlas-pie-base"}));
+    const endpoint = fraction => {
+      const angle = 2*Math.PI*fraction/100;
+      return `${40+36*Math.sin(angle)} ${40-36*Math.cos(angle)}`;
+    };
+    let start = 0;
+    for (const [share, color] of shares) {
+      if (share === 100) {
+        pie.append(svgElement("circle", {cx:40,cy:40,r:36,class:color}));
+      } else if (share > 0 && share < 100) {
+        pie.append(svgElement("path", {class:color,
+          d:`M 40 40 L ${endpoint(start)} A 36 36 0 ${share > 50 ? 1 : 0} 1 ${endpoint(start+share)} Z`}));
+      }
+      start += share;
+    }
+    return pie;
   }
 
   function coveragePie(row, key, label) {
@@ -187,16 +236,7 @@
     const share = shareOfActivity(row, field);
     const item = element("figure", "atlas-coverage-pie");
     item.dataset.coverageRole = key;
-    const pie = svgElement("svg", {viewBox:"0 0 80 80",class:"atlas-pie-svg","aria-hidden":"true"});
-    pie.append(svgElement("circle", {cx:40,cy:40,r:36,class:"atlas-pie-base"}));
-    if (share === 100) {
-      pie.append(svgElement("circle", {cx:40,cy:40,r:36,class:"atlas-pie-slice"}));
-    } else if (share > 0 && share < 100) {
-      const theta = 2 * Math.PI * share / 100;
-      const x = 40 + 36*Math.sin(theta);
-      const y = 40 - 36*Math.cos(theta);
-      pie.append(svgElement("path", {class:"atlas-pie-slice",d:`M 40 40 L 40 4 A 36 36 0 ${share > 50 ? 1 : 0} 1 ${x} ${y} Z`}));
-    }
+    const pie = pieGraphic([[share,"atlas-pie-slice"]]);
     const caption = element("figcaption");
     caption.append(element("span", "atlas-pie-label", label),
       element("strong", "atlas-share-value", readableShare(share)),
@@ -204,6 +244,55 @@
     if (!Number.isFinite(share) || share < 0 || share > 100) pie.setAttribute("hidden", "");
     item.append(pie, caption);
     return item;
+  }
+
+  function renderMemberPie(container, pair, metrics) {
+    const counts = metrics.map(item => item?.members);
+    container.hidden = !counts.every(count => Number.isFinite(count) && count > 0);
+    container.replaceChildren();
+    if (container.hidden) return;
+    const total = counts[0] + counts[1];
+    const shares = [100*counts[0]/total,100*counts[1]/total];
+    const colors = ["atlas-member-first", "atlas-member-second"];
+    const figure = element("figure", "atlas-member-pie atlas-coverage-pie");
+    const caption = element("figcaption");
+    caption.append(element("b", "", "Main members · share of both counts"));
+    pair.forEach((row, index) => caption.append(element("span", "atlas-member-key " + colors[index],
+      `${row.case} · ${counts[index]} pcs · ${readableShare(shares[index])}`)));
+    figure.append(pieGraphic(shares.map((share,index) => [share,"atlas-pie-slice " + colors[index]])), caption);
+    container.append(figure);
+  }
+
+  function renderPairSummary(container, pair, metrics) {
+    const table = element("table", "pair-summary-table");
+    const header = element("tr");
+    header.append(element("th", "", "Measure"), ...pair.map(row => element("th", "", row.case)));
+    for (const cell of header.cells) cell.scope = "col";
+    const thead = element("thead");
+    thead.append(header);
+    const body = element("tbody");
+    const coverage = (row, key) => {
+      const field = key + "_area_m2";
+      return `${readableShare(shareOfActivity(row, field))} · ${readableArea(row, field)}`;
+    };
+    for (const [name, get] of [
+      ["Finished footprint · F", row => readableArea(row,"object_area_m2")],
+      ["Total activity · A", row => readableArea(row,"activity_area_m2")],
+      ["A/F · F/A", row => `${multiplier(row)} · ${readableShare(shareOfActivity(row,"object_area_m2"))}`],
+      ["Human", row => coverage(row,"human")], ["Machine", row => coverage(row,"machine")], ["Parts", row => coverage(row,"part")],
+      ["Main members", (row, model) => modelNumber(model?.members,"pcs")],
+      ["Dimensions (X × Y × Z)", (row, model) => modelDimensions(model)],
+      ["Solid member volume", (row, model) => modelNumber(model?.volume,"m³",model?.approximate)],
+      ["Member surface area", (row, model) => modelNumber(model?.surface,"m²",model?.approximate)]
+    ]) {
+      const line = element("tr");
+      const label = element("th", "", name);
+      label.scope = "row";
+      line.append(label, ...pair.map((row, index) => element("td", "", get(row,metrics[index]))));
+      body.append(line);
+    }
+    table.append(thead,body);
+    container.replaceChildren(table);
   }
 
   function start(source, {rows, modes}, registered, modelMetrics) {
@@ -219,7 +308,9 @@
     const operatorPlans = atlas.querySelector("#compare-operators");
     const partPlans = atlas.querySelector("#compare-parts");
     const modelCards = atlas.querySelector("#compare-models");
-    const modelReading = atlas.querySelector("#compare-model-reading");
+    const memberPie = atlas.querySelector("#compare-member-pie");
+    const conclusion = atlas.querySelector("#compare-conclusion");
+    const summary = atlas.querySelector("#compare-summary");
     const planCache = new Map();
     const planFor = row => {
       if (!planCache.has(row.case)) planCache.set(row.case, getPlan(source, row, registered));
@@ -241,27 +332,22 @@
       machine:"Follow how far the machine moves around the object.",
       part:"Follow the routes parts take as they enter and turn near the object."
     };
+    const conclusions = {
+      "V01-V24":"V01 uses more recorded assembly space at a similar footprint. V24 has more modeled members. Check the range of part handling separately from the member count.",
+      "V11-V26":"The finished footprints are close. V11 records more total and part activity, and machine coverage is the larger measured layer in V26. The two layouts call for different checks around the finished object.",
+      "V20-V22":"The cases cover almost the same total area. V20 records human movement and V22 records machine movement. The top views show which routes to check in each layout.",
+      "V04-V28":"The total activity areas are close. Parts cover a larger share of A in V28, so its part routes are especially useful for reading the extent of the work area.",
+      "V27-V29":"Part coverage is close in square metres. Human coverage is larger in V27, and machine coverage is larger in V29. Read the part routes together with the different operator routes."
+    };
     const fieldRows = (row, specs) => specs.map(([field, key, label]) => ({
       key, label, value:areaValue(row, field + "_area_m2"), caption:readableArea(row, field + "_area_m2")
     }));
 
-    function studyPlan(row, plan, shared, layers, highlighted) {
-      const card = renderPlan(row, plan, shared, new Set(layers), highlighted);
-      card.querySelector("svg image").setAttribute("opacity", "0.84");
+    function studyPlan(row, plan, shared, layers) {
+      const card = renderPlan(row, plan, shared, new Set(layers), {routesOnly:true});
       const pies = element("div", "atlas-coverage-pies");
       for (const key of layers) pies.append(coveragePie(row, key, roleNames[key]));
       card.querySelector("svg").before(pies);
-      if (highlighted) {
-        const timing = element("p", "note pair-study-timing");
-        const marks = [highlighted.start, highlighted.end];
-        marks.forEach((mark, index) => {
-          const text = `${index+1} · ${mark.time.toFixed(1)} s`;
-          const frame = element(mark.src ? "a" : "span", "", text);
-          if (mark.src) frame.href = new URL(mark.src, casePage).href;
-          timing.append(frame);
-        });
-        card.append(timing);
-      }
       return card;
     }
 
@@ -349,18 +435,11 @@
         height:Math.max(...planData.map(plan => plan.viewBox[3]*plan.metres))
       } : null;
       const layers = new Set(roleMode ? [selectedRole] : compareLayers.filter(input => input.checked).map(input => input.value));
-      atlas.querySelector("#atlas-plan-note").textContent = "Top Views from Fifteen assembly cases. The dashed outline marks the finished object’s bounds. " +
-        (shared ? "Both plans use the same scale." : "Each plan is fitted to its own view.");
+      atlas.querySelector("#atlas-plan-note").textContent = "Original Top Views · " + (shared ? "Shared scale" : "Fitted separately");
       operatorPlans.replaceChildren();
       partPlans.replaceChildren();
       modelCards.replaceChildren();
-      const firstExample = studyMode && pair.some(row => row.case === "V01") && pair.some(row => row.case === "V24");
-      const counts = [modelMetrics.V01?.members, modelMetrics.V24?.members];
-      modelReading.hidden = !firstExample || !counts.every(Number.isFinite);
-      if (!modelReading.hidden) {
-        modelReading.textContent = `V24 has ${(counts[1]/counts[0]).toFixed(1)} times as many modeled main members. V01 covers ${(
-          areaValue(byId.get("V01"), "activity_area_m2")/areaValue(byId.get("V24"), "activity_area_m2")).toFixed(1)} times the recorded activity area.`;
-      }
+      const metrics = pair.map(row => modelMetrics[row.case]);
       pair.forEach((row, index) => {
         const card = element("article", "atlas-card");
         const maximum = extent || (hasMetres(row) ? metricLimit : modelLimit(row));
@@ -373,12 +452,19 @@
           card.append(ratios);
           const plan = planData[index];
           operatorPlans.append(studyPlan(row, plan, shared, ["human","machine"]));
-          partPlans.append(studyPlan(row, plan, shared, ["part"], partExample(row,plan)));
-          modelCards.append(metricCard(row,modelMetrics[row.case]));
+          partPlans.append(studyPlan(row, plan, shared, ["part"]));
+          modelCards.append(metricCard(row,metrics[index],plan));
         } else {
-          plans.append(renderPlan(row, planData[index], shared, layers));
+          plans.append(renderPlan(row, planData[index], shared, layers, {routesOnly:true}));
         }
       });
+      if (studyMode) {
+        const key = pair.map(row => row.case).sort().join("-");
+        conclusion.textContent = conclusions[key] || pair.map(row =>
+          `${row.case} records ${readableArea(row,"activity_area_m2")} of activity for a footprint of ${readableArea(row,"object_area_m2")}.`).join(" ");
+        renderMemberPie(memberPie,pair,metrics);
+        renderPairSummary(summary,pair,metrics);
+      }
     }
 
     const relationAtlas = initializeCaseRelations({rows, modes, hasMetres, areaValue, calibration, readableArea,
@@ -420,7 +506,7 @@
       showPlan(row, role, selectTrack) {
         const plan = planFor(row);
         const track = selectTrack(plan.data.actions.filter(action => action.role === role), plan.viewBox);
-        return {drawing: renderPlan(row, plan, null, new Set([role]), track), track};
+        return {drawing: renderPlan(row, plan, null, new Set([role]), {highlighted:track}), track};
       },
       frameUrl: name => name ? new URL(name, casePage).href : null
     });
@@ -430,7 +516,7 @@
     const [response, registration, modelMetrics] = await Promise.all([
       fetch(casePage),
       fetch("case_area_comparison.csv").catch(() => null),
-      fetch("case-model-metrics.json?v=1").then(result => result.ok ? result.json() : {}).catch(() => ({}))
+      fetch("case-model-metrics.json?v=2").then(result => result.ok ? result.json() : {}).catch(() => ({}))
     ]);
     if (!response.ok) throw new Error("Case page: " + response.status);
     const source = document.createElement("template");
