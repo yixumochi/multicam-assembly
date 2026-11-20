@@ -4,6 +4,7 @@
   --plate-footprint: #baf492;
   --plate-human: #ee751c;
   --plate-machine: #6ac2e7;
+  --plate-part: #78d5b2;
   --plate-blue: #12627d;
   --plate-rule: #d8e5de;
 }
@@ -107,14 +108,30 @@
 
 #compare-bars .atlas-fill.footprint { background: var(--plate-footprint); }
 #compare-bars .atlas-fill.activity { background: var(--plate-ink); }
-#compare-bars .atlas-fill.human { background: var(--plate-human); }
-#compare-bars .atlas-fill.machine { background: var(--plate-machine); }
-#compare-bars .atlas-fill.part { background: #237c5f; }
+#compare-operators .atlas-fill.human { background: var(--plate-human); }
+#compare-operators .atlas-fill.machine { background: var(--plate-machine); }
+#compare-parts .atlas-fill.part { background: var(--plate-part); }
 #compare-bars .atlas-pair-ratio { margin: 9px 0 0; font-size: 13px; font-weight: 650; }
+
+.pair-study-title { margin: 0 0 9px; color: var(--plate-ink); font-size: clamp(17px, 2vw, 21px); }
+.pair-study-section { border-top: 1px solid var(--plate-rule); margin-top: 22px; padding-top: 16px; }
+.pair-study-section > .note { margin: 0 0 12px; }
+.pair-study-section .atlas-axis { margin: 0 122px 8px 36px; }
+.pair-study-section .atlas-card svg { aspect-ratio: 16 / 10; background: #fffef8; }
+#compare-parts svg .role-highlight { stroke: var(--plate-part); stroke-width: 4px; }
+#compare-parts svg .role-endpoint { fill: var(--plate-ink); stroke: white; }
+#compare-parts svg .role-endpoint-label { fill: white; }
+.pair-study-timing { display: flex; flex-wrap: wrap; gap: 5px 20px; }
+.pair-study-facts { display: grid; grid-template-columns: minmax(0, 1fr) auto; margin: 0 0 8px; font-size: 14px; }
+.pair-study-facts :is(dt, dd) { padding: 5px 0; border-bottom: 1px solid var(--plate-rule); }
+.pair-study-facts dd { margin: 0; padding-left: 8px; font-weight: 650; text-align: end; }
+.pair-study-model-source { overflow-wrap: anywhere; }
+#compare-model-reading { margin: 12px 0 0; }
 
 @media (max-width: 640px) {
   .case-relations-drawing .case-mode-title { font-size: 34px; }
   .case-relations-drawing .case-node-label { font-size: 31px; }
   .case-relations-drawing .case-node-values { display: none; }
   .case-relations :is(.case-relations-questions, .case-relations-pairs) button { min-height: 44px; }
+  .pair-study-section .atlas-axis { margin: 0 95px 8px 31px; }
 }

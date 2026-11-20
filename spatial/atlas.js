@@ -76,10 +76,7 @@
 
   function renderPlan(row, {plan, data, viewBox, metres}, shared, layers, highlighted) {
     const panel = element("article", "atlas-card");
-    const link = element("a", "", row.case + " case sheet");
-    link.href = caseUrl(row);
-    const title = element("h4");
-    title.append(link);
+    const title = caseHeading(row);
     const [left, top, width, height] = viewBox;
     const canvas = svgElement("svg", {
       viewBox: shared ? `0 0 ${shared.width} ${shared.height}` : viewBox.join(" "),
@@ -148,7 +145,41 @@
     return ordered.length % 2 ? ordered[middle] : (ordered[middle - 1] + ordered[middle]) / 2;
   }
 
-  function start(source, {rows, modes}, registered) {
+  function caseHeading(row) {
+    const heading = element("h4");
+    const link = element("a", "", row.case + " case sheet");
+    link.href = caseUrl(row);
+    heading.append(link);
+    return heading;
+  }
+
+  function metricCard(row, metrics) {
+    const card = element("article", "atlas-card");
+    const facts = element("dl", "pair-study-facts");
+    const number = (value, unit, approximate = false) => Number.isFinite(value)
+      ? (approximate ? "≈" : "") + value.toLocaleString("en", {maximumFractionDigits:unit === "m³" ? 3 : 1}) + " " + unit
+      : "Unverified";
+    for (const [name, value] of [["Main members", number(metrics?.members, "pcs")],
+      ["Solid member volume", number(metrics?.volume, "m³", metrics?.approximate)],
+      ["Member surface area", number(metrics?.surface, "m²", metrics?.approximate)]]) {
+      facts.append(element("dt", "", name), element("dd", "", value));
+    }
+    card.append(caseHeading(row), facts);
+    if (metrics) card.append(element("p", "note", metrics.scope), element("p", "note pair-study-model-source", metrics.file));
+    return card;
+  }
+
+  function partExample(row, plan) {
+    const [x, y, width, height] = plan.viewBox;
+    const visible = point => point[0] >= x && point[0] <= x+width && point[1] >= y && point[1] <= y+height;
+    const candidates = plan.data.actions.filter(action => action.role === "part" && action.line?.length > 1 &&
+      action.end.time > action.start.time && [action.line[0], action.line.at(-1)].every(visible));
+    const chosen = candidates.find(action => action.id === {V01:"065", V24:"102"}[row.case]);
+    const travel = ({line}) => Math.hypot(line.at(-1)[0]-line[0][0], line.at(-1)[1]-line[0][1]);
+    return chosen || candidates.sort((a,b) => travel(b)-travel(a)).find(action => travel(action) > 0);
+  }
+
+  function start(source, {rows, modes}, registered, modelMetrics) {
     const metricLimit = Math.ceil(Math.max(20, ...rows.filter(hasMetres)
       .flatMap(row => areaFields.map(field => areaValue(row, field)))) / 20) * 20;
     const modelLimit = row => Math.ceil(Math.max(10, ...areaFields.map(field => row[field])) / 10) * 10;
@@ -157,6 +188,16 @@
     const question = atlas.querySelector("#compare-question");
     const roleChoice = atlas.querySelector("#compare-role");
     const roleControl = atlas.querySelector("#compare-role-control");
+    const areaStudy = atlas.querySelector("#atlas-area-study");
+    const operatorPlans = atlas.querySelector("#compare-operators");
+    const partPlans = atlas.querySelector("#compare-parts");
+    const modelCards = atlas.querySelector("#compare-models");
+    const modelReading = atlas.querySelector("#compare-model-reading");
+    const planCache = new Map();
+    const planFor = row => {
+      if (!planCache.has(row.case)) planCache.set(row.case, getPlan(source, row, registered));
+      return planCache.get(row.case);
+    };
     const byId = new Map(rows.map(row => [row.case, row]));
     const compareLayers = [...atlas.querySelectorAll(".atlas-layers input[value]")];
     const picked = [first, second];
@@ -173,6 +214,28 @@
       machine:"Follow how far the machine moves around the object.",
       part:"Follow the routes parts take as they enter and turn near the object."
     };
+    const fieldRows = (row, specs) => specs.map(([field, key, label]) => ({
+      key, label, value:areaValue(row, field + "_area_m2"), caption:readableArea(row, field + "_area_m2")
+    }));
+
+    function studyPlan(row, plan, shared, layers, fields, maximum, highlighted) {
+      const card = renderPlan(row, plan, shared, new Set(layers), highlighted);
+      card.querySelector("svg image").setAttribute("opacity", "0.84");
+      const plot = bars(maximum, fieldRows(row, fields));
+      card.querySelector("svg").before(plot, axis(maximum, unit(row)));
+      if (highlighted) {
+        const timing = element("p", "note pair-study-timing");
+        const marks = [highlighted.start, highlighted.end];
+        marks.forEach((mark, index) => {
+          const text = `${index+1} · ${mark.time.toFixed(1)} s`;
+          const frame = element(mark.src ? "a" : "span", "", text);
+          if (mark.src) frame.href = new URL(mark.src, casePage).href;
+          timing.append(frame);
+        });
+        card.append(timing);
+      }
+      return card;
+    }
 
     function renderComparison() {
       const pair = picked.map(select => byId.get(select.value));
@@ -194,22 +257,26 @@
       const metricPair = pair.every(hasMetres);
       const roleShare = row => 100 * row[field] / row.activity_area_m2;
       const roleMode = question.value === "role";
-      atlas.querySelector("#atlas-pair-key").hidden = question.value !== "summary";
-      for (const input of compareLayers) input.closest("label").hidden = roleMode;
-      for (const input of compareLayers) input.disabled = roleMode;
+      const studyMode = question.value === "summary";
+      atlas.querySelector("#atlas-pair-key").hidden = !studyMode;
+      areaStudy.hidden = !studyMode;
+      plans.hidden = studyMode;
+      for (const input of compareLayers) {
+        input.closest("label").hidden = roleMode || studyMode;
+        input.disabled = roleMode || studyMode;
+      }
       let fieldsFor;
       let extent;
       let axisUnit;
-      if (question.value === "summary") {
-        const fields = [["object", "footprint", "F"], ["activity", "activity", "A"],
-          ["human", "human", "H"], ["machine", "machine", "R"], ["part", "part", "P"]];
+      if (studyMode) {
         findings.textContent = selectedRelation?.finding || (metricPair
           ? `${pair[0].case} recorded ${readableArea(pair[0], "activity_area_m2")} of activity and ${pair[1].case} recorded ${readableArea(pair[1], "activity_area_m2")}. Compare their A/F and role coverage below.`
           : "A/F is comparable across units. Each case uses its own area scale below.");
-        extent = metricPair ? metricLimit : null;
+        const peak = Math.max(...pair.flatMap(row => areaFields.map(field => areaValue(row,field))));
+        const increment = peak <= 10 ? 2 : peak <= 40 ? 5 : 10;
+        extent = metricPair ? Math.max(increment, Math.ceil(peak/increment)*increment) : null;
         axisUnit = "m²";
-        fieldsFor = row => fields.map(([field, key, label]) => ({key, label,
-          value:areaValue(row, field + "_area_m2"), caption:readableArea(row, field + "_area_m2")}));
+        fieldsFor = row => fieldRows(row, [["object", "footprint", "F"], ["activity", "activity", "A"]]);
       } else if (question.value === "ratio") {
         const ratio = row => row.ratio_activity_over_object;
         const [higher, lower] = [...pair].sort((left,right) => ratio(right)-ratio(left));
@@ -244,28 +311,43 @@
         axisUnit = "m²";
         fieldsFor = row => [{key:"activity",label:"A",value:area(row),caption:readableArea(row,"activity_area_m2")}];
       }
-      const planData = pair.map(row => getPlan(source, row, registered));
+      const planData = pair.map(planFor);
       const common = atlas.querySelector("#atlas-common");
       const canShare = planData.every(plan => plan.metres);
       common.disabled = !canShare;
+      common.closest("label").hidden = studyMode && !canShare;
       const shared = canShare && common.checked ? {
         width:Math.max(...planData.map(plan => plan.viewBox[2]*plan.metres)),
         height:Math.max(...planData.map(plan => plan.viewBox[3]*plan.metres))
       } : null;
       const layers = new Set(roleMode ? [selectedRole] : compareLayers.filter(input => input.checked).map(input => input.value));
-      atlas.querySelector("#atlas-plan-note").textContent = "The dashed outline marks the finished object’s bounds. " +
+      atlas.querySelector("#atlas-plan-note").textContent = "Top Views from Fifteen assembly cases. The dashed outline marks the finished object’s bounds. " +
         (shared ? "Both plans use the same scale." : "Each plan is fitted to its own view.");
+      operatorPlans.replaceChildren();
+      partPlans.replaceChildren();
+      modelCards.replaceChildren();
+      const firstExample = studyMode && pair.some(row => row.case === "V01") && pair.some(row => row.case === "V24");
+      const counts = [modelMetrics.V01?.members, modelMetrics.V24?.members];
+      modelReading.hidden = !firstExample || !counts.every(Number.isFinite);
+      if (!modelReading.hidden) {
+        modelReading.textContent = `V24 has ${(counts[1]/counts[0]).toFixed(1)} times as many modeled main members. V01 covers ${(
+          areaValue(byId.get("V01"), "activity_area_m2")/areaValue(byId.get("V24"), "activity_area_m2")).toFixed(1)} times the recorded activity area.`;
+      }
       pair.forEach((row, index) => {
         const card = element("article", "atlas-card");
         const maximum = extent || (hasMetres(row) ? metricLimit : modelLimit(row));
-        const heading = element("h4");
-        const link = element("a", "", row.case + " case sheet");
-        link.href = caseUrl(row);
-        heading.append(link);
-        card.append(heading, bars(maximum, fieldsFor(row)), axis(maximum, extent ? axisUnit : unit(row)));
-        if (question.value === "summary") card.append(element("p", "atlas-pair-ratio", "A/F  " + multiplier(row)));
+        card.append(caseHeading(row), bars(maximum, fieldsFor(row)), axis(maximum, extent ? axisUnit : unit(row)));
         compareBars.append(card);
-        plans.append(renderPlan(row, planData[index], shared, layers));
+        if (studyMode) {
+          card.append(element("p", "atlas-pair-ratio", "A/F  " + multiplier(row)));
+          const plan = planData[index];
+          operatorPlans.append(studyPlan(row, plan, shared, ["human","machine"],
+            [["human","human","H"], ["machine","machine","R"]], maximum));
+          partPlans.append(studyPlan(row, plan, shared, ["part"], [["part","part","P"]], maximum, partExample(row,plan)));
+          modelCards.append(metricCard(row,modelMetrics[row.case]));
+        } else {
+          plans.append(renderPlan(row, planData[index], shared, layers));
+        }
       });
     }
 
@@ -303,12 +385,10 @@
     atlas.querySelector(".atlas-layers").addEventListener("change", renderComparison);
     atlas.querySelector("#atlas-status").hidden = true;
     atlas.querySelector("#atlas-content").hidden = false;
-    const planCache = new Map();
     initializeSpatialRoles({
       rows, modes, median, caseUrl, areaValue, calibration,
       showPlan(row, role, selectTrack) {
-        if (!planCache.has(row.case)) planCache.set(row.case, getPlan(source, row, registered));
-        const plan = planCache.get(row.case);
+        const plan = planFor(row);
         const track = selectTrack(plan.data.actions.filter(action => action.role === role), plan.viewBox);
         return {drawing: renderPlan(row, plan, null, new Set([role]), track), track};
       },
@@ -317,9 +397,10 @@
   }
 
   async function load() {
-    const [response, registration] = await Promise.all([
+    const [response, registration, modelMetrics] = await Promise.all([
       fetch(casePage),
-      fetch("case_area_comparison.csv").catch(() => null)
+      fetch("case_area_comparison.csv").catch(() => null),
+      fetch("case-model-metrics.json?v=1").then(result => result.ok ? result.json() : {}).catch(() => ({}))
     ]);
     if (!response.ok) throw new Error("Case page: " + response.status);
     const source = document.createElement("template");
@@ -332,7 +413,7 @@
         if (caseId && line.includes('"registered metric union"')) registered.add(caseId);
       }
     }
-    start(source.content, areaData, registered);
+    start(source.content, areaData, registered, modelMetrics);
   }
 
   load().catch(error => {

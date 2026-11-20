@@ -44,12 +44,12 @@ details summary { cursor: pointer; color: var(--blue); }
 </style>
 <link rel="stylesheet" href="../research.css">
 <link rel="stylesheet" href="atlas.css?v=guide2">
-<link rel="stylesheet" href="case-relations.css?v=2">
+<link rel="stylesheet" href="case-relations.css?v=3">
 <link rel="stylesheet" href="role-analysis.css?v=atlas3">
 <script src="area-calibration.js" defer></script>
 <script src="role-analysis.js?v=atlas3" defer></script>
 <script src="case-relations.js?v=2" defer></script>
-<script src="atlas.js?v=case-relations1" defer></script>
+<script src="atlas.js?v=pair-study1" defer></script>
 </head>
 <body>
 <header>
@@ -169,7 +169,7 @@ details summary { cursor: pointer; color: var(--blue); }
         <div class="atlas-controls">
           <label for="compare-question">Question
             <select id="compare-question">
-              <option value="summary">Area overview</option>
+              <option value="summary">Area and assembly comparison</option>
               <option value="area">Which covers more area during assembly?</option>
               <option value="ratio">Which spreads further relative to its finished size?</option>
               <option value="role">Where should this role have room to move?</option>
@@ -183,7 +183,7 @@ details summary { cursor: pointer; color: var(--blue); }
         </div>
         <div id="atlas-pair-detail" hidden>
           <p id="compare-findings" class="spatial-takeaway" aria-live="polite"></p>
-          <p id="atlas-pair-key" class="note">F footprint · A total activity · H human · R robot / machine · P parts. Role areas can overlap.</p>
+          <h4 id="atlas-pair-key" class="pair-study-title">Finished footprint and total activity</h4>
           <div id="compare-bars" class="atlas-pair"></div>
           <div class="atlas-controls atlas-layers">
             <label><input type="checkbox" value="human" checked> Human</label>
@@ -192,6 +192,24 @@ details summary { cursor: pointer; color: var(--blue); }
             <label><input id="atlas-common" type="checkbox" checked> Shared plan scale</label>
           </div>
           <p id="atlas-plan-note" class="note"></p>
+          <div id="atlas-area-study" hidden>
+            <section class="pair-study-section" aria-labelledby="pair-operators-title">
+              <h4 id="pair-operators-title" class="pair-study-title">Human and machine activity</h4>
+              <p class="note">Human and machine coverage are measured separately and can overlap.</p>
+              <div id="compare-operators" class="atlas-pair"></div>
+            </section>
+            <section class="pair-study-section" aria-labelledby="pair-parts-title">
+              <h4 id="pair-parts-title" class="pair-study-title">Part movement</h4>
+              <p class="note">The shaded areas use the saved part tracks. Markers 1 and 2 identify the start and end of one recorded movement.</p>
+              <div id="compare-parts" class="atlas-pair"></div>
+            </section>
+            <section class="pair-study-section" aria-labelledby="pair-model-title">
+              <h4 id="pair-model-title" class="pair-study-title">Finished members in Rhino</h4>
+              <p class="note">The count and volume cover the modeled main members shown below. Surface area sums their individual faces, including contact faces.</p>
+              <div id="compare-models" class="atlas-pair"></div>
+              <p id="compare-model-reading" class="note" hidden></p>
+            </section>
+          </div>
           <div id="compare-plans" class="atlas-pair"></div>
         </div>
       </section>

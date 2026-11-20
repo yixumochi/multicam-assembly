@@ -1,0 +1,118 @@
+{
+  "V01": {
+    "file": "V01_TWO_ROOM_FRAME_PEOPLE_v3_mm.3dm",
+    "scope": "Reconstructed frame members. Pegs, temporary platform and people are excluded.",
+    "members": 58,
+    "volume": 2.28015,
+    "surface": 71.0685,
+    "approximate": false
+  },
+  "V06": {
+    "file": "V06_LAID_shell_scaffold_humans_mm.3dm",
+    "scope": "Two modeled sheet layers. Seam pins, spacers and the bench are excluded.",
+    "members": 24,
+    "volume": 0.03373,
+    "surface": 18.4512,
+    "approximate": true
+  },
+  "V07": {
+    "file": "V07_whole_shell_EXPLANATORY_CLOSED_BREP.3dm",
+    "scope": "Modeled boards. Reinforcement fibres are excluded. Metric measurements use the published length.",
+    "members": 35,
+    "surface": 31.6179,
+    "volume": 0.2243,
+    "approximate": true
+  },
+  "V11": {
+    "file": "V11_COMPLETE_INSTALLATION_GROUP.3dm",
+    "scope": "Interpretive reconstruction of the timber laths.",
+    "members": 54,
+    "volume": 0.20191,
+    "surface": 71.9348,
+    "approximate": true
+  },
+  "V20": {
+    "file": "V20_shell_jointed_brep.3dm",
+    "scope": "Shell cells in six modeled modules. Separate wall-detail geometry is excluded.",
+    "members": 336,
+    "volume": 0.29899,
+    "surface": 47.8727,
+    "approximate": false
+  },
+  "V04": {
+    "file": "V04_REBUILT_manufacturer_arms_timber_human_cc0.3dm",
+    "scope": "Reconstructed frame, including modeled back and end members.",
+    "members": 34,
+    "volume": 1.2454,
+    "surface": 49.6344,
+    "approximate": false
+  },
+  "V21": {
+    "file": "V21_SOURCE_FORM_FULL_CLOSED_BREP.3dm",
+    "scope": "Plan-constrained reconstruction of timber slats. Dowels are excluded. Metric measurements use the published height.",
+    "members": 622,
+    "surface": 181.6597,
+    "volume": 2.28268,
+    "approximate": true
+  },
+  "V23": {
+    "file": "V23_SequentialRoof_REPRESENTATIVE.3dm",
+    "scope": "One representative truss, as shown in the case comparison. Duplicate, assembly and joint-detail geometry is excluded.",
+    "members": 426,
+    "volume": 4.7853,
+    "surface": 263.5902,
+    "approximate": false
+  },
+  "V27": {
+    "file": "V27_CAA_COMPLETE_ROBOTS_PEOPLE_v1_mm.3dm",
+    "scope": "Timber rods from the workshop assembly graph. Connectors are excluded.",
+    "members": 141,
+    "surface": 7.0689,
+    "volume": 0.03441,
+    "approximate": false
+  },
+  "V29": {
+    "file": "V29_CRoW_WORKCELL_KUKA_IIWA_v1_mm.3dm",
+    "scope": "Modeled timber pieces, including the member shown being installed.",
+    "members": 16,
+    "volume": 0.012,
+    "surface": 1.48,
+    "approximate": false
+  },
+  "V22": {
+    "file": "02_Workshop_4Robots_STUDY.3dm",
+    "scope": "One modeled workshop pod. Includes the reconstructed hidden panels.",
+    "members": 9,
+    "volume": 0.38514,
+    "surface": 15.716,
+    "approximate": false
+  },
+  "V24": {
+    "file": "V24_whole_structure_INTERPRETIVE.3dm",
+    "scope": "Reconstructed base and tower members. Temporary struts and the robot are excluded.",
+    "members": 338,
+    "volume": 0.23422,
+    "surface": 33.9893,
+    "approximate": false
+  },
+  "V26": {
+    "file": "workcell_paper_named.3dm",
+    "scope": "The model shows a workcell and an unfinished cassette, so the finished member set remains unverified."
+  },
+  "V28": {
+    "file": "halflap_structure_baked_with_RFL_orientation.3dm",
+    "scope": "Named shelter beams in the source model. Secondary geometry and the workcell are excluded.",
+    "members": 46,
+    "volume": 1.11479,
+    "surface": 49.1894,
+    "approximate": true
+  },
+  "V30": {
+    "file": "V30_DeepTimber_VIDEO_FINAL_H.3dm",
+    "scope": "Timber pieces in the modeled final H joint, based on the recorded trial.",
+    "members": 3,
+    "volume": 0.01126,
+    "surface": 0.8829,
+    "approximate": false
+  }
+}
