@@ -1,4 +1,4 @@
-#atlas {
+.assembly-atlas {
   --plate-paper: #fffef8;
   --plate-ink: #17363b;
   --plate-footprint: #baf492;
@@ -7,26 +7,57 @@
   --plate-part: #78d5b2;
   --plate-blue: #12627d;
   --plate-rule: #d8e5de;
-}
-
-.case-relations {
+  margin: 0;
   background: var(--plate-paper);
   color: var(--plate-ink);
-  font-family: "Segoe UI", sans-serif;
-  padding: clamp(12px, 3vw, 34px);
+  font: 15px/1.45 "Segoe UI", sans-serif;
 }
 
-.case-relations h3 {
-  margin: 0;
-  font: 650 clamp(23px, 3vw, 30px)/1.2 "Segoe UI", sans-serif;
-  letter-spacing: -.025em;
+.assembly-atlas *, .assembly-atlas *::before, .assembly-atlas *::after { box-sizing: border-box; }
+.assembly-atlas a { color: var(--plate-blue); }
+.assembly-atlas :is(button, select) { font: inherit; color: inherit; }
+.assembly-atlas select { max-width: 100%; padding: 5px 8px; background: white; border: 1px solid var(--plate-rule); border-radius: 6px; }
+.assembly-atlas label { display: grid; gap: 3px; font-size: 12px; }
+.assembly-atlas .note { color: var(--atlas-muted, #456264); font-size: 13px; }
+.assembly-atlas details { font-size: 13px; }
+.assembly-atlas details summary { color: var(--plate-blue); cursor: pointer; }
+
+.assembly-atlas-header, .assembly-atlas-main {
+  max-width: 1440px;
+  margin-inline: auto;
+  padding-inline: clamp(16px, 3vw, 44px);
 }
+
+.assembly-atlas-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px 20px;
+  padding-block: clamp(18px, 3vw, 35px) 21px;
+  border-bottom: 1px solid var(--plate-rule);
+}
+.assembly-atlas-header h1 {
+  margin: 0;
+  font-size: clamp(29px, 4vw, 52px);
+  line-height: 1.05;
+  letter-spacing: -.045em;
+}
+.assembly-atlas-header a { font-size: 13px; text-underline-offset: 3px; }
+.assembly-atlas-series { margin: 0 0 7px; color: var(--plate-blue); font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+.assembly-atlas-main { padding-block: 24px 42px; }
+.case-relations-layout { display: grid; grid-template-columns: minmax(280px, .86fr) minmax(0, 2fr); align-items: start; gap: clamp(20px, 3.4vw, 48px); }
+.case-relations-sidebar { padding-top: 2px; }
+.case-relations-questions { display: grid; gap: 17px; }
+.case-relations-pairs { display: grid; justify-items: start; margin: 5px 0 0 17px; }
+.case-relations-sidebar details { margin-top: 24px; }
+.case-relations-sidebar details p { color: var(--atlas-muted); max-width: 35ch; }
 
 .case-relations-key {
   display: flex;
   flex-wrap: wrap;
   gap: 4px 17px;
-  margin: 12px 0 4px;
+  margin: 10px 0 4px;
   font-size: 13px;
 }
 
@@ -43,38 +74,45 @@
 .case-relations-key .case-footprint { --swatch: var(--plate-footprint); }
 .case-relations-key .case-human { --swatch: var(--plate-human); }
 .case-relations-key .case-machine { --swatch: var(--plate-machine); }
-.case-relations > .note { margin: 5px 0 10px; }
-.case-relations :is(.case-relations-questions, .case-relations-pairs) {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin: 12px 0;
-}
-
-.case-relations :is(.case-relations-questions, .case-relations-pairs) button {
-  background: transparent;
-  border: 1px solid var(--plate-rule);
-  border-radius: 6px;
+.case-relations-status { margin: 6px 0 0; }
+.case-relations [data-relation-question]:not(.case-relations-clear) {
+  width: 100%;
+  background: white;
+  border: 1px solid var(--plate-ink);
+  border-radius: 28px;
   color: var(--plate-ink);
   cursor: pointer;
-  font: inherit;
-  font-size: 13px;
-  min-height: 38px;
-  padding: 6px 10px;
+  font-size: clamp(14px, 1.45vw, 17px);
+  font-weight: 650;
+  min-height: 48px;
+  padding: 10px 16px;
   text-align: left;
 }
-
-.case-relations :is(.case-relations-questions, .case-relations-pairs) button[aria-pressed="true"] {
+.case-relations [data-relation-question]:not(.case-relations-clear)[aria-pressed="true"] {
   background: var(--plate-blue);
   border-color: var(--plate-blue);
   color: var(--plate-paper);
 }
+.case-relations [data-relation-question]:not(.case-relations-clear):hover { border-color: var(--plate-blue); }
+.case-relations :is(.case-relations-pairs button, .case-relations-clear) {
+  border: 0;
+  background: transparent;
+  color: var(--plate-blue);
+  padding: 4px 3px;
+  min-height: 32px;
+  cursor: pointer;
+  font-size: 14px;
+  text-underline-offset: 4px;
+  text-decoration: underline;
+}
+.case-relations-pairs button[aria-pressed="true"] { color: var(--plate-ink); font-weight: 700; text-decoration-thickness: 2px; }
+.case-relations .case-relations-clear { margin: 12px 0 0 17px; font-size: 12px; }
 
 .case-relations-drawing {
   display: block;
-  width: min(100%, 1000px);
+  width: 100%;
   height: auto;
-  margin: 16px auto 0;
+  margin: 0;
   background: white;
   border: 1px solid var(--plate-rule);
   border-radius: 12px;
@@ -184,6 +222,12 @@
   .case-relations-drawing .case-mode-title { font-size: 34px; }
   .case-relations-drawing .case-node-label { font-size: 31px; }
   .case-relations-drawing .case-node-values { display: none; }
-  .case-relations :is(.case-relations-questions, .case-relations-pairs) button { min-height: 44px; }
+  .case-relations :is(.case-relations-pairs button, .case-relations-clear) { min-height: 34px; }
   .pair-layer-switch button { min-height: 40px; }
+}
+
+@media (max-width: 820px) {
+  .case-relations-layout { grid-template-columns: minmax(0, 1fr); }
+  .case-relations-questions { gap: 10px; }
+  .case-relations-sidebar details { margin-top: 12px; }
 }

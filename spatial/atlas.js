@@ -118,13 +118,14 @@
     }
   }
 
-  function renderPlan(row, {plan, data, viewBox, metres, outline}, shared, layers, {highlighted, coverageOnly = false, switchable = false} = {}) {
+  function renderPlan(row, {plan, data, viewBox, metres, outline}, shared, layers) {
+    const switchable = !layers;
     const panel = element("article", "atlas-card");
-    const title = caseHeading(row, coverageOnly);
+    const title = caseHeading(row, true);
     const [left, top, width, height] = viewBox;
     const canvas = svgElement("svg", {
       viewBox: shared ? `0 0 ${shared.width} ${shared.height}` : viewBox.join(" "),
-      role: "img", "aria-label": row.case + (coverageOnly ? " original top drawing and activity coverage" : " original top drawing and selected activity tracks")
+      role: "img", "aria-label": row.case + " original top drawing and activity coverage"
     });
     const geometry = svgElement("g", {});
     if (shared) {
@@ -134,59 +135,22 @@
     }
     const backdrop = plan.querySelector("image").cloneNode(true);
     backdrop.setAttribute("href", new URL(backdrop.getAttribute("href"), casePage).href);
-    backdrop.setAttribute("opacity", switchable ? (outline ? "0.48" : "0.7") : coverageOnly ? "1" : "0.55");
-    if (coverageOnly) {
-      geometry.classList.add("atlas-coverage-plan");
-      backdrop.classList.add("atlas-coverage-drawing");
-      if (switchable) {
-        for (const [mode, roles] of [["operators", ["human","machine"]], ["parts", ["part"]]]) {
-          const layer = svgElement("g", {"data-study-layer":mode});
-          filledCoverage(layer, data.actions, new Set(roles), row.case);
-          geometry.append(layer);
-        }
-      } else {
-        filledCoverage(geometry,data.actions,layers,row.case);
+    backdrop.setAttribute("opacity", switchable ? (outline ? "0.48" : "0.7") : "1");
+    geometry.classList.add("atlas-coverage-plan");
+    backdrop.classList.add("atlas-coverage-drawing");
+    if (switchable) {
+      for (const [mode, roles] of [["operators", ["human","machine"]], ["parts", ["part"]]]) {
+        const layer = svgElement("g", {"data-study-layer":mode});
+        filledCoverage(layer, data.actions, new Set(roles), row.case);
+        geometry.append(layer);
       }
-      geometry.append(backdrop);
-      if (switchable && outline) geometry.append(svgElement("path", {
-        d:`M ${coordinates(outline)} Z`, class:"atlas-object-outline"
-      }));
     } else {
-      geometry.append(backdrop);
-      for (const action of data.actions) {
-        if (!layers.has(action.role) || !action.poly?.length) continue;
-        geometry.append(svgElement("polygon", {
-          points:coordinates(action.poly), fill:action.color, "fill-opacity":0.18, stroke:action.color
-        }));
-        if (action.line?.length > 1) geometry.append(svgElement("polyline", {
-          points:coordinates(action.line), fill:"none", stroke:action.color
-        }));
-      }
+      filledCoverage(geometry, data.actions, layers, row.case);
     }
-    if (!coverageOnly && data.object_range) {
-      const [minX, minY, maxX, maxY] = data.object_range;
-      geometry.append(svgElement("rect", {
-        x:Math.min(minX,maxX), y:Math.min(minY,maxY), width:Math.abs(maxX-minX), height:Math.abs(maxY-minY),
-        fill:"none", stroke:"#193f4d", "stroke-dasharray":"5 3"
-      }));
-    }
-    if (highlighted) {
-      const points = highlighted.line;
-      const radius = Math.min(width, height) * 0.023;
-      geometry.append(svgElement("polyline", {
-        points:coordinates(points), class:"role-highlight", fill:"none"
-      }));
-      for (const [index, point] of [points[0], points.at(-1)].entries()) {
-        const [x, y] = point;
-        geometry.append(svgElement("circle", {cx:x, cy:y, r:radius, class:"role-endpoint"}));
-        const number = svgElement("text", {
-          x, y, "dominant-baseline":"central", "text-anchor":"middle", "font-size":radius * 1.15,
-          class:"role-endpoint-label"
-        });
-        number.textContent = index + 1;
-        geometry.append(number);
-      }
-    }
+    geometry.append(backdrop);
+    if (switchable && outline) geometry.append(svgElement("path", {
+      d:`M ${coordinates(outline)} Z`, class:"atlas-object-outline"
+    }));
     canvas.append(geometry);
     if (shared) {
       const start = shared.width * 0.04;
@@ -198,14 +162,7 @@
       canvas.append(label);
     }
     panel.append(title, canvas);
-    if (!coverageOnly) panel.append(element("p", "note", shared ? "Shared metre scale" : "Fit to saved plan · " + (metric(row) ? "metric case" : "model units")));
     return panel;
-  }
-
-  function median(values) {
-    const ordered = [...values].sort((left, right) => left - right);
-    const middle = Math.floor(ordered.length / 2);
-    return ordered.length % 2 ? ordered[middle] : (ordered[middle - 1] + ordered[middle]) / 2;
   }
 
   function caseHeading(row, compact = false) {
@@ -434,7 +391,7 @@
     }
 
     function studyPlan(row, plan, shared) {
-      const card = renderPlan(row, plan, shared, null, {coverageOnly:true, switchable:true});
+      const card = renderPlan(row, plan, shared);
       const drawing = card.querySelector("svg");
       drawing.classList.add("atlas-coverage-canvas");
       drawing.dataset.case = row.case;
@@ -558,7 +515,7 @@
           coveragePlans.append(studyPlan(row, plan, shared));
           modelCards.append(metricCard(row,metrics[index],plan));
         } else {
-          plans.append(renderPlan(row, planData[index], shared, layers, {coverageOnly:true}));
+          plans.append(renderPlan(row, planData[index], shared, layers));
         }
       });
       if (studyMode) {
@@ -596,7 +553,18 @@
         atlas.querySelector("#atlas-pair-heading").focus();
       }
     });
-    renderComparison();
+    function openLinkedCase() {
+      const id = location.hash.slice(1);
+      if (byId.has(id)) {
+        first.value = id;
+        second.value = "";
+        question.value = "summary";
+        selectedRelation = null;
+      }
+      renderComparison();
+    }
+    openLinkedCase();
+    window.addEventListener("hashchange", openLinkedCase);
     for (const select of picked) select.addEventListener("change", () => {
       selectedRelation = null;
       renderComparison();
@@ -606,15 +574,6 @@
     atlas.querySelector(".atlas-layers").addEventListener("change", renderComparison);
     atlas.querySelector("#atlas-status").hidden = true;
     atlas.querySelector("#atlas-content").hidden = false;
-    initializeSpatialRoles({
-      rows, modes, median, caseUrl, areaValue, calibration,
-      showPlan(row, role, selectTrack) {
-        const plan = planFor(row);
-        const track = selectTrack(plan.data.actions.filter(action => action.role === role), plan.viewBox);
-        return {drawing: renderPlan(row, plan, null, new Set([role]), {highlighted:track}), track};
-      },
-      frameUrl: name => name ? new URL(name, casePage).href : null
-    });
   }
 
   async function load() {
@@ -640,8 +599,6 @@
 
   load().catch(error => {
     console.error(error);
-    for (const status of [atlas.querySelector("#atlas-status"), document.getElementById("roles-status")]) {
-      status.textContent = "Could not load the case measurements. Reload the page to try again.";
-    }
+    atlas.querySelector("#atlas-status").textContent = "Could not load the case measurements. Reload the page to try again.";
   });
 })();

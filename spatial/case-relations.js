@@ -1,8 +1,8 @@
 function initializeCaseRelations({rows, modes, hasMetres, areaValue, calibration, readableArea, chooseCase, chooseRelation}) {
   const section = document.querySelector(".case-relations");
   const drawing = section.querySelector("svg");
-  const buttons = [...section.querySelectorAll("[data-relation-question]")];
-  const pairList = section.querySelector(".case-relations-pairs");
+  const buttons = [...section.querySelectorAll(".case-relations-questions [data-relation-question]")];
+  const clearButton = section.querySelector(".case-relations-clear");
   const status = section.querySelector(".case-relations-status");
   const byId = new Map(rows.map(row => [row.case, row]));
   const area = (row, key) => areaValue(row, key + "_area_m2");
@@ -128,7 +128,7 @@ function initializeCaseRelations({rows, modes, hasMetres, areaValue, calibration
     roles:[["V20","V22"], ["V04","V28"]],
     parts:[["V27","V29"]]
   };
-  function relationFor(ids) {
+  function relationFor(ids, topic) {
     const [a,b] = ids.map(id => byId.get(id));
     if (!a || !b || ![a,b].every(hasMetres)) return null;
     const similar = (key, threshold) => {
@@ -136,15 +136,15 @@ function initializeCaseRelations({rows, modes, hasMetres, areaValue, calibration
       return Math.max(x,y) > 0 && Math.abs(x-y) <= threshold*Math.max(x,y);
     };
     let finding;
-    if (question === "spread" && similar("object",.20)) {
+    if (topic === "spread" && similar("object",.20)) {
       const sizes = [area(a,"activity"),area(b,"activity")];
       const ratio = Math.max(...sizes) / Math.min(...sizes);
       if (Number.isFinite(ratio) && ratio >= 1.5) finding = `${a.case} and ${b.case} have similar footprints (${display(a,"object")} and ${display(b,"object")}). Their recorded activity areas are ${display(a,"activity")} and ${display(b,"activity")}, a ${ratio.toFixed(1)}× difference.`;
     }
-    if (question === "roles" && similar("object",.20) && similar("activity",.15)) {
+    if (topic === "roles" && similar("object",.20) && similar("activity",.15)) {
       finding = `${a.case} and ${b.case} cover similar total areas (${display(a,"activity")} and ${display(b,"activity")}). Human coverage is ${display(a,"human")} and ${display(b,"human")}, machine coverage is ${display(a,"machine")} and ${display(b,"machine")}, respectively.`;
     }
-    if (question === "parts" && similar("part",.15)) {
+    if (topic === "parts" && similar("part",.15)) {
       finding = `Part coverage is similar (${display(a,"part")} in ${a.case}, ${display(b,"part")} in ${b.case}). Human coverage is ${display(a,"human")} and ${display(b,"human")}, machine coverage is ${display(a,"machine")} and ${display(b,"machine")}, respectively.`;
     }
     return finding ? {ids, finding} : null;
@@ -173,35 +173,51 @@ function initializeCaseRelations({rows, modes, hasMetres, areaValue, calibration
     }
   }
 
-  function showConnections() {
+  function showConnections(topic) {
+    question = topic;
+    clearButton.hidden = topic === "all";
+    for (const button of buttons) button.setAttribute("aria-pressed", button.dataset.relationQuestion === topic);
     lines.replaceChildren();
-    pairList.replaceChildren();
-    pairList.hidden = question === "all";
-    for (const ids of pairs[question] || []) {
-      const relation = relationFor(ids);
-      if (!relation) continue;
+    for (const relation of relations[topic] ?? []) {
+      const {ids} = relation;
       const key = ids.join("-");
-      const pairButton = document.createElement("button");
-      pairButton.type = "button";
-      pairButton.textContent = ids.join(" ↔ ");
-      pairButton.dataset.atlasRelation = key;
-      pairButton.addEventListener("click", () => chooseRelation(relation));
-      pairList.append(pairButton);
       const line = svg("g", {class:"case-connection","data-atlas-relation":key});
       const d = curve(...ids.map(id => nodes.get(id)));
       line.append(svg("path", {d,class:"case-connection-hit"}), svg("path", {d,class:"case-connection-line"}));
       line.addEventListener("click", () => chooseRelation(relation));
       lines.append(line);
     }
-    if (!pairList.hidden && !pairList.children.length) pairList.textContent = "No examples match this question.";
     indicateRelation();
   }
 
+  const relations = Object.fromEntries(Object.entries(pairs).map(([topic, items]) => [
+    topic, items.map(ids => relationFor(ids, topic)).filter(Boolean)
+  ]));
+  for (const [topic, examples] of Object.entries(relations)) {
+    const pairList = section.querySelector(`[data-theme-pairs="${topic}"]`);
+    for (const relation of examples) {
+      const pairButton = document.createElement("button");
+      pairButton.type = "button";
+      pairButton.textContent = relation.ids.join(" ↔ ");
+      pairButton.dataset.atlasRelation = relation.ids.join("-");
+      pairButton.setAttribute("aria-pressed", "false");
+      pairButton.addEventListener("click", () => {
+        showConnections(topic);
+        chooseRelation(relation);
+      });
+      pairList.append(pairButton);
+    }
+  }
   for (const button of buttons) button.addEventListener("click", () => {
-    question = button.dataset.relationQuestion;
-    for (const choice of buttons) choice.setAttribute("aria-pressed", choice === button);
-    showConnections();
+    const topic = button.dataset.relationQuestion;
+    showConnections(question === topic ? "all" : topic);
   });
+  clearButton.addEventListener("click", () => {
+    const active = buttons.find(button => button.dataset.relationQuestion === question);
+    showConnections("all");
+    active?.focus();
+  });
+  showConnections("spread");
 
   return {
     update(selected, relation) {
@@ -210,7 +226,7 @@ function initializeCaseRelations({rows, modes, hasMetres, areaValue, calibration
       for (const [id, node] of nodes) node.element.setAttribute("aria-pressed", picked.includes(id));
       indicateRelation();
       status.textContent = picked.length === 2 ? `${picked.join(" and ")} selected. Compare them below.` :
-        picked.length ? `${picked[0]} selected. Choose a second case.` : "Select a case to start a comparison.";
+        picked.length ? `${picked[0]} selected. Choose a second case.` : "Select two cases on the atlas to compare them.";
     }
   };
 }
