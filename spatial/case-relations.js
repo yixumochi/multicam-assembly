@@ -1,4 +1,4 @@
-function initializeCaseRelations({rows, modes, hasMetres, areaValue, calibration, readableArea, chooseCase, comparisonUrl}) {
+function initializeCaseRelations({rows, modes, hasMetres, areaValue, calibration, readableArea, canCompare, chooseCase, comparisonUrl}) {
   const section = document.querySelector(".case-relations");
   const drawing = section.querySelector("svg");
   const buttons = [...section.querySelectorAll(".case-relations-questions [data-relation-question]")];
@@ -83,8 +83,11 @@ function initializeCaseRelations({rows, modes, hasMetres, areaValue, calibration
       const {row, x, y, r} = point;
       const labelX = column.x - 175;
       const caseLabel = row.case + (calibration(row) ? " ≈" : "");
-      const group = svg("g", {role:"button",tabindex:"0","aria-pressed":"false","data-atlas-case":row.case,
-        "aria-label":`${row.case}, ${column.title}. F ${display(row,"object")}, A ${display(row,"activity")}, human ${display(row,"human")}, machine ${display(row,"machine")}`});
+      const comparable = canCompare(row);
+      const group = svg("g", {role:comparable ? "button" : "link",tabindex:"0","data-atlas-case":row.case,
+        "aria-label":comparable ? `${row.case}, ${column.title}. F ${display(row,"object")}, A ${display(row,"activity")}, human ${display(row,"human")}, machine ${display(row,"machine")}` :
+          `${row.case}, ${column.title}. Open the case sheet.`});
+      if (comparable) group.setAttribute("aria-pressed", "false");
       group.append(svg("circle", {cx:x,cy:y,r:Math.max(50,r),class:"case-hit"}));
       group.append(svg("rect", {x:labelX-8,y:y-37,width:111,height:76,class:"case-hit"}));
       group.append(svg("rect", {x:labelX-5,y:y-30,width:103,height:57,class:"case-label-paper"}));
@@ -123,7 +126,7 @@ function initializeCaseRelations({rows, modes, hasMetres, areaValue, calibration
   }
 
   const pairs = {
-    spread:[["V01","V24"], ["V11","V26"]],
+    spread:[["V01","V24"]],
     roles:[["V20","V22"], ["V04","V28"]],
     parts:[["V27","V29"]]
   };
@@ -204,7 +207,9 @@ function initializeCaseRelations({rows, modes, hasMetres, areaValue, calibration
   return {
     update(selected) {
       const picked = selected.filter(Boolean);
-      for (const [id, node] of nodes) node.element.setAttribute("aria-pressed", picked.includes(id));
+      for (const [id, node] of nodes) {
+        if (canCompare(node.row)) node.element.setAttribute("aria-pressed", picked.includes(id));
+      }
       status.textContent = picked.length === 2 ? `${picked.join(" and ")} selected. Compare them below.` :
         picked.length ? `${picked[0]} selected. Choose a second case.` : "Select two cases on the atlas to compare them.";
     }

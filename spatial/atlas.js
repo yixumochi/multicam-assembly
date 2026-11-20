@@ -1,6 +1,7 @@
 (() => {
   const atlas = document.getElementById("atlas");
   const comparisonPage = atlas.hasAttribute("data-compare-page");
+  const canCompare = row => row.case !== "V26";
   const casePage = new URL("../index.html", location.href);
   const metric = row => row.unit === "mm_to_m";
   const calibration = row => metric(row) ? undefined : areaCalibration[row.case];
@@ -52,9 +53,11 @@
     const data = JSON.parse(article.querySelector('script[type="application/json"]').textContent);
     const viewBox = plan.getAttribute("viewBox").split(/\s+/).map(Number);
     const iso = article.querySelector('img[src*="_model_iso."]')?.getAttribute("src");
-    const trace = outlines[row.case];
-    const outline = trace?.plan === data.plan?.split("?")[0] ? trace.points : null;
-    return {plan, data, viewBox, iso, outline, metres: nativeMetresPerPixel(row, data, granted)};
+    const sheet = outlines[row.case];
+    const registeredSheet = sheet?.plan === data.plan?.split("?")[0] ? sheet : null;
+    const outline = registeredSheet?.points ?? null;
+    const preview = registeredSheet?.preview;
+    return {plan, data, viewBox, iso, outline, preview, metres: nativeMetresPerPixel(row, data, granted)};
   }
 
   function areaPlanBox({data, viewBox, outline}) {
@@ -95,25 +98,6 @@
     };
   }
 
-  function cleanPlanFilter(id) {
-    const filter = svgElement("filter", {
-      id, x:"0%", y:"0%", width:"100%", height:"100%", primitiveUnits:"objectBoundingBox",
-      "color-interpolation-filters":"sRGB"
-    });
-    // Lift soft render shadows while retaining the original plan's edges.
-    filter.append(
-      svgElement("feColorMatrix", {type:"saturate", values:0, result:"ink"}),
-      svgElement("feGaussianBlur", {in:"ink", stdDeviation:".01 .014", result:"shadows"}),
-      svgElement("feComposite", {in:"ink", in2:"shadows", operator:"arithmetic", k2:1, k3:-.8, k4:.8})
-    );
-    const contrast = svgElement("feComponentTransfer", {});
-    for (const channel of ["R","G","B"]) {
-      contrast.append(svgElement("feFunc" + channel, {type:"linear", slope:1.65, intercept:-.65}));
-    }
-    filter.append(contrast);
-    return filter;
-  }
-
   function filledCoverage(geometry, actions, layers, caseId, mergeRoles) {
     const byRole = new Map();
     for (const action of actions) {
@@ -146,7 +130,7 @@
     operators: ["human","machine"]
   };
 
-  function renderPlan(row, {plan, data, viewBox, metres, outline}, shared, mode, label) {
+  function renderPlan(row, {plan, data, viewBox, metres, outline, preview}, shared, mode, label) {
     const [left, top, width, height] = viewBox;
     const canvas = svgElement("svg", {
       viewBox: shared ? `0 0 ${shared.width} ${shared.height}` : viewBox.join(" "),
@@ -159,36 +143,31 @@
       geometry.setAttribute("transform", `translate(${offsetX} ${offsetY}) scale(${metres}) translate(${-left} ${-top})`);
     }
     const backdrop = plan.querySelector("image").cloneNode(true);
-    backdrop.setAttribute("href", new URL(backdrop.getAttribute("href"), casePage).href);
-    backdrop.setAttribute("opacity", mode === "footprint" ? "0.9" : outline ? "0.5" : "0.7");
-    if (row.case !== "V01" && row.case !== "V24") {
-      const filterId = `plan-clean-${row.case}-${mode}`;
-      const defs = svgElement("defs", {});
-      defs.append(cleanPlanFilter(filterId));
-      canvas.append(defs);
-      backdrop.setAttribute("filter", `url(#${filterId})`);
-    }
+    const sourceUrl = new URL(backdrop.getAttribute("href"), casePage).href;
+    backdrop.setAttribute("href", preview ? new URL(preview, location.href).href : sourceUrl);
+    if (preview) backdrop.addEventListener("error", () => backdrop.setAttribute("href", sourceUrl), {once:true});
+    backdrop.setAttribute("opacity", mode === "footprint" ? "0.95" : "0.7");
     geometry.classList.add("atlas-coverage-plan");
     backdrop.classList.add("atlas-coverage-drawing");
     filledCoverage(geometry, data.actions, new Set(planLayers[mode]), row.case, mode === "activity");
     geometry.append(backdrop);
-    if (mode === "footprint") {
-      const frame = footprintFrame({data, outline});
-      if (frame) {
-        const padding = Math.max(frame.width, frame.height) * .055;
-        const title = svgElement("title", {});
-        title.textContent = row.case === "V26" ? "Saved workcell reference" : "Footprint framing box";
-        const box = svgElement("rect", {
-          x:frame.x - padding, y:frame.y - padding,
-          width:frame.width + 2 * padding, height:frame.height + 2 * padding,
-          class:"atlas-footprint-frame"
-        });
-        box.append(title);
-        geometry.append(box);
-      }
-    } else if (outline) geometry.append(svgElement("path", {
-      d:`M ${coordinates(outline)} Z`, class:"atlas-object-outline"
+    if (outline) geometry.append(svgElement("path", {
+      d:`M ${coordinates(outline)} Z`, class:"atlas-object-outline",
+      "data-boundary":"trace"
     }));
+    const frame = footprintFrame({data, outline});
+    if (frame && (mode === "footprint" || !outline)) {
+      const padding = mode === "footprint" ? Math.max(frame.width, frame.height) * .055 : 0;
+      const box = svgElement("rect", {
+        x:frame.x - padding, y:frame.y - padding,
+        width:frame.width + 2 * padding, height:frame.height + 2 * padding,
+        class:"atlas-footprint-frame", "data-boundary":outline ? "frame" : "extent"
+      });
+      const title = svgElement("title", {});
+      title.textContent = outline ? "Footprint framing box" : "Saved object extent";
+      box.append(title);
+      geometry.append(box);
+    }
     canvas.append(geometry);
     if (shared) {
       const start = shared.width * 0.04;
@@ -277,8 +256,7 @@
   ];
 
   const findingsByPair = {
-    "V01-V24":"With similar footprints, V01 recorded 4.3× as much assembly area as V24, whose finished model has 338 members versus 58 in V01.",
-    "V11-V26":"At similar footprints, part movement covers most of V11’s larger activity area, while V26’s largest recorded layer is machine movement.",
+    "V01-V24":"At a similar footprint, V01 used 4.3× V24’s recorded assembly area, with 58 modeled members versus V24’s 338.",
     "V20-V22":"V20 and V22 cover similar total areas, with human activity in V20 and machine activity in V22.",
     "V04-V28":"V04 and V28 cover similar total areas, with part movement accounting for a larger share in V28.",
     "V27-V29":"V27 and V29 have similar part coverage, with more human coverage in V27 and more machine coverage in V29."
@@ -291,13 +269,17 @@
   }
 
   function readAtlas({rows, modes}) {
-    const ids = new Set(rows.map(row => row.case));
+    const byId = new Map(rows.map(row => [row.case, row]));
     const compareTab = document.getElementById("compare-tab-link");
     let selected = [];
     const relations = initializeCaseRelations({
-      rows, modes, hasMetres, areaValue, calibration, readableArea,
+      rows, modes, hasMetres, areaValue, calibration, readableArea, canCompare,
       comparisonUrl: ids => compareUrl(ids).href,
       chooseCase(id) {
+        if (!canCompare(byId.get(id))) {
+          location.assign(caseUrl(byId.get(id)));
+          return;
+        }
         if (selected.includes(id)) {
           selected = [];
         } else if (selected.length) {
@@ -315,7 +297,7 @@
     }
     function openLinkedCase() {
       const id = location.hash.slice(1);
-      selected = ids.has(id) ? [id] : [];
+      selected = byId.has(id) && canCompare(byId.get(id)) ? [id] : [];
       updateSelection();
     }
     openLinkedCase();
@@ -425,9 +407,6 @@
       const plan = renderPlan(row, plans[index], shared, mode, name);
       const side = element("div", "compare-plan");
       side.append(plan);
-      if (mode === "footprint" && row.case === "V26") {
-        side.append(element("p", "note compare-plan-caption", "Saved workcell view"));
-      }
       const charts = element("div", "compare-case-charts");
       const controls = keys.map(key => [coverageChart(row, key, footprintMax), key]);
       for (const [chart] of controls) charts.append(chart);
@@ -496,7 +475,8 @@
 
   function readComparison(source, rows, registered, modelMetrics, outlines) {
     const picked = ["#compare-first","#compare-second"].map(selector => atlas.querySelector(selector));
-    const byId = new Map(rows.map(row => [row.case, row]));
+    const available = rows.filter(canCompare);
+    const byId = new Map(available.map(row => [row.case, row]));
     const planCache = new Map();
     const matrix = atlas.querySelector("#compare-matrix");
     const detail = atlas.querySelector("#atlas-pair-detail");
@@ -507,7 +487,7 @@
 
     for (const [index, select] of picked.entries()) {
       select.add(new Option("Choose a case", ""));
-      for (const row of rows) select.add(new Option(row.case, row.case));
+      for (const row of available) select.add(new Option(row.case, row.case));
       const id = initial[index];
       if (byId.has(id) && (index === 0 || id !== initial[0])) select.value = id;
       select.addEventListener("change", () => {
@@ -569,7 +549,7 @@
       const [registration, modelMetrics, outlines] = await Promise.all([
         fetch("case_area_comparison.csv").then(response => response.ok ? response.text() : "").catch(() => ""),
         fetch("case-model-metrics.json?v=2").then(response => response.ok ? response.json() : {}).catch(() => ({})),
-        fetch("case-plan-outlines.json?v=1").then(response => response.ok ? response.json() : {}).catch(() => ({}))
+        fetch("case-plan-outlines.json?v=2").then(response => response.ok ? response.json() : {}).catch(() => ({}))
       ]);
       const registered = new Set();
       for (const line of registration.split(/\r?\n/)) {

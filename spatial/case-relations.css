@@ -79,12 +79,15 @@
 .case-relations-key .case-human { --swatch: var(--plate-human); }
 .case-relations-key .case-machine { --swatch: var(--plate-machine); }
 .case-relations-status { margin: 6px 0 0; }
+.case-relations [data-relation-question="spread"] { --theme-color: var(--plate-footprint); }
+.case-relations [data-relation-question="roles"] { --theme-color: var(--plate-machine); }
+.case-relations [data-relation-question="parts"] { --theme-color: var(--plate-human); }
 .case-relations [data-relation-question]:not(.case-relations-clear) {
   width: 100%;
-  background: white;
-  border: 1px solid var(--plate-ink);
+  background: color-mix(in srgb, var(--theme-color) 42%, white);
+  border: 1px solid color-mix(in srgb, var(--theme-color) 66%, var(--plate-ink));
   border-radius: 28px;
-  color: var(--plate-ink);
+  color: #0b2328;
   cursor: pointer;
   font-size: clamp(14px, 1.45vw, 17px);
   font-weight: 650;
@@ -93,11 +96,11 @@
   text-align: left;
 }
 .case-relations [data-relation-question]:not(.case-relations-clear)[aria-pressed="true"] {
-  background: var(--plate-blue);
-  border-color: var(--plate-blue);
-  color: var(--plate-paper);
+  background: var(--theme-color);
+  border-color: var(--plate-ink);
+  box-shadow: inset 0 0 0 1px var(--plate-ink);
 }
-.case-relations [data-relation-question]:not(.case-relations-clear):hover { border-color: var(--plate-blue); }
+.case-relations [data-relation-question]:not(.case-relations-clear):hover { background: var(--theme-color); }
 .case-relations :is(.case-relations-pairs a, .case-relations-clear) {
   border: 0;
   background: transparent;
