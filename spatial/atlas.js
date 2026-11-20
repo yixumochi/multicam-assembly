@@ -210,11 +210,11 @@
   ];
 
   const findingsByPair = {
-    "V01-V24":"The finished footprints are close. V01’s recorded assembly area is 4.3× V24’s, and its part tracks cover 5.5× as much ground. The finished V24 model has 338 members versus 58 in V01.",
-    "V11-V26":"The footprints are close, while V11 covers more ground during assembly. Its part tracks account for most of the recorded work area. V26’s largest recorded layer is machine movement.",
-    "V20-V22":"The total activity areas are close. The plans show different uses of that space. V20 records human movement alongside the shell and V22 records machine movement around the pod.",
-    "V04-V28":"The total activity areas are close. Parts cover a larger share of that area in V28, while the human and machine layers are both present in V04. The layers show where each type of movement concentrates.",
-    "V27-V29":"The part movement areas are close. V27 records more human coverage and V29 records more machine coverage. The operator plans show where each case uses the space around its parts."
+    "V01-V24":"With similar footprints, V01 recorded 4.3× as much assembly area as V24, whose finished model has 338 members versus 58 in V01.",
+    "V11-V26":"At similar footprints, part movement covers most of V11’s larger activity area, while V26’s largest recorded layer is machine movement.",
+    "V20-V22":"V20 and V22 cover similar total areas, with human activity in V20 and machine activity in V22.",
+    "V04-V28":"V04 and V28 cover similar total areas, with part movement accounting for a larger share in V28.",
+    "V27-V29":"V27 and V29 have similar part coverage, with more human coverage in V27 and more machine coverage in V29."
   };
 
   function compareUrl(cases) {
@@ -410,15 +410,15 @@
   function caseFindings(pair) {
     const key = pair.map(row => row.case).sort().join("-");
     if (findingsByPair[key]) return findingsByPair[key];
-    if (!pair.every(hasMetres)) {
-      return pair.map(row => `${row.case} records activity across ${multiplier(row)} its finished footprint.`).join(" ");
-    }
     const [first, second] = pair;
-    const area = (row, kind) => readableArea(row, kind + "_area_m2");
+    if (!pair.every(hasMetres)) {
+      return `Recorded activity covers ${multiplier(first)} the footprint in ${first.case} and ${multiplier(second)} in ${second.case}.`;
+    }
+    const activity = row => readableArea(row, "activity_area_m2");
     const [greater] = [...pair].sort((a,b) => areaValue(b,"part_area_m2") - areaValue(a,"part_area_m2"));
     const partNote = areaValue(first,"part_area_m2") === areaValue(second,"part_area_m2")
-      ? "Recorded part coverage is equal." : `${greater.case} records the wider part movement area.`;
-    return `The finished footprints are ${area(first,"object")} for ${first.case} and ${area(second,"object")} for ${second.case}. Total activity covers ${area(first,"activity")} and ${area(second,"activity")}, respectively. ${partNote}`;
+      ? "equal part coverage" : `wider part movement in ${greater.case}`;
+    return `Recorded assembly activity covers ${activity(first)} in ${first.case} and ${activity(second)} in ${second.case}, with ${partNote}.`;
   }
 
   function readComparison(source, rows, registered, modelMetrics, outlines) {
