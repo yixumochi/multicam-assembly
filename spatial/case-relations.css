@@ -133,10 +133,13 @@
 .pair-study-section { border-top: 1px solid var(--plate-rule); margin-top: 22px; padding-top: 16px; }
 .pair-study-section > .note { margin: 0 0 12px; }
 .pair-study-section .atlas-card svg { aspect-ratio: 4 / 3; background: #fffef8; }
-.atlas-route { fill: none; stroke-width: 1.8px; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
-.atlas-route[data-route-role="human"] { stroke: var(--plate-human); }
-.atlas-route[data-route-role="machine"] { stroke: var(--plate-machine); }
-.atlas-route[data-route-role="part"] { stroke: var(--plate-part); }
+.atlas-coverage-fill { stroke: none; fill-opacity: 1; }
+.atlas-coverage-plan { isolation: isolate; }
+.atlas-coverage-drawing { mix-blend-mode: multiply; }
+[data-coverage-layer="human"] { fill: var(--plate-human); }
+[data-coverage-layer="machine"] { fill: var(--plate-machine); }
+[data-coverage-layer="part"] { fill: var(--plate-part); }
+[data-coverage-layer="overlap"] { fill: var(--plate-ink); }
 .pair-study-iso { position: relative; margin: 0 0 12px; background: white; }
 .pair-study-iso img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: contain; }
 .pair-study-iso figcaption { position: absolute; bottom: 0; left: 0; padding: 4px 7px; background: var(--plate-paper); font-size: 12px; }
@@ -150,11 +153,16 @@
 .atlas-member-pie .atlas-pie-slice { fill: var(--member-color); }
 .atlas-member-key { font-size: 13px; }
 .atlas-member-key::before { display: inline-block; width: 8px; height: 8px; margin-right: 6px; background: var(--member-color); content: ""; }
-.pair-summary-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-.pair-summary-table :is(th, td) { padding: 6px 7px; border-bottom: 1px solid var(--plate-rule); text-align: left; overflow-wrap: anywhere; }
-.pair-summary-table thead { color: var(--plate-ink); background: #edf3ef; }
-.pair-summary-table tbody th { font-weight: 500; }
-#compare-conclusion { margin: 0 0 12px; }
+.pair-summary-graphic { display: block; width: min(100%, 960px); height: auto; margin: 0 auto; background: white; }
+.pair-summary-icon { fill: none; stroke: var(--plate-ink); stroke-width: 1.8px; stroke-linecap: round; stroke-linejoin: round; }
+.pair-summary-rule { stroke: var(--plate-rule); stroke-width: 1px; }
+.pair-summary-track { fill: #edf3ef; }
+.pair-summary-value { fill: var(--summary-tone, var(--plate-ink)); }
+[data-summary-tone="footprint"] { --summary-tone: var(--plate-footprint); }
+[data-summary-tone="human"] { --summary-tone: var(--plate-human); }
+[data-summary-tone="machine"] { --summary-tone: var(--plate-machine); }
+[data-summary-tone="part"] { --summary-tone: var(--plate-part); }
+.pair-summary-missing { stroke: var(--atlas-muted); stroke-width: 1.5px; stroke-dasharray: 4 4; }
 
 @media (max-width: 640px) {
   .case-relations-drawing .case-mode-title { font-size: 34px; }
