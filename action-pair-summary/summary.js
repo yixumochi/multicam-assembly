@@ -12,7 +12,8 @@
   const results = document.querySelector('#results')
   const download = document.querySelector('#download')
   const sortButtons = [...document.querySelectorAll('[data-sort]')]
-  const tabs = [...document.querySelectorAll('.summary-view-tabs [role="tab"]')]
+  const pairDataLink = document.querySelector('#pair-data-link')
+  const filters = new URLSearchParams(window.location.search)
   const scatter = document.querySelector('#pair-scatter')
   const scatterNotes = document.querySelector('#scatter-notes')
   const scatterFinding = document.querySelector('#scatter-finding')
@@ -56,8 +57,6 @@
       "tone": "moderate-gap"
     }
   }
-  let ready = false
-  let activeView = 'table'
   let pairs = []
   let displayed = []
   let sortKey = 'score'
@@ -130,42 +129,6 @@
     return (ascending ? first - second : second - first) || b.score - a.score
   }
 
-  function selectView(view) {
-    activeView = view
-    for (const tab of tabs) {
-      const selected = tab.id === 'tab-' + view
-      tab.setAttribute('aria-selected', String(selected))
-      tab.tabIndex = selected ? 0 : -1
-      document.getElementById(tab.getAttribute('aria-controls')).hidden = !selected
-    }
-    if (ready) render()
-  }
-
-  function openView(tab) {
-    const view = tab.id === 'tab-scatter' ? 'scatter' : 'table'
-    const url = new URL(window.location.href)
-    url.hash = view === 'scatter' ? 'scatter' : ''
-    history.replaceState(history.state, '', url)
-    selectView(view)
-  }
-
-  tabs.forEach((tab, index) => {
-    tab.addEventListener('click', () => openView(tab))
-    tab.addEventListener('keydown', event => {
-      const next = {ArrowLeft: (index + tabs.length - 1) % tabs.length, ArrowRight: (index + 1) % tabs.length,
-        Home: 0, End: tabs.length - 1}[event.key]
-      if (next === undefined) return
-      event.preventDefault()
-      openView(tabs[next])
-      tabs[next].focus()
-    })
-  })
-  function viewFromHash() {
-    selectView(window.location.hash === '#scatter' ? 'scatter' : 'table')
-  }
-  window.addEventListener('hashchange', viewFromHash)
-  viewFromHash()
-
   function render() {
     const criteria = search.value.trim().toLowerCase().split(/\s+/).filter(Boolean)
     const drawingCase = caseFilter.value
@@ -178,7 +141,12 @@
     }).sort(comparePairs)
     const count = displayed.length
     download.disabled = count === 0
-    if (activeView === 'scatter') {
+    if (scatter) {
+      const target = new URL('index.html', window.location.href)
+      if (search.value.trim()) target.searchParams.set('q', search.value.trim())
+      if (drawingCase) target.searchParams.set('case', drawingCase)
+      if (scope !== 'cross') target.searchParams.set('scope', scope)
+      pairDataLink.href = target.href
       renderScatter(count)
       return
     }
@@ -253,12 +221,29 @@
     setTimeout(() => URL.revokeObjectURL(url), 1000)
   })
 
-  results.addEventListener('click', event => {
+  results?.addEventListener('click', event => {
     const target = event.target.closest('tr[data-href]')
     if (!target || event.target.closest('a') || !window.getSelection()?.isCollapsed) return
     if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return
     window.location.assign(target.dataset.href)
   })
+
+  function followScatterBookmark() {
+    if (window.location.hash !== '#scatter') return false
+    const target = new URL('scatter.html', window.location.href)
+    target.search = window.location.search
+    window.location.replace(target.href)
+    return true
+  }
+
+  if (!scatter) {
+    if (followScatterBookmark()) return
+    window.addEventListener('hashchange', followScatterBookmark)
+  }
+
+  search.value = filters.get('q') || ''
+  const initialScope = filters.get('scope')
+  if (['cross', 'all', 'same'].includes(initialScope)) scopeFilter.value = initialScope
 
   fetch('data.json')
     .then(response => {
@@ -267,9 +252,10 @@
     })
     .then(data => {
       pairs = data.rows.filter(row => row.score >= .5)
-      ready = true
       const cases = [...new Set(pairs.flatMap(pair => pair.cases))].sort()
       cases.forEach(id => caseFilter.add(new Option(id, id)))
+      const initialCase = filters.get('case')
+      if (cases.includes(initialCase)) caseFilter.value = initialCase
       search.addEventListener('input', render)
       caseFilter.addEventListener('change', render)
       scopeFilter.addEventListener('change', render)

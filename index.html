@@ -35,10 +35,8 @@ button, input, select { accent-color: var(--blue); }
 .main-panel, .detail { border-color: #bfd2c9; border-radius: 8px; }
 .panel-head { background: #f7fcf1; }
 .panel-head h2 { font-size: 28px; }
-.relationship-nav { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
-.pair-summary-link { display: inline-flex; align-items: center; min-height: 36px; padding: 7px 12px; border: 1px solid #bad9df; border-radius: 7px; background: #fff; color: var(--ink); font-size: 15px; font-weight: 650; text-decoration: none; }
-.pair-summary-link:hover { background: var(--lime-wash); text-decoration: underline; }
-.counts, .contextline, .view-guide, .field, .tabs button, .cases button, .feather-legend, .map-legend, .small-note, .pair-meta, .pair-name { font-size: 17px; }
+#drawing-status:empty { display: none; }
+.tabs button, .cases button, .feather-legend, .map-legend, .small-note, .pair-meta, .pair-name { font-size: 17px; }
 .tabs button, .cases button { padding: 8px 14px; }
 .tabs { border: 1px solid #bad9df; background: var(--soft); }
 .tabs button:hover { background: var(--lime-wash); }
@@ -268,7 +266,7 @@ button, input, select { accent-color: var(--blue); }
   .name-pair-media { grid-template-columns: minmax(0, 1fr); }
 }
 
-</style><link rel="stylesheet" href="research.css"><link rel="stylesheet" href="site-header.css?v=1"><link rel="stylesheet" href="start-page.css?v=1"><script src="start-page.js?v=1" defer></script><script>
+</style><link rel="stylesheet" href="research.css"><link rel="stylesheet" href="site-header.css?v=1"><link rel="stylesheet" href="start-page.css?v=1"><link rel="stylesheet" href="wheel-demo.css"><script src="start-page.js?v=1" defer></script><script src="wheel-demo.js" defer></script><script>
 if (window.parent !== window && new URLSearchParams(location.search).get('view') === 'case-area') {
   document.documentElement.dataset.view = 'case-area';
 }
@@ -284,7 +282,7 @@ html[data-view="case-area"] .workspace,
 html[data-view="case-area"] #cases-page main { width:100%; max-width:none; margin:0; padding:0; }
 html[data-view="case-area"] body { margin:0; }
 </style></head><body>
-<nav class="page-tabs site-nav" aria-label="Pages"><button type="button" data-page="path" aria-pressed="true">Start here / Methods</button><button type="button" data-page="explorer" aria-pressed="false">Action Relationships</button><button type="button" data-page="cases" aria-pressed="false">Fifteen assembly cases</button><a href="spatial/index.html">Atlas of Assembly Space</a><a href="spatial/compare.html">Compare two cases</a><a href="observation/index.html">Relative position</a><a href="analysis/index.html">Recorded comparison</a></nav>
+<nav class="page-tabs site-nav" aria-label="Pages"><button type="button" data-page="path" aria-pressed="true">Start here / Methods</button><button type="button" data-page="explorer" aria-pressed="false">Action Relationships</button><a href="action-pair-summary/scatter.html">Scatter Plot</a><button type="button" data-page="cases" aria-pressed="false">Fifteen assembly cases</button><a href="spatial/index.html">Atlas of Assembly Space</a><a href="spatial/compare.html">Compare two cases</a><a href="observation/index.html">Relative position</a><a href="analysis/index.html">Recorded comparison</a></nav>
 <main class="workspace">
 <section id="path-page" class="start-layout" aria-label="Start here / Methods">
   <section id="study-start" class="case-gallery" aria-labelledby="case-gallery-title">
@@ -328,6 +326,45 @@ html[data-view="case-area"] body { margin:0; }
       </a>
     </dialog>
   </section>
+
+<section id="home-wheel-guide" class="wheel-guide" aria-label="How to use the action-name wheel">
+  <div class="wheel-guide-heading">
+    <h2>How to use the wheel</h2>
+    <div class="wheel-guide-links">
+      <button type="button" class="wheel-guide-replay" hidden><span aria-hidden="true">↻</span> Replay</button>
+      <a class="wheel-guide-cta" href="#action-connections">Open the wheel <span aria-hidden="true">→</span></a>
+    </div>
+  </div>
+  <div class="wheel-guide-body">
+    <div class="wheel-guide-preview" aria-hidden="true">
+      <svg class="wheel-guide-network" viewBox="194 194 892 892" focusable="false">
+        <path d="M 640.0 210.0 A 430 430 0 0 1 1020.7 839.9 L 772.8 709.7 A 150 150 0 0 0 640.0 490.0 Z" fill="#e9f7fb" stroke="#12627d" stroke-opacity=".28" stroke-width="3"/><path d="M 1012.4 855.0 A 430 430 0 0 1 241.8 802.3 L 501.1 696.6 A 150 150 0 0 0 769.9 715.0 Z" fill="#edfbdc" stroke="#3d7a45" stroke-opacity=".28" stroke-width="3"/><path d="M 235.6 786.3 A 430 430 0 0 1 622.8 210.3 L 634.0 490.1 A 150 150 0 0 0 498.9 691.0 Z" fill="#fff0df" stroke="#97420e" stroke-opacity=".28" stroke-width="3"/>
+<path d="M 840.3 289.1 Q 836.0 468.2 1014.1 487.4 M 918.9 347.8 Q 887.5 467.8 980.7 501.0 M 838.4 373.8 Q 848.6 487.4 1014.1 487.4 M 248.0 737.6 Q 575.9 608.8 474.8 271.3 M 669.9 1042.9 Q 632.3 644.2 457.0 320.7 M 669.9 1042.9 Q 707.3 928.2 775.0 943.3 M 373.9 336.0 Q 622.7 642.8 559.2 999.0 M 249.0 538.3 Q 506.5 683.3 383.4 952.0 M 561.7 243.7 Q 636.8 636.8 653.7 971.7 M 980.7 422.9 Q 700.2 511.4 588.7 239.3 M 980.7 422.9 Q 664.1 646.1 781.4 979.8 M 998.8 454.4 Q 759.9 479.2 715.3 243.1 M 405.4 311.1 Q 639.1 636.1 857.1 891.2 M 590.5 1041.0 Q 630.0 643.3 489.5 304.2 M 590.5 1041.0 Q 682.3 864.2 817.9 920.3 M 439.1 289.5 Q 646.3 614.0 966.9 470.9 M 397.6 363.1 Q 579.1 436.3 679.3 237.9 M 397.6 363.1 Q 622.1 643.6 524.3 989.4 M 667.2 1007.0 Q 579.1 868.3 433.5 944.6 M 715.3 243.1 Q 643.3 638.5 631.0 1007.9 M 750.6 251.4 Q 625.6 623.9 241.4 705.8 M 1041.0 590.5 Q 660.7 654.1 653.7 971.7 M 426.3 340.4 Q 532.9 379.7 580.9 276.8 M 426.3 340.4 Q 640.2 637.6 857.1 891.2 M 457.0 320.7 Q 647.2 615.6 966.9 470.9 M 457.0 320.7 Q 619.2 638.2 406.2 924.2 M 594.9 1005.2 Q 627.7 645.0 439.8 375.1 M 924.6 873.3 Q 656.0 633.4 675.8 273.7 M 489.5 304.2 Q 651.5 607.1 966.9 470.9 M 900.4 900.0 Q 727.4 828.7 653.7 971.7 M 966.9 470.9 Q 679.7 648.8 817.9 920.3 M 873.7 924.3 Q 640.0 709.2 406.2 924.2 M 781.4 979.8 Q 747.0 725.3 970.1 675.9 M 559.2 999.0 Q 676.4 802.9 857.1 891.2 M 279.6 457.4 Q 639.9 635.1 998.3 723.9 M 295.8 509.8 Q 640.7 637.7 998.3 723.9 M 998.3 723.9 Q 648.0 657.5 441.2 905.9 M 331.4 439.5 Q 604.9 644.5 441.2 905.9 M 383.4 952.0 Q 642.8 661.3 951.7 754.4 M 775.0 943.3 Q 638.9 640.5 482.9 347.5" fill="none" stroke="#2582a3" stroke-opacity=".26" stroke-width="4"/>
+<circle cx="679.3" cy="237.9" r="7" fill="#6ac2e7" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="750.6" cy="251.4" r="7" fill="#6ac2e7" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="708.6" cy="278.4" r="7" fill="#6ac2e7" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="840.3" cy="289.1" r="7" fill="#6ac2e7" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="918.9" cy="347.8" r="7" fill="#6ac2e7" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="859.9" cy="344.9" r="7" fill="#6ac2e7" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="804.6" cy="351.7" r="7" fill="#6ac2e7" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="869.2" cy="399.8" r="7" fill="#6ac2e7" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="998.8" cy="454.4" r="7" fill="#6ac2e7" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="950.3" cy="442.2" r="7" fill="#6ac2e7" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="980.7" cy="501.0" r="7" fill="#6ac2e7" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="1041.0" cy="590.5" r="7" fill="#6ac2e7" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="1041.6" cy="683.7" r="7" fill="#6ac2e7" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="1019.3" cy="779.2" r="7" fill="#6ac2e7" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="998.3" cy="723.9" r="7" fill="#6ac2e7" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="970.1" cy="675.9" r="7" fill="#6ac2e7" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="951.7" cy="754.4" r="7" fill="#6ac2e7" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="925.9" cy="925.5" r="7" fill="#baf492" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="864.8" cy="975.7" r="7" fill="#baf492" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="795.2" cy="1013.0" r="7" fill="#baf492" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="900.4" cy="900.0" r="7" fill="#baf492" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="844.8" cy="945.8" r="7" fill="#baf492" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="781.4" cy="979.8" r="7" fill="#baf492" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="857.1" cy="891.2" r="7" fill="#baf492" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="775.0" cy="943.3" r="7" fill="#baf492" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="630.2" cy="1043.9" r="7" fill="#baf492" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="551.3" cy="1034.2" r="7" fill="#baf492" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="667.2" cy="1007.0" r="7" fill="#baf492" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="594.9" cy="1005.2" r="7" fill="#baf492" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="524.3" cy="989.4" r="7" fill="#baf492" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="599.3" cy="969.5" r="7" fill="#baf492" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="413.3" cy="974.4" r="7" fill="#baf492" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="433.5" cy="944.6" r="7" fill="#baf492" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="441.2" cy="905.9" r="7" fill="#baf492" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="288.2" cy="838.6" r="7" fill="#baf492" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="248.0" cy="737.6" r="7" fill="#ee751c" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="282.9" cy="728.9" r="7" fill="#ee751c" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="236.2" cy="628.5" r="7" fill="#ee751c" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="262.1" cy="497.0" r="7" fill="#ee751c" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="301.2" cy="419.9" r="7" fill="#ee751c" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="295.8" cy="509.8" r="7" fill="#ee751c" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="331.4" cy="439.5" r="7" fill="#ee751c" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="336.2" cy="506.0" r="7" fill="#ee751c" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="373.9" cy="336.0" r="7" fill="#ee751c" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="439.1" cy="289.5" r="7" fill="#ee751c" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="397.6" cy="363.1" r="7" fill="#ee751c" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="457.0" cy="320.7" r="7" fill="#ee751c" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="439.8" cy="375.1" r="7" fill="#ee751c" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="561.7" cy="243.7" r="7" fill="#ee751c" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="580.9" cy="276.8" r="7" fill="#ee751c" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/>
+<path class="wheel-guide-arc" pathLength="100" d="M 894.1 373.8 Q 650.7 643.2 599.3 969.5" fill="none" stroke="#ee751c" stroke-linecap="round" stroke-width="13"/>
+<circle class="wheel-guide-target wheel-guide-target-0" cx="894.1" cy="373.8" r="17" fill="#6ac2e7" stroke="#17363b" stroke-width="6"/><circle class="wheel-guide-target wheel-guide-target-1" cx="599.3" cy="969.5" r="17" fill="#baf492" stroke="#17363b" stroke-width="6"/>
+      </svg>
+      <span class="wheel-guide-arrow">→</span>
+      <div class="wheel-guide-pair">
+        <p>V06 × V21 <span>0.515</span></p>
+        <div class="wheel-guide-stills">
+          <img src="plates/click_rest/012_Manual_V06_Move_and_tilt_held_panel_b.jpg" alt="" width="160" height="90" loading="lazy">
+          <img src="plates/click_rest/070_Mixed_V21_Raise_and_guide_panel_b.jpg" alt="" width="160" height="90" loading="lazy">
+        </div>
+        <svg viewBox="0 0 108 21" focusable="false">
+          <path d="M1 20h106M1 5h106" fill="none" stroke="#d8e5de"/>
+          <path d="M3 7.1L53 6L105 2.9" fill="none" stroke="#176b85" stroke-width="2" stroke-linecap="round"/>
+          <path d="M3 18.1L53 14.2L105 12.8" fill="none" stroke="#a74719" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </div>
+    </div>
+    <ol class="wheel-guide-steps">
+      <li><span aria-hidden="true">1</span><div><strong>Find an action</strong><p>Search by name or select a dot.</p></div></li>
+      <li><span aria-hidden="true">2</span><div><strong>Pick a connection</strong><p>Select an arc between two actions.</p></div></li>
+      <li><span aria-hidden="true">3</span><div><strong>Compare the evidence</strong><p>Read the keyframes and movement charts.</p></div></li>
+    </ol>
+  </div>
+</section>
 
   <section class="start-module" aria-labelledby="action-module-title">
     <div class="start-module-sidebar">
@@ -375,7 +412,7 @@ html[data-view="case-area"] body { margin:0; }
         <button type="button" data-study-panel aria-controls="sentence-video" aria-pressed="true">Video</button>
         <button type="button" data-study-panel aria-controls="study-method" aria-pressed="false">Workflow</button>
         <a href="#action-connections">Action-name connections ↗</a>
-        <a href="action-pair-summary/index.html">Pair summary ↗</a>
+        <a href="action-pair-summary/scatter.html">Scatter Plot ↗</a>
       </nav>
     </div>
     <div class="start-module-content">
@@ -414,28 +451,51 @@ html[data-view="case-area"] body { margin:0; }
   </section>
 </section>
 <div id="explorer-body" hidden>
-<div class="study-panel">Pairs link similar action names with drawings on both sides. <span id="drawing-status" role="status"></span></div><section class="toolbar" aria-label="Filters"><label class="field">Search action names<input id="q" type="search" placeholder="Try hold, insert or gripper…" autocomplete="off"></label><label class="field"><span class="range-heading">Minimum cosine <output id="threshold-label">0.50</output></span><span class="range-wrap"><small>0.50</small><input aria-label="Minimum cosine" id="threshold" type="range" min="0.50" max="0.95" step="0.01" value="0.50"><small>0.95</small></span></label><label class="field">Name-pair scope<select id="scope"><option value="cross">No shared case</option><option value="all">All name pairs</option><option value="same">At least one shared case</option></select></label><button id="clear">Reset filters</button></section>
+<section id="explorer-wheel-guide" class="wheel-guide" aria-label="How to use the action-name wheel">
+  <div class="wheel-guide-heading">
+    <h2>How to use the wheel</h2>
+    <div class="wheel-guide-links">
+      <button type="button" class="wheel-guide-replay" hidden><span aria-hidden="true">↻</span> Replay</button>
+      <a class="wheel-guide-cta" href="#action-pair=5:178">Try this comparison <span aria-hidden="true">→</span></a>
+    </div>
+  </div>
+  <div class="wheel-guide-body">
+    <div class="wheel-guide-preview" aria-hidden="true">
+      <svg class="wheel-guide-network" viewBox="194 194 892 892" focusable="false">
+        <path d="M 640.0 210.0 A 430 430 0 0 1 1020.7 839.9 L 772.8 709.7 A 150 150 0 0 0 640.0 490.0 Z" fill="#e9f7fb" stroke="#12627d" stroke-opacity=".28" stroke-width="3"/><path d="M 1012.4 855.0 A 430 430 0 0 1 241.8 802.3 L 501.1 696.6 A 150 150 0 0 0 769.9 715.0 Z" fill="#edfbdc" stroke="#3d7a45" stroke-opacity=".28" stroke-width="3"/><path d="M 235.6 786.3 A 430 430 0 0 1 622.8 210.3 L 634.0 490.1 A 150 150 0 0 0 498.9 691.0 Z" fill="#fff0df" stroke="#97420e" stroke-opacity=".28" stroke-width="3"/>
+<path d="M 840.3 289.1 Q 836.0 468.2 1014.1 487.4 M 918.9 347.8 Q 887.5 467.8 980.7 501.0 M 838.4 373.8 Q 848.6 487.4 1014.1 487.4 M 248.0 737.6 Q 575.9 608.8 474.8 271.3 M 669.9 1042.9 Q 632.3 644.2 457.0 320.7 M 669.9 1042.9 Q 707.3 928.2 775.0 943.3 M 373.9 336.0 Q 622.7 642.8 559.2 999.0 M 249.0 538.3 Q 506.5 683.3 383.4 952.0 M 561.7 243.7 Q 636.8 636.8 653.7 971.7 M 980.7 422.9 Q 700.2 511.4 588.7 239.3 M 980.7 422.9 Q 664.1 646.1 781.4 979.8 M 998.8 454.4 Q 759.9 479.2 715.3 243.1 M 405.4 311.1 Q 639.1 636.1 857.1 891.2 M 590.5 1041.0 Q 630.0 643.3 489.5 304.2 M 590.5 1041.0 Q 682.3 864.2 817.9 920.3 M 439.1 289.5 Q 646.3 614.0 966.9 470.9 M 397.6 363.1 Q 579.1 436.3 679.3 237.9 M 397.6 363.1 Q 622.1 643.6 524.3 989.4 M 667.2 1007.0 Q 579.1 868.3 433.5 944.6 M 715.3 243.1 Q 643.3 638.5 631.0 1007.9 M 750.6 251.4 Q 625.6 623.9 241.4 705.8 M 1041.0 590.5 Q 660.7 654.1 653.7 971.7 M 426.3 340.4 Q 532.9 379.7 580.9 276.8 M 426.3 340.4 Q 640.2 637.6 857.1 891.2 M 457.0 320.7 Q 647.2 615.6 966.9 470.9 M 457.0 320.7 Q 619.2 638.2 406.2 924.2 M 594.9 1005.2 Q 627.7 645.0 439.8 375.1 M 924.6 873.3 Q 656.0 633.4 675.8 273.7 M 489.5 304.2 Q 651.5 607.1 966.9 470.9 M 900.4 900.0 Q 727.4 828.7 653.7 971.7 M 966.9 470.9 Q 679.7 648.8 817.9 920.3 M 873.7 924.3 Q 640.0 709.2 406.2 924.2 M 781.4 979.8 Q 747.0 725.3 970.1 675.9 M 559.2 999.0 Q 676.4 802.9 857.1 891.2 M 279.6 457.4 Q 639.9 635.1 998.3 723.9 M 295.8 509.8 Q 640.7 637.7 998.3 723.9 M 998.3 723.9 Q 648.0 657.5 441.2 905.9 M 331.4 439.5 Q 604.9 644.5 441.2 905.9 M 383.4 952.0 Q 642.8 661.3 951.7 754.4 M 775.0 943.3 Q 638.9 640.5 482.9 347.5" fill="none" stroke="#2582a3" stroke-opacity=".26" stroke-width="4"/>
+<circle cx="679.3" cy="237.9" r="7" fill="#6ac2e7" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="750.6" cy="251.4" r="7" fill="#6ac2e7" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="708.6" cy="278.4" r="7" fill="#6ac2e7" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="840.3" cy="289.1" r="7" fill="#6ac2e7" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="918.9" cy="347.8" r="7" fill="#6ac2e7" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="859.9" cy="344.9" r="7" fill="#6ac2e7" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="804.6" cy="351.7" r="7" fill="#6ac2e7" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="869.2" cy="399.8" r="7" fill="#6ac2e7" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="998.8" cy="454.4" r="7" fill="#6ac2e7" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="950.3" cy="442.2" r="7" fill="#6ac2e7" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="980.7" cy="501.0" r="7" fill="#6ac2e7" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="1041.0" cy="590.5" r="7" fill="#6ac2e7" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="1041.6" cy="683.7" r="7" fill="#6ac2e7" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="1019.3" cy="779.2" r="7" fill="#6ac2e7" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="998.3" cy="723.9" r="7" fill="#6ac2e7" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="970.1" cy="675.9" r="7" fill="#6ac2e7" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="951.7" cy="754.4" r="7" fill="#6ac2e7" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="925.9" cy="925.5" r="7" fill="#baf492" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="864.8" cy="975.7" r="7" fill="#baf492" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="795.2" cy="1013.0" r="7" fill="#baf492" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="900.4" cy="900.0" r="7" fill="#baf492" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="844.8" cy="945.8" r="7" fill="#baf492" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="781.4" cy="979.8" r="7" fill="#baf492" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="857.1" cy="891.2" r="7" fill="#baf492" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="775.0" cy="943.3" r="7" fill="#baf492" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="630.2" cy="1043.9" r="7" fill="#baf492" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="551.3" cy="1034.2" r="7" fill="#baf492" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="667.2" cy="1007.0" r="7" fill="#baf492" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="594.9" cy="1005.2" r="7" fill="#baf492" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="524.3" cy="989.4" r="7" fill="#baf492" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="599.3" cy="969.5" r="7" fill="#baf492" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="413.3" cy="974.4" r="7" fill="#baf492" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="433.5" cy="944.6" r="7" fill="#baf492" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="441.2" cy="905.9" r="7" fill="#baf492" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="288.2" cy="838.6" r="7" fill="#baf492" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="248.0" cy="737.6" r="7" fill="#ee751c" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="282.9" cy="728.9" r="7" fill="#ee751c" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="236.2" cy="628.5" r="7" fill="#ee751c" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="262.1" cy="497.0" r="7" fill="#ee751c" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="301.2" cy="419.9" r="7" fill="#ee751c" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="295.8" cy="509.8" r="7" fill="#ee751c" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="331.4" cy="439.5" r="7" fill="#ee751c" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="336.2" cy="506.0" r="7" fill="#ee751c" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="373.9" cy="336.0" r="7" fill="#ee751c" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="439.1" cy="289.5" r="7" fill="#ee751c" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="397.6" cy="363.1" r="7" fill="#ee751c" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="457.0" cy="320.7" r="7" fill="#ee751c" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="439.8" cy="375.1" r="7" fill="#ee751c" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="561.7" cy="243.7" r="7" fill="#ee751c" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/><circle cx="580.9" cy="276.8" r="7" fill="#ee751c" stroke="#17363b" stroke-opacity=".65" stroke-width="2"/>
+<path class="wheel-guide-arc" pathLength="100" d="M 894.1 373.8 Q 650.7 643.2 599.3 969.5" fill="none" stroke="#ee751c" stroke-linecap="round" stroke-width="13"/>
+<circle class="wheel-guide-target wheel-guide-target-0" cx="894.1" cy="373.8" r="17" fill="#6ac2e7" stroke="#17363b" stroke-width="6"/><circle class="wheel-guide-target wheel-guide-target-1" cx="599.3" cy="969.5" r="17" fill="#baf492" stroke="#17363b" stroke-width="6"/>
+      </svg>
+      <span class="wheel-guide-arrow">→</span>
+      <div class="wheel-guide-pair">
+        <p>V06 × V21 <span>0.515</span></p>
+        <div class="wheel-guide-stills">
+          <img src="plates/click_rest/012_Manual_V06_Move_and_tilt_held_panel_b.jpg" alt="" width="160" height="90" loading="lazy">
+          <img src="plates/click_rest/070_Mixed_V21_Raise_and_guide_panel_b.jpg" alt="" width="160" height="90" loading="lazy">
+        </div>
+        <svg viewBox="0 0 108 21" focusable="false">
+          <path d="M1 20h106M1 5h106" fill="none" stroke="#d8e5de"/>
+          <path d="M3 7.1L53 6L105 2.9" fill="none" stroke="#176b85" stroke-width="2" stroke-linecap="round"/>
+          <path d="M3 18.1L53 14.2L105 12.8" fill="none" stroke="#a74719" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </div>
+    </div>
+    <ol class="wheel-guide-steps">
+      <li><span aria-hidden="true">1</span><div><strong>Find an action</strong><p>Search by name or select a dot.</p></div></li>
+      <li><span aria-hidden="true">2</span><div><strong>Pick a connection</strong><p>Select an arc between two actions.</p></div></li>
+      <li><span aria-hidden="true">3</span><div><strong>Compare the evidence</strong><p>Read the keyframes and movement charts.</p></div></li>
+    </ol>
+  </div>
+</section>
+<p id="drawing-status" role="status"></p>
+<section class="toolbar" aria-label="Filters"><label class="field">Search action names<input id="q" type="search" placeholder="Try hold, insert or gripper…" autocomplete="off"></label><label class="field"><span class="range-heading">Minimum cosine <output id="threshold-label">0.50</output></span><span class="range-wrap"><small>0.50</small><input aria-label="Minimum cosine" id="threshold" type="range" min="0.50" max="0.95" step="0.01" value="0.50"><small>0.95</small></span></label><label class="field">Name-pair scope<select id="scope"><option value="cross">No shared case</option><option value="all">All name pairs</option><option value="same">At least one shared case</option></select></label><button id="clear">Reset filters</button></section>
 <nav class="filter-bottom" aria-label="Filter by case"><span>CASE</span><div id="vlist" class="cases"></div></nav>
-<div class="content"><section class="main-panel"><div class="panel-head"><div><h2 id="view-title">Action-name connections</h2><div id="counts" class="counts" aria-live="polite"></div></div><div class="relationship-nav"><nav class="tabs" aria-label="Action relationship views"><button data-view="network" aria-pressed="true">Connections</button><button data-view="pairs" aria-pressed="false">Pairs</button><button data-view="map" aria-pressed="false">Case map</button></nav><a class="pair-summary-link" href="action-pair-summary/index.html">Action Pair Summary</a></div></div><div class="contextline"><span id="context-note"></span><span id="pair-chip" class="pair-chip" hidden></span></div>
-<div id="pairs-view" hidden><div class="pair-head"><span>Action A / cases</span><span>Cosine</span><span>Action B / cases</span></div><div id="pair-list"></div><div class="pager"><span id="page-status"></span><div><select id="page-size" aria-label="Pairs per page"><option value="20">20 / page</option><option value="50">50 / page</option><option value="all">Show all</option></select><button id="prev" aria-label="Previous page">←</button><button id="next" aria-label="Next page">→</button></div></div></div>
-<div id="map-view" class="view-content" hidden>
-  <div class="map-legend" aria-label="Case map legend">
-    <span class="legend-item"><span class="legend-size" aria-hidden="true"><i></i><i></i></span> Dot area · number of pairs</span>
-    <span class="legend-item"><span class="legend-ramp" aria-hidden="true"></span> Highest cosine · 0.50–0.95</span>
-    <span class="legend-item"><span class="legend-ring" aria-hidden="true"></span> Selected cases</span>
-  </div>
-  <div id="heatmap"></div>
-  <p class="small-note">Dot sizes are scaled to the current results. Hover or focus a dot for its exact count and cosine.</p>
-  <div id="matrix-wrap" class="hidden">
-    <div id="matrix-title" class="panel-title"></div>
-    <p id="matrix-note">Cells show the cosine of each action-name pair. Blank cells have no link passing the current filters.</p>
-    <div id="matrix"></div>
-    <button id="open-pairs">Read these pairs →</button>
-  </div>
-</div>
-<div id="network-view" class="view-content"><div class="network-tools"><label for="sort">Order</label><select id="sort"><option value="v">By installation</option><option value="component">Connected group at 0.65</option></select><button id="export">Export connections SVG</button></div><div class="feather-legend" aria-label="Connections legend"><span><i class="dot-sky"></i> Manual</span><span><i class="dot-lime"></i> Mixed</span><span><i class="dot-orange"></i> Robot</span><span><i class="arc-sample"></i> Stored pair</span></div><div class="network-scroll"><svg id="diagram" xmlns="http://www.w3.org/2000/svg"></svg></div><p id="wheel-prompt" class="wheel-prompt">Please click a dot.</p></div>
+<div class="content show-plates"><section class="main-panel"><div class="panel-head"><div><h2 id="view-title">Action-name connections</h2><div id="counts" class="counts" aria-live="polite"></div></div></div>
+<div id="network-view" class="view-content"><div class="network-tools"><label for="sort">Order</label><select id="sort"><option value="v">By installation</option><option value="component">Connected group at 0.65</option></select><button id="export">Export connections SVG</button></div><div class="feather-legend" aria-label="Connections legend"><span><i class="dot-sky"></i> Manual</span><span><i class="dot-lime"></i> Mixed</span><span><i class="dot-orange"></i> Robot</span><span><i class="arc-sample"></i> Stored pair</span></div><div class="network-scroll"><svg id="diagram" xmlns="http://www.w3.org/2000/svg"></svg></div><p id="wheel-prompt" class="wheel-prompt">Select an action dot or a connection line.</p></div>
 </section><aside class="detail" id="detail" tabindex="-1" aria-label="Selected pair or action"></aside></div>
-<details class="help"><summary>How action pairs are selected</summary><p id="method-note"></p><p>All qualifying pairs remain available; pagination is for browsing, not a Top-K selection. “No shared case” keeps names whose case sets do not overlap. It is narrower than all possible cross-case event comparisons. Connected groups at 0.65 are graph components, not the agglomerative clusters reported elsewhere.</p><p>Precomputed cosine scores measure similarity between action names. Use the drawings to compare the physical operations, geometry and direction.</p><p>The separate <a href="analysis/index.html">431-row comparison export</a> uses case-specific records.</p></details>
+<details class="help"><summary>How action pairs are selected</summary><p id="method-note"></p><p>The wheel shows all qualifying name pairs with drawings on both sides. “No shared case” keeps names whose case sets do not overlap. “Connected group at 0.65” orders actions by graph component.</p><p>Precomputed cosine scores measure similarity between action names. Use the drawings to compare the physical operations, geometry and direction.</p><p>The separate <a href="analysis/index.html">431-row comparison export</a> uses case-specific records.</p></details>
 </div>
 <section id="cases-page" hidden><style>
   #cases-page{ --ink:#213846; --muted:#657783; --line:#e1e7e9; --paper:#f5f7f8; --card:#fff; --machine:#7dc9e9; --human:#e87c3a; --parts:#78d5b2; --shadow:none; }
@@ -919,7 +979,6 @@ const state = {
   scope: "cross",
   query: "",
   selectedV: null,
-  selectedPair: null,
   selectedNode: null,
   selectedEdge: null,
   hoverNode: null,
@@ -935,16 +994,6 @@ function sharesV(a, b) {
   return a.v_ids.some((v) => b.v_ids.includes(v))
 }
 
-function pairKey(a, b) {
-  return a < b ? a + "|" + b : b + "|" + a
-}
-
-function edgeTouchesPair(edge, a, b) {
-  const left = NODES[edge.source].v_ids
-  const right = NODES[edge.target].v_ids
-  return (left.includes(a) && right.includes(b)) || (left.includes(b) && right.includes(a))
-}
-
 function scopedEdges() {
   const floor = state.threshold
   return EDGES.filter((edge) => {
@@ -953,35 +1002,6 @@ function scopedEdges() {
     const shared = sharesV(NODES[edge.source], NODES[edge.target])
     return state.scope === "same" ? shared : !shared
   })
-}
-
-function activeEdges() {
-  const edges = scopedEdges()
-  if (!state.selectedPair) return edges
-  const {a, b} = state.selectedPair
-  return edges.filter((edge) => edgeTouchesPair(edge, a, b))
-}
-
-function casePairStats(edges) {
-  const stats = {}
-  edges.forEach((edge) => {
-    const seenCasePairs = new Set()
-    const left = NODES[edge.source].v_ids
-    const right = NODES[edge.target].v_ids
-    left.forEach((a) => {
-      right.forEach((b) => {
-        if (a === b) return
-        const key = pairKey(a, b)
-        if (seenCasePairs.has(key)) return
-        seenCasePairs.add(key)
-        const row = stats[key] || (stats[key] = {count: 0, max: -1, edges: []})
-        row.count += 1
-        if (edge.cosine > row.max) row.max = edge.cosine
-        row.edges.push(edge)
-      })
-    })
-  })
-  return stats
 }
 
 function sectionOf(index) {
@@ -1111,108 +1131,6 @@ function hideTip() {
   document.getElementById("tip").style.display = "none"
 }
 
-function renderMatrix(edges) {
-  const wrap = document.getElementById("matrix-wrap")
-  const host = document.getElementById("matrix")
-  if (!state.selectedPair) {
-    wrap.classList.add("hidden")
-    host.replaceChildren()
-    return
-  }
-  const {a, b} = state.selectedPair
-  wrap.classList.remove("hidden")
-  document.getElementById("matrix-title").textContent = "Name × name  ·  " + a + " rows  ·  " + b + " columns"
-  const rowSet = new Set()
-  const colSet = new Set()
-  const lookup = new Map()
-  edges.forEach((edge) => {
-    const left = NODES[edge.source]
-    const right = NODES[edge.target]
-    const leftHasA = left.v_ids.includes(a)
-    const rightHasB = right.v_ids.includes(b)
-    const leftHasB = left.v_ids.includes(b)
-    const rightHasA = right.v_ids.includes(a)
-    if (leftHasA && rightHasB) {
-      rowSet.add(edge.source)
-      colSet.add(edge.target)
-      lookup.set(edge.source + ":" + edge.target, edge)
-    }
-    if (leftHasB && rightHasA) {
-      rowSet.add(edge.target)
-      colSet.add(edge.source)
-      lookup.set(edge.target + ":" + edge.source, edge)
-    }
-  })
-  const rows = [...rowSet].sort((i, j) => NODES[i].action_name.localeCompare(NODES[j].action_name))
-  const cols = [...colSet].sort((i, j) => NODES[i].action_name.localeCompare(NODES[j].action_name))
-  const labelW = 215
-  const cell = Math.max(18, Math.min(28, Math.floor(520 / Math.max(cols.length, 1))))
-  const width = labelW + cols.length * cell + 8
-  const height = 110 + rows.length * cell
-  host.replaceChildren()
-  const svg = el("svg", {width, height, viewBox: "0 0 " + width + " " + height})
-  cols.forEach((index, c) => {
-    const x = labelW + c * cell + cell / 2
-    const text = el("text", {
-      x, y: 100, fill: "#1a1a1a", "font-size": 9, "text-anchor": "start",
-      transform: "rotate(-55 " + x + " 100)",
-    })
-    text.textContent = displayName(NODES[index])
-    svg.appendChild(text)
-  })
-  rows.forEach((rowIndex, r) => {
-    const y = 110 + r * cell
-    const label = el("text", {x: labelW - 6, y: y + cell * 0.7, fill: "#1a1a1a", "font-size": 10, "text-anchor": "end"})
-    label.textContent = displayName(NODES[rowIndex])
-    svg.appendChild(label)
-    cols.forEach((colIndex, c) => {
-      const edge = lookup.get(rowIndex + ":" + colIndex)
-      const x = labelW + c * cell
-      const rect = el("rect", {
-        x, y, width: cell - 1, height: cell - 1,
-        fill: edge ? heatColor(edge.cosine) : "#f4f7ef", rx: 2,
-        stroke: edge && state.selectedEdge === edge ? "#e76714" : "#fff",
-        "stroke-width": edge && state.selectedEdge === edge ? 2 : 0.5,
-      })
-      if (edge) {
-        rect.style.cursor = "pointer"
-        rect.setAttribute("class", "matrix-hit")
-        rect.setAttribute("tabindex", "0")
-        rect.setAttribute("role", "button")
-        rect.setAttribute("aria-label", `${displayName(NODES[rowIndex])} × ${displayName(NODES[colIndex])}, cosine ${edge.cosine.toFixed(3)}`)
-        rect.addEventListener("keydown", event => {
-          if (event.key !== "Enter" && event.key !== " ") return
-          event.preventDefault()
-          chooseEdge(edge)
-        })
-        rect.addEventListener("pointerenter", (event) => {
-          showTip(esc(displayName(NODES[rowIndex])) + "  ×  " + esc(displayName(NODES[colIndex])) + "<br>cosine " + edge.cosine.toFixed(3), event)
-        })
-        rect.addEventListener("pointerleave", hideTip)
-        rect.addEventListener("click", (event) => {
-          event.stopPropagation()
-          state.selectedEdge = edge
-          state.selectedNode = null
-          render()
-        })
-        if (cell >= 24) {
-          const text = el("text", {
-            x: x + (cell - 1) / 2, y: y + (cell - 1) * 0.68, fill: edge.cosine >= 0.87 ? "#fff" : "#17363b",
-            "font-size": 8, "text-anchor": "middle",
-          })
-          text.textContent = edge.cosine.toFixed(2)
-          text.style.pointerEvents = "none"
-          svg.appendChild(rect)
-          svg.appendChild(text)
-          return
-        }
-      }
-      svg.appendChild(rect)
-    })
-  })
-  host.appendChild(svg)
-}
-
 function renderDiagram(edges) {
   const indexes = orderedIndexes(edges)
   const placed = layout(indexes)
@@ -1310,234 +1228,6 @@ function renderDiagram(edges) {
   applyHighlight()
 }
 
-function tags(vIds) {
-  const wrap = document.createElement("span")
-  vIds.forEach((v) => {
-    const tag = document.createElement("span")
-    tag.className = "tag"
-    tag.style.background = COLORS[v] || "#888"
-    tag.textContent = v
-    wrap.appendChild(tag)
-  })
-  return wrap
-}
-
-function cosineText(score) {
-  return score.toFixed(3)
-}
-
-function renderDetail(edges) {
-  const root = document.getElementById("detail")
-  root.replaceChildren()
-  const title = document.createElement("h2")
-  title.textContent = "Detail"
-  root.appendChild(title)
-  if (state.selectedEdge) {
-    const edge = state.selectedEdge
-    const a = NODES[edge.source]
-    const b = NODES[edge.target]
-    const score = document.createElement("p")
-    score.className = "score"
-    score.textContent = cosineText(edge.cosine)
-    root.appendChild(score)
-    ;[[a, "Action A"], [b, "Action B"]].forEach(([node, heading]) => {
-      const h = document.createElement("h3")
-      h.textContent = heading
-      root.appendChild(h)
-      const name = document.createElement("p")
-      name.textContent = displayName(node)
-      root.appendChild(name)
-      root.appendChild(tags(node.v_ids))
-    })
-    const raw = document.createElement("p")
-    raw.className = "raw"
-    raw.textContent = "Stored cosine " + edge.cosine
-    root.appendChild(raw)
-    return
-  }
-  if (state.selectedNode === null) {
-    const note = document.createElement("p")
-    if (state.selectedPair) {
-      note.textContent = "Case pair " + state.selectedPair.a + " · " + state.selectedPair.b + ". The matrix above lists every stored name link for this pair at the current threshold. Click a cell or an arc for the exact cosine."
-    } else if (state.scope === "cross") {
-      note.textContent = "Start from the case × case map. Color is the highest cosine in that cell. Click a cell to compare only those two cases."
-    } else {
-      note.textContent = "Hover a name or an arc. Click to keep it here. One node is one action name."
-    }
-    root.appendChild(note)
-    const rule = document.createElement("p")
-    rule.textContent = DATA.meta.component_rule + " " + 'Stored edge floor: 0.40; the interface starts at 0.50. A missing pair is not a measured zero.'
-    root.appendChild(rule)
-    if (state.selectedPair && edges.length) {
-      const heading = document.createElement("h2")
-      heading.textContent = "Links in this pair"
-      root.appendChild(heading)
-      const list = document.createElement("ul")
-      edges.slice().sort((a, b) => b.cosine - a.cosine).forEach((edge) => {
-        const li = document.createElement("li")
-        const button = document.createElement("button")
-        button.className = "linkrow"
-        button.innerHTML = "<span>" + NODES[edge.source].action_name + " · " + NODES[edge.target].action_name + "  " + cosineText(edge.cosine) + "</span>"
-        button.addEventListener("click", () => {
-          state.selectedEdge = edge
-          state.selectedNode = null
-          render()
-        })
-        li.appendChild(button)
-        list.appendChild(li)
-      })
-      root.appendChild(list)
-    }
-    return
-  }
-  const node = NODES[state.selectedNode]
-  const h = document.createElement("h3")
-  h.textContent = node.action_name
-  root.appendChild(h)
-  root.appendChild(tags(node.v_ids))
-  const id = document.createElement("p")
-  id.className = "raw"
-  id.textContent = "Node id " + node.id
-  root.appendChild(id)
-  if (node.component_id) {
-    const group = document.createElement("p")
-    group.textContent = "Connected group " + node.component_id + " at cosine 0.65. Membership of the group is not itself a cosine."
-    root.appendChild(group)
-  }
-  const related = edges
-    .filter((edge) => edge.source === state.selectedNode || edge.target === state.selectedNode)
-    .map((edge) => {
-      const other = edge.source === state.selectedNode ? edge.target : edge.source
-      return {other, cosine: edge.cosine, edge}
-    })
-    .sort((a, b) => b.cosine - a.cosine)
-  const heading = document.createElement("h2")
-  heading.textContent = related.length ? "Linked at this threshold" : "No links at this threshold"
-  root.appendChild(heading)
-  const list = document.createElement("ul")
-  related.forEach((item) => {
-    const li = document.createElement("li")
-    const button = document.createElement("button")
-    button.className = "linkrow"
-    button.innerHTML = "<span>" + NODES[item.other].action_name + "  " + cosineText(item.cosine) + "</span><small>" + NODES[item.other].v_ids.join(" ") + "</small>"
-    button.addEventListener("click", () => {
-      state.selectedEdge = item.edge
-      state.selectedNode = null
-      render()
-    })
-    li.appendChild(button)
-    list.appendChild(li)
-  })
-  root.appendChild(list)
-  const events = document.createElement("h2")
-  events.textContent = "Events"
-  root.appendChild(events)
-  node.events.forEach((event) => {
-    const block = document.createElement("div")
-    block.className = "event"
-    const line = document.createElement("div")
-    line.appendChild(tags([event.v_id]))
-    const ident = document.createElement("span")
-    ident.className = "raw"
-    ident.textContent = " " + event.id
-    line.appendChild(ident)
-    block.appendChild(line)
-    const when = document.createElement("div")
-    when.textContent = Number(event.start).toFixed(2) + "–" + Number(event.end).toFixed(2) + " s"
-    if (event.task !== null && event.task !== undefined) when.textContent += "  ·  task " + event.task
-    block.appendChild(when)
-    if (event.historical_group_id) {
-      const historical = document.createElement("div")
-      historical.textContent = "Historical group " + event.historical_group_id + "  " + event.historical_group_name
-      block.appendChild(historical)
-    }
-    if (event.video) {
-      const video = document.createElement("div")
-      video.textContent = event.video
-      block.appendChild(video)
-    }
-    if (event.v_id && CASES.includes(event.v_id)) {
-      const link = document.createElement("a")
-      link.href = "#" + document.getElementById(event.v_id).closest("[data-page]").dataset.page + "/" + event.v_id
-      link.textContent = "Open public case record ↗"; link.target = "_blank"; link.rel = "noopener"
-      block.appendChild(link)
-    }
-    root.appendChild(block)
-  })
-}
-
-function renderCounts(edges) {
-  const shown = orderedIndexes(edges).length
-  const query = state.query.trim().toLowerCase()
-  const matches = query ? NODES.filter((node) => node.action_name.toLowerCase().includes(query)).length : null
-  const box = document.getElementById("counts")
-  box.replaceChildren()
-  const actions = document.createElement("div")
-  actions.innerHTML = "<strong>" + shown + "</strong> of " + NODES.length + " actions"
-  box.appendChild(actions)
-  const links = document.createElement("div")
-  const linkWord = edges.length === 1 ? "link" : "links"
-  const scopeNote = state.scope === "cross" ? " cross V" : state.scope === "same" ? " shared V" : ""
-  links.innerHTML = "<strong>" + edges.length + "</strong> " + linkWord + scopeNote + " ≥ " + state.threshold.toFixed(2)
-  box.appendChild(links)
-  if (state.selectedPair) {
-    const pair = document.createElement("div")
-    pair.innerHTML = "<strong>" + state.selectedPair.a + " · " + state.selectedPair.b + "</strong> open"
-    box.appendChild(pair)
-  }
-  if (matches !== null) {
-    const found = document.createElement("div")
-    found.innerHTML = "<strong>" + matches + "</strong> search matches"
-    box.appendChild(found)
-  }
-}
-
-function renderVList() {
-  const root = document.getElementById("vlist")
-  root.replaceChildren()
-  CASES.forEach((v) => {
-    const names = NODES.filter((node) => node.v_ids.includes(v)).length
-    const button = document.createElement("button")
-    button.className = "vrow" + (state.selectedV === v ? " on" : "")
-    const swatch = document.createElement("span")
-    swatch.className = "swatch"
-    swatch.style.background = COLORS[v]
-    button.appendChild(swatch)
-    button.appendChild(document.createTextNode(v))
-    const count = document.createElement("small")
-    count.textContent = names
-    button.appendChild(count)
-    button.addEventListener("click", () => {
-      state.selectedV = state.selectedV === v ? null : v
-      state.selectedPair = null
-      state.selectedNode = null
-      state.selectedEdge = null
-      render()
-    })
-    root.appendChild(button)
-  })
-}
-
-function renderPairChip() {
-  const chip = document.getElementById("pair-chip")
-  if (!state.selectedPair) {
-    chip.hidden = true
-    chip.replaceChildren()
-    return
-  }
-  chip.hidden = false
-  chip.replaceChildren()
-  chip.appendChild(document.createTextNode(state.selectedPair.a + " · " + state.selectedPair.b))
-  const clear = document.createElement("button")
-  clear.type = "button"
-  clear.textContent = "×"
-  clear.addEventListener("click", () => {
-    state.selectedPair = null
-    render()
-  })
-  chip.appendChild(clear)
-}
-
 let lastEdges = []
 
 function applyHighlight() {
@@ -1558,20 +1248,6 @@ function applyHighlight() {
     const hit = group.querySelector("rect")
     if (hit) hit.setAttribute("fill", state.selectedNode === index ? "#edfbdc" : "transparent")
   })
-}
-
-function scrollToQuery() {
-  const query = state.query.trim().toLowerCase()
-  if (!query) return
-  const hit = [...document.querySelectorAll("#diagram text")].find((node) => node.textContent.toLowerCase().includes(query) && node.getAttribute("font-size") === "13")
-  if (hit) hit.scrollIntoView({block: "center"})
-}
-
-
-function heatColor(score) {
-  const strength = Math.max(0, Math.min(1, (score - 0.65) / 0.35))
-  const mix = (light, dark) => Math.round(light + (dark - light) * strength)
-  return `rgb(${mix(201, 22)},${mix(236, 119)},${mix(246, 158)})`
 }
 
 function arcColor(score) {
@@ -1598,94 +1274,6 @@ function nearestDot(loc) {
   })
   return best
 }
-
-function renderHeatmap(edges) {
-  const stats = casePairStats(edges)
-  const cell = 34
-  const margin = 48
-  const plot = CASES.length * cell
-  const size = margin + plot + 3
-  const maxCount = Math.max(1, ...Object.values(stats).map(info => info.count))
-  const root = document.getElementById('heatmap')
-  const svg = el('svg', {
-    width: size, height: size, viewBox: `0 0 ${size} ${size}`,
-    role: 'group', 'aria-label': 'Case similarity dot matrix',
-  })
-  const rowBand = el('rect', {x: 0, width: size, height: cell, fill: '#edfbdc', visibility: 'hidden'})
-  const columnBand = el('rect', {y: 0, width: cell, height: size, fill: '#edfbdc', visibility: 'hidden'})
-  svg.append(rowBand, columnBand)
-  const showBands = (x, y) => {
-    rowBand.setAttribute('y', y)
-    columnBand.setAttribute('x', x)
-    rowBand.setAttribute('visibility', 'visible')
-    columnBand.setAttribute('visibility', 'visible')
-  }
-  const clearBands = () => {
-    rowBand.setAttribute('visibility', 'hidden')
-    columnBand.setAttribute('visibility', 'hidden')
-    hideTip()
-  }
-  const selected = state.selectedPair && pairKey(state.selectedPair.a, state.selectedPair.b)
-  for (const [row, a] of CASES.entries()) {
-    const y = margin + row * cell
-    const text = el('text', {x: margin - 8, y: y + cell / 2, 'text-anchor': 'end', 'dominant-baseline': 'central', fill: '#17363b', 'font-size': 11})
-    text.textContent = a
-    svg.appendChild(text)
-  }
-  for (const [column, b] of CASES.entries()) {
-    const x = margin + column * cell
-    const text = el('text', {x: x + cell / 2, y: margin - 11, 'text-anchor': 'middle', fill: '#17363b', 'font-size': 11})
-    text.textContent = b
-    svg.appendChild(text)
-  }
-  for (const [row, a] of CASES.entries()) {
-    for (const [column, b] of CASES.entries()) {
-      const x = margin + column * cell
-      const y = margin + row * cell
-      const cx = x + cell / 2
-      const cy = y + cell / 2
-      const key = pairKey(a, b)
-      const info = a === b ? null : stats[key]
-      if (!info) {
-        svg.appendChild(el('circle', {cx, cy, r: 1.5, fill: a === b ? '#a6b4ac' : '#d7e2df', 'aria-hidden': 'true'}))
-        continue
-      }
-
-      const radius = 12 * Math.sqrt(info.count / maxCount)
-      const count = `${info.count} name ${info.count === 1 ? 'pair' : 'pairs'}`
-      const isSelected = selected === key
-      const group = el('g', {
-        class: 'case-bubble-hit', role: 'button', tabindex: 0,
-        'aria-label': `${a} × ${b}, ${count}, highest cosine ${info.max.toFixed(3)}`,
-        'aria-pressed': String(isSelected),
-      })
-      group.appendChild(el('rect', {class: 'bubble-target', x: x + 1, y: y + 1, width: cell - 2, height: cell - 2, rx: 4, fill: 'transparent'}))
-      group.appendChild(el('circle', {cx, cy, r: radius, fill: heatColor(info.max), stroke: '#2581a3', 'stroke-width': 0.5, 'pointer-events': 'none'}))
-      if (isSelected) group.appendChild(el('circle', {cx, cy, r: Math.max(radius + 3, 8), fill: 'none', stroke: '#ee751c', 'stroke-width': 2.5, 'pointer-events': 'none'}))
-      const showPair = event => {
-        showBands(x, y)
-        showTip(`<strong>${esc(a)} × ${esc(b)}</strong><br>${count}<br>Highest cosine ${info.max.toFixed(3)}`, event)
-      }
-      group.addEventListener('pointerenter', showPair)
-      group.addEventListener('pointerleave', clearBands)
-      group.addEventListener('focus', () => {
-        const bounds = group.getBoundingClientRect()
-        showPair({clientX: bounds.right, clientY: bounds.top})
-      })
-      group.addEventListener('blur', clearBands)
-      group.addEventListener('click', () => selectPair(a, b))
-      group.addEventListener('keydown', event => {
-        if (event.key !== 'Enter' && event.key !== ' ') return
-        event.preventDefault()
-        selectPair(a, b)
-        root.querySelector(`[aria-label^="${a} × ${b},"]`)?.focus()
-      })
-      svg.appendChild(group)
-    }
-  }
-  root.replaceChildren(svg)
-}
-
 
 function featherSectors(indexes) {
   const sectors = []
@@ -2749,7 +2337,6 @@ const V24_MOTION_PLATES = [
   }
 ];
 // Presentation layer. Stored vectors, name strings and cosine scores are unchanged.
-let view = 'network', page = 0, pageSize = 20
 const $ = id => document.getElementById(id)
 const esc = text => String(text).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))
 const displayName = node => node.action_name.replace(/^ACTION\s*\|\s*/i, '')
@@ -2770,34 +2357,27 @@ function eligibleEdges() {
       (!state.selectedV || a.v_ids.includes(state.selectedV) || b.v_ids.includes(state.selectedV))
   })
 }
-function currentEdges(base) {
-  const pair = state.selectedPair
-  return base.filter(edge => !pair || edgeTouchesPair(edge, pair.a, pair.b))
-    .sort((a,b)=>b.cosine-a.cosine || NODES[a.source].action_name.localeCompare(NODES[b.source].action_name))
+function chooseEdge(edge) {
+  state.selectedEdge = edge
+  state.selectedNode = null
+  render()
 }
-function nodeHTML(node) {
-  return '<span class="pair-name">'+esc(displayName(node))+'</span><span class="pair-meta">'+node.v_ids.map(v=>'<span class="pill">'+esc(v)+'</span>').join('')+'<span>'+node.events.length+' event'+(node.events.length===1?'':'s')+'</span></span>'
-}
-function chooseEdge(edge) {state.selectedEdge=edge;state.selectedNode=null;render(); if(view!=='network' && innerWidth<761){$('detail').scrollIntoView({behavior:'smooth',block:'start'});$('detail').focus({preventScroll:true})}}
-function renderPairs(edges) {
-  const size=pageSize==='all'?Math.max(edges.length,1):pageSize
-  page=Math.min(page,Math.max(0,Math.ceil(edges.length/size)-1))
-  const slice=edges.slice(page*size,(page+1)*size)
-  $('pair-list').replaceChildren()
-  if(!slice.length) $('pair-list').innerHTML='<div class="empty"><h3>No matching name pairs</h3><p>Try a lower threshold, another case, or a shorter search.</p><p>Names with no qualifying links remain in the source dataset.</p></div>'
-  slice.forEach(edge=>{
-    const button=document.createElement('button')
-    button.className='pair-row'+(state.selectedEdge===edge?' selected':'')
-    button.setAttribute('aria-pressed',String(state.selectedEdge===edge))
-    button.innerHTML='<span>'+nodeHTML(NODES[edge.source])+'</span><span class="score-mark">'+edge.cosine.toFixed(3)+'<span class="score-line"><i style="width:'+Math.min(100,Math.max(0,edge.cosine*100))+'%"></i></span></span><span>'+nodeHTML(NODES[edge.target])+'</span>'
-    button.addEventListener('click',()=>chooseEdge(edge));$('pair-list').appendChild(button)
-  })
-  $('page-status').textContent=edges.length ? (page*size+1)+'–'+Math.min((page+1)*size,edges.length)+' of '+edges.length+' pairs · all available' : '0 pairs'
-  $('prev').disabled=page===0;$('next').disabled=(page+1)*size>=edges.length
-}
-function renderCaseFilters(){
-  $('vlist').replaceChildren()
-  ;[null,...CASES].forEach(v=>{const b=document.createElement('button');b.textContent=v||'All cases';b.className=state.selectedV===v?'on':'';b.setAttribute('aria-pressed',String(state.selectedV===v));b.onclick=()=>{state.selectedV=v;state.selectedPair=null;clearDetail();page=0;render()};$('vlist').appendChild(b)})
+function renderCaseFilters() {
+  const list = $('vlist')
+  list.replaceChildren()
+  for (const id of [null, ...CASES]) {
+    const button = document.createElement('button')
+    button.textContent = id || 'All cases'
+    const selected = state.selectedV === id
+    button.classList.toggle('on', selected)
+    button.setAttribute('aria-pressed', String(selected))
+    button.onclick = () => {
+      state.selectedV = id
+      clearDetail()
+      render()
+    }
+    list.appendChild(button)
+  }
 }
 const ATLAS = 'index.html'
 const PLATES = [
@@ -3715,51 +3295,28 @@ function openPairPop(edge) {
   host.replaceChildren(sheet)
   close.focus()
 }
-function renderInspector(edges){
-  const root=$('detail')
-  if (view !== 'network') root.classList.remove('is-empty')
-  if (view === 'network') {
-    const waiting = state.selectedNode === null && !state.selectedEdge
-    root.classList.toggle('is-empty', waiting)
-    if (waiting) {
-      closePairPop()
-      root.replaceChildren()
-      return
-    }
-    if (state.selectedEdge) {
-      const edge = state.selectedEdge
-      loadRest(() => { if (state.selectedEdge === edge) openPairPop(edge) })
-      const note = document.createElement('p')
-      note.className = 'small-note'
-      note.textContent = 'The pair is open over the page. Close it to return to this action.'
-      root.replaceChildren(note)
-      return
-    }
+function renderInspector() {
+  const root = $('detail')
+  const waiting = state.selectedNode === null && !state.selectedEdge
+  root.classList.toggle('is-empty', waiting)
+  if (waiting) {
     closePairPop()
-    const nodes = state.selectedNode !== null ? [NODES[state.selectedNode]] : null
-    root.replaceChildren(plateTabs(nodes))
+    root.replaceChildren()
     return
   }
-  if(state.selectedNode!==null){
-    renderDetail(edges)
-    const back=document.createElement('button');back.className='back-link';back.textContent='← Back to overview';back.onclick=()=>{clearDetail();render()};root.prepend(back)
+  if (state.selectedEdge) {
+    const edge = state.selectedEdge
+    loadRest(() => { if (state.selectedEdge === edge) openPairPop(edge) })
+    const note = document.createElement('p')
+    note.className = 'small-note'
+    note.textContent = 'The pair is open over the page. Close it to return to this action.'
+    root.replaceChildren(note)
     return
   }
-  if(!state.selectedEdge){
-    root.innerHTML = '<h2>Source events</h2><p>Choose a pair to inspect its action names, cases and source events.</p><div class="note-box">The cosine score measures text similarity. “Open gripper” and “Close gripper” can score highly while describing opposite changes.</div>'
-    return
-  }
-  const e=state.selectedEdge
-  root.innerHTML='<h2>Selected name pair</h2><div class="score">'+e.cosine.toFixed(3)+'</div><div class="detail-label">Stored cosine similarity</div>'
-  ;[[e.source,'Action A'],[e.target,'Action B']].forEach(([index,label])=>{
-    const n=NODES[index],box=document.createElement('div');box.className='node-card'
-    box.innerHTML='<div class="detail-label">'+label+'</div><h3>'+esc(displayName(n))+'</h3><div class="pair-meta">'+n.v_ids.map(v=>'<span class="pill">'+esc(v)+'</span>').join('')+'</div><p>'+n.events.length+' source event'+(n.events.length===1?'':'s')+'</p><ul class="source-events">'+n.events.map(event=>'<li><span class="pill">'+esc(event.v_id)+'</span> '+esc(event.id)+'</li>').join('')+'</ul><details><summary class="small-note">Original stored name</summary><p class="raw">'+esc(n.action_name)+'</p></details>'
-    const b=document.createElement('button');b.textContent='Inspect source events →';b.onclick=()=>{state.selectedNode=index;state.selectedEdge=null;render()};box.appendChild(b);root.appendChild(box)
-  })
-  const note=document.createElement('div');note.className='note-box';note.textContent='Candidate relationship. Compare direction, object identity and operation stage in the source evidence.';root.appendChild(note)
+  closePairPop()
+  root.replaceChildren(plateTabs([NODES[state.selectedNode]]))
 }
 function clearDetail(){state.selectedNode=null;state.selectedEdge=null;state.hoverNode=null;state.hoverEdge=null}
-let shownView=null
 function walkEdge() {
   return EDGES.find(edge => {
     const names = [displayName(NODES[edge.source]), displayName(NODES[edge.target])]
@@ -3787,7 +3344,6 @@ function showPage(name) {
 function resetRelationshipFilters(scope = 'cross') {
   clearDetail()
   state.selectedV = null
-  state.selectedPair = null
   state.query = ''
   state.threshold = .50
   state.scope = scope
@@ -3795,12 +3351,11 @@ function resetRelationshipFilters(scope = 'cross') {
   $('q').value = ''
   $('threshold').value = '.50'
   $('scope').value = scope
-  page = 0
 }
 function openRelationshipRoute() {
   const pair = /^#action-pair=(\d+):(\d+)$/.exec(location.hash)
+  if (location.hash === '#explorer') history.replaceState(history.state, '', '#action-connections')
   if (!pair && location.hash !== '#action-connections') return false
-  view = 'network'
   if (pair && REST_READY) {
     const edge = EDGES.find(({source, target}) => source === Number(pair[1]) && target === Number(pair[2]))
     if (edge && edge.cosine >= .50 && [edge.source, edge.target].every(index => pairDrawingFor(NODES[index]))) {
@@ -3833,33 +3388,19 @@ function renderPath() {
   if (edge) slot.textContent = edge.cosine.toFixed(3)
   slot.dataset.ready = '1'
 }
-function render(){
-  const base = eligibleEdges()
-  const edges = currentEdges(base)
+function render() {
+  const edges = eligibleEdges().sort((a, b) =>
+    b.cosine - a.cosine || NODES[a.source].action_name.localeCompare(NODES[b.source].action_name))
   lastEdges = edges
-  if(state.selectedEdge && !edges.includes(state.selectedEdge))clearDetail()
-  $('pairs-view').hidden=view!=='pairs';$('map-view').hidden=view!=='map';$('network-view').hidden=view!=='network'
-  document.querySelector('.content').classList.toggle('show-plates', view==='network')
-  document.querySelector('.content').classList.toggle('has-pick', view==='network' && (state.selectedNode !== null || !!state.selectedEdge))
-  document.querySelectorAll('[data-view]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.view===view)))
-  $('view-title').textContent={pairs:'Action-name pairs',map:'Case relationships',network:'Action-name connections'}[view]
-  const names=new Set(edges.flatMap(e=>[e.source,e.target]))
-  $('counts').textContent=edges.length+' name pairs · '+names.size+' linked names · cosine ≥ '+state.threshold.toFixed(2)
-  $('context-note').textContent=view==='pairs'?'Sorted by highest cosine · select a row to inspect':view==='map'?'Select a dot to compare the action names in two cases':''
+  if (state.selectedEdge && !edges.includes(state.selectedEdge)) clearDetail()
+  document.querySelector('.content').classList.toggle('has-pick', state.selectedNode !== null || !!state.selectedEdge)
+  const names = new Set(edges.flatMap(edge => [edge.source, edge.target]))
+  $('counts').textContent = edges.length + ' name pairs · ' + names.size + ' linked names · cosine ≥ ' + state.threshold.toFixed(2)
   $('drawing-status').textContent = REST_READY ? '' : (REST_BY_NAME ? 'The drawing index is unavailable.' : 'Loading the drawing index…')
-  $('threshold-label').textContent=state.threshold.toFixed(2)
-  renderCaseFilters();renderPairChip();renderInspector(edges)
-  if(view==='pairs')renderPairs(edges)
-  if(view==='map'){renderHeatmap(base);renderMatrix(edges)}
-  if(view==='network'){
-    renderDiagram(edges)
-    if(pageTab==='explorer' && shownView && shownView!=='network') requestAnimationFrame(()=>$('diagram').scrollIntoView({block:'start',inline:'nearest'}))
-  }
-  shownView=view
-}
-function selectPair(a,b){
-  state.selectedPair=state.selectedPair && pairKey(a,b)===pairKey(state.selectedPair.a,state.selectedPair.b)?null:{a,b}
-  clearDetail();page=0;render();hideTip()
+  $('threshold-label').textContent = state.threshold.toFixed(2)
+  renderCaseFilters()
+  renderInspector()
+  renderDiagram(edges)
 }
 function exportSvg(){
   const svg=$('diagram').cloneNode(true);svg.setAttribute('xmlns',NS)
@@ -3868,18 +3409,30 @@ function exportSvg(){
 }
 $('dataset-meta').textContent = NODES.length + ' action names · ' + DATA.meta.event_count + ' events · ' + CASES.length + ' cases'
 $('method-note').textContent=DATA.meta.grain+' '+DATA.meta.cosine+' '+DATA.meta.edge_floor_note
-$('q').oninput=e=>{state.query=e.target.value;page=0;clearDetail();render()}
-$('threshold').oninput=()=>{state.threshold=thresholdValue();page=0;clearDetail();render()}
-$('scope').onchange=e=>{state.scope=e.target.value;page=0;clearDetail();render()}
+$('q').oninput=e=>{state.query=e.target.value;clearDetail();render()}
+$('threshold').oninput=()=>{state.threshold=thresholdValue();clearDetail();render()}
+$('scope').onchange=e=>{state.scope=e.target.value;clearDetail();render()}
 $('sort').onchange=e=>{state.sort=e.target.value;state.collapsed.clear();render()}
 $('clear').onclick=()=>{resetRelationshipFilters();render()}
-document.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>{view=b.dataset.view;render()})
-$('prev').onclick=()=>{page--;render()};$('next').onclick=()=>{page++;render()}
-$('page-size').onchange=e=>{pageSize=e.target.value==='all'?'all':Number(e.target.value);page=0;render()}
-$('open-pairs').onclick=()=>{view='pairs';page=0;render()}
 $('export').onclick=exportSvg
 $('diagram').addEventListener('click',()=>{clearDetail();render()})
-document.querySelectorAll('.page-tabs [data-page]').forEach(button => button.addEventListener('click', () => showPage(button.dataset.page)))
+document.querySelectorAll('.page-tabs [data-page]').forEach(button => {
+  button.addEventListener('click', () => {
+    const name = button.dataset.page
+    if (name === 'explorer') {
+      if (location.hash !== '#action-connections') {
+        location.hash = '#action-connections'
+      } else {
+        openRelationshipRoute()
+        window.scrollTo(0, 0)
+      }
+    } else if (/^#action-(?:connections$|pair=)/.test(location.hash)) {
+      location.hash = name === 'path' ? '#study-start' : '#overview'
+    } else {
+      showPage(name)
+    }
+  })
+})
 renderPath()
 window.addEventListener('hashchange', openRelationshipRoute)
 openRelationshipRoute()
