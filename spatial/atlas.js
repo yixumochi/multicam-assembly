@@ -611,7 +611,7 @@
       detail.hidden = !pair.every(Boolean);
       atlas.querySelector("#compare-empty").hidden = !detail.hidden;
       if (detail.hidden) {
-        document.title = "Compare two cases · Atlas of Assembly Space";
+        document.title = "Compare two cases";
         return;
       }
       const title = pair.map(row => row.case).join(" ↔ ");
