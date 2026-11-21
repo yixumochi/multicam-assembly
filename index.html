@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>MultiCam · Timber Assembly in Motion</title>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>MultiCam · Assembly Research</title>
 <style>
 :root{--ink:#213846;--muted:#657783;--line:#e1e7e9;--blue:#087e9c;--soft:#eaf5f7;--orange:#be641e;--green:#087e9c;--green-soft:#eaf5f7}*{box-sizing:border-box}body{margin:0;background:#f5f7f8;color:var(--ink);font:14px/1.5 'Segoe UI',Arial,sans-serif}button,input,select{font:inherit;color:inherit}button,a,input,select{outline-offset:4px}button{cursor:pointer}a{color:var(--blue);text-decoration:none}a:hover{text-decoration:underline}button{border:1px solid var(--line);background:white;border-radius:7px;padding:8px 12px}button:hover{border-color:#9eafb7;background:#f3f7f8}button:disabled{opacity:.4;cursor:default}[hidden],.hidden{display:none!important}
 h1{font-size:30px;letter-spacing:-.8px;font-weight:650;margin:4px 0}p{margin:6px 0;color:var(--muted)}.subnav{font-size:12px;display:flex;gap:20px;margin-top:10px}.workspace{max-width:1800px;margin:auto;padding:24px 36px}.toolbar{display:grid;grid-template-columns:minmax(200px,1.3fr) minmax(190px,1fr) minmax(180px,1fr) auto;gap:22px;align-items:end;background:#fff;border:1px solid var(--line);padding:20px;border-radius:10px}.field{display:flex;flex-direction:column;gap:8px;font-size:12px;font-weight:600}.field input[type=search],.field select{height:40px;width:100%;padding:0 10px;border:1px solid #d6dfe3;border-radius:6px;background:white;font-weight:400}.range-heading{display:flex;justify-content:space-between}.range-heading output{font-size:17px;color:var(--blue);line-height:18px;font-variant-numeric:tabular-nums}.range-wrap{height:40px;display:flex;align-items:center;gap:10px}.range-wrap small{font-weight:400;color:var(--muted)}input[type=range]{accent-color:var(--blue);width:100%}.filter-bottom{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:15px 0 20px}.filter-bottom>span{color:var(--muted);font-size:12px}.cases{display:flex;gap:6px;flex-wrap:wrap}.cases button{font-size:12px;padding:5px 10px}.cases button.on{background:var(--ink);color:white;border-color:var(--ink)}.small-note{font-size:12px;color:var(--muted)}
@@ -268,7 +268,7 @@ button, input, select { accent-color: var(--blue); }
   .name-pair-media { grid-template-columns: minmax(0, 1fr); }
 }
 
-</style><link rel="stylesheet" href="research.css"><link rel="stylesheet" href="site-header.css?v=1"><script>
+</style><link rel="stylesheet" href="research.css"><link rel="stylesheet" href="site-header.css?v=1"><link rel="stylesheet" href="start-page.css?v=1"><script src="start-page.js?v=1" defer></script><script>
 if (window.parent !== window && new URLSearchParams(location.search).get('view') === 'case-area') {
   document.documentElement.dataset.view = 'case-area';
 }
@@ -284,67 +284,135 @@ html[data-view="case-area"] .workspace,
 html[data-view="case-area"] #cases-page main { width:100%; max-width:none; margin:0; padding:0; }
 html[data-view="case-area"] body { margin:0; }
 </style></head><body>
-<header class="site-header">
-  <div>
-    <p class="site-header-series">MultiCam</p>
-    <h1>Timber Assembly in Motion</h1>
-  </div>
-</header>
 <nav class="page-tabs site-nav" aria-label="Pages"><button type="button" data-page="path" aria-pressed="true">Start here / Methods</button><button type="button" data-page="explorer" aria-pressed="false">Action Relationships</button><button type="button" data-page="cases" aria-pressed="false">Fifteen assembly cases</button><a href="spatial/index.html">Atlas of Assembly Space</a><a href="spatial/compare.html">Compare two cases</a><a href="observation/index.html">Relative position</a><a href="analysis/index.html">Recorded comparison</a></nav>
 <main class="workspace">
-<section id="path-page" aria-label="How a pair is made">
-<div class="study" id="study-start"><p>Follow assembly actions through films, drawings, and spatial tracks.</p><h2>When similar names describe different assembly conditions</h2><p>“Hold timber at joint” and “Position timber at joint” score <b>0.897</b>. Their recorded axes change in opposite directions. Who supports the member, and which adjustments can we actually see?</p><div class="duo"><figure class="side-record"><img class="hero-shot" src="plates/click_rest/071_Robot_V28_Hold_timber_at_joint_b.jpg" alt="Hold timber at joint, reference still"><figcaption>V28 · Hold timber at joint<br><b>Recorded endpoint change: +27.5°</b></figcaption></figure><figure class="side-record"><img class="hero-shot" src="plates/click_rest/001_Mixed_V21_Position_timber_at_joint_b.jpg" alt="Position timber at joint, reference still"><figcaption>V21 · Position timber at joint<br><b>Recorded endpoint change: -2.9°</b></figcaption></figure></div><nav><a href="analysis/index.html#pair-3">Compare both events and six stills →</a><a href="#overview">Explore 15 cases</a><a href="#v22-method">Read a V22 shot</a><a href="#study-method">Data &amp; methods</a></nav><p class="sub">These are two-dimensional, camera-dependent drawings, not measured forces, clearances or world rotations.</p></div><section class="study v22-method" id="v22-method" aria-labelledby="v22-method-title">
-  <h2 id="v22-method-title">One V22 shot, two ways to read it</h2>
-  <p class="v22-method-context">Semiramis · V22 S01 · 77.3–85.7 s</p>
-  <p>The action label describes what happens. The spatial track shows where it happens on the workshop plan.</p>
-  <div class="name-pair-media">
-    <figure>
-      <h3>Action and relationship</h3>
-      <img class="v22-method-still" src="runs/v22_corrected_spatial_motion_v1/shots/S01/F1932.jpg" width="960" height="540"
-        loading="lazy" decoding="async" alt="V22 S01 source frame showing a robot holding a timber panel">
-      <figcaption>A robot holds a timber panel. Read the shot in terms of the actor, the action and the part it acts on.</figcaption>
-    </figure>
-    <figure>
-      <h3>Movement and position</h3>
-      <video controls playsinline preload="none" width="1280" height="640"
-        poster="video-to-top-view/assets/33_v22_workshop_video_poster.jpg"
-        aria-label="V22 S01 video tracking, local top view and workshop plan placement">
-        <source src="video-to-top-view/assets/32_v22_video_to_workshop_plan.mp4" type="video/mp4">
-      </video>
-      <figcaption>Track a point on the robot in the same clip, then see how its path is placed on the workshop plan.
-        <a href="video-to-top-view/">Open the video walkthrough</a>.
-      </figcaption>
-    </figure>
-  </div>
-  <figure class="v22-method-flow">
-    <a href="video-to-top-view/assets/14_visual_pipeline.svg" aria-label="Open the full-size V22 processing diagram">
-      <img src="video-to-top-view/assets/14_visual_pipeline.png" width="2400" height="1308" loading="lazy" decoding="async"
-        alt="V22 video frames processed with SAM2.1, feature tracking and Depth Pro, then used for local projection and workshop placement">
-    </a>
-    <figcaption><a href="video-to-top-view/technical.html#networks">SAM2.1 and Depth Pro architectures</a></figcaption>
-  </figure>
-</section>
-<details id="study-method" class="study"><summary>How a name pair is made</summary>
-  <p id="dataset-meta"></p>
-  <p>Action labels also let us compare events across cases. Label Studio connects each English action name to annotated spans in the source films. Each unique name has one stored vector.</p>
-  <div class="name-pair-media">
-    <figure>
-      <h3>From action names to a pair</h3>
-      <a href="media/name-pair/diagram.svg" aria-label="Open the pairing diagram at full size">
-        <img src="media/name-pair/diagram.svg" width="640" height="536" loading="lazy" decoding="async" alt="English action names enter a six-layer MiniLM encoder. Mean pooling and normalization produce one 384-dimensional vector per name. Cosine similarity and display filters select pairs for comparison with source drawings.">
+<section id="path-page" class="start-layout" aria-label="Start here / Methods">
+  <section id="study-start" class="case-gallery" aria-labelledby="case-gallery-title">
+    <div class="case-gallery-header">
+      <h1 id="case-gallery-title">Case gallery</h1>
+      <div class="case-gallery-key" aria-label="Assembly modes">
+        <span data-mode="human-led">Human-led</span>
+        <span data-mode="robotic-assembly">Robot-led</span>
+        <span data-mode="human-robot">Mixed</span>
+      </div>
+      <div class="case-gallery-controls">
+        <button type="button" data-gallery-direction="-1" aria-label="Scroll to earlier cases" aria-controls="case-gallery-track">←</button>
+        <button type="button" data-gallery-direction="1" aria-label="Scroll to later cases" aria-controls="case-gallery-track">→</button>
+      </div>
+    </div>
+    <ol class="case-gallery-track" id="case-gallery-track">
+      <li><a class="case-gallery-card" href="#human-led/V01" data-case-preview="V01" data-mode="human-led" data-gallery-mode="Human-led" data-full-image="runs/all_cases_motion_v1/recordings/V01__task40/motion/shots/T40_F000768_000793/F768.jpg" aria-label="Preview V01, Human-led" aria-haspopup="dialog"><img src="media/case-gallery/V01.webp" width="360" height="204" loading="lazy" decoding="async" alt=""><span class="case-gallery-code">V01</span></a></li>
+      <li><a class="case-gallery-card" href="#human-robot/V04" data-case-preview="V04" data-mode="human-robot" data-gallery-mode="Mixed" data-full-image="runs/all_cases_motion_v1/recordings/V04__task29/motion/shots/T29_F000255_000354/F255.jpg" aria-label="Preview V04, Mixed" aria-haspopup="dialog"><img src="media/case-gallery/V04.webp" width="360" height="204" loading="lazy" decoding="async" alt=""><span class="case-gallery-code">V04</span></a></li>
+      <li><a class="case-gallery-card" href="#human-led/V06" data-case-preview="V06" data-mode="human-led" data-gallery-mode="Human-led" data-full-image="runs/all_cases_motion_v1/recordings/V06__task42/motion/shots/T42_F001510_001531/F1510.jpg" aria-label="Preview V06, Human-led" aria-haspopup="dialog"><img src="media/case-gallery/V06.webp" width="360" height="204" loading="lazy" decoding="async" alt=""><span class="case-gallery-code">V06</span></a></li>
+      <li><a class="case-gallery-card" href="#human-led/V07" data-case-preview="V07" data-mode="human-led" data-gallery-mode="Human-led" data-full-image="runs/all_cases_motion_v1/recordings/V07__task39/motion/shots/T39_F000315_000325/F315.jpg" aria-label="Preview V07, Human-led" aria-haspopup="dialog"><img src="media/case-gallery/V07.webp" width="360" height="204" loading="lazy" decoding="async" alt=""><span class="case-gallery-code">V07</span></a></li>
+      <li><a class="case-gallery-card" href="#human-led/V11" data-case-preview="V11" data-mode="human-led" data-gallery-mode="Human-led" data-full-image="runs/all_cases_motion_v1/recordings/V11__task35/motion/shots/T35_F000150_000300/F150.jpg" aria-label="Preview V11, Human-led" aria-haspopup="dialog"><img src="media/case-gallery/V11.webp" width="360" height="204" loading="lazy" decoding="async" alt=""><span class="case-gallery-code">V11</span></a></li>
+      <li><a class="case-gallery-card" href="#human-led/V20" data-case-preview="V20" data-mode="human-led" data-gallery-mode="Human-led" data-full-image="runs/all_cases_motion_v1/recordings/V20__task30/motion/shots/T30_F002848_002849/F2848.jpg" aria-label="Preview V20, Human-led" aria-haspopup="dialog"><img src="media/case-gallery/V20.webp" width="360" height="204" loading="lazy" decoding="async" alt=""><span class="case-gallery-code">V20</span></a></li>
+      <li><a class="case-gallery-card" href="#human-robot/V21" data-case-preview="V21" data-mode="human-robot" data-gallery-mode="Mixed" data-full-image="runs/all_cases_motion_v1/recordings/V21__task41/motion/shots/T41_F000979_001221/F1099.jpg" aria-label="Preview V21, Mixed" aria-haspopup="dialog"><img src="media/case-gallery/V21.webp" width="360" height="204" loading="lazy" decoding="async" alt=""><span class="case-gallery-code">V21</span></a></li>
+      <li><a class="case-gallery-card" href="#robotic-assembly/V22" data-case-preview="V22" data-mode="robotic-assembly" data-gallery-mode="Robot-led" data-full-image="runs/v22_corrected_spatial_motion_v1/shots/S01/F1932.jpg" aria-label="Preview V22, Robot-led" aria-haspopup="dialog"><img src="media/case-gallery/V22.webp" width="360" height="204" loading="lazy" decoding="async" alt=""><span class="case-gallery-code">V22</span></a></li>
+      <li><a class="case-gallery-card" href="#human-robot/V23" data-case-preview="V23" data-mode="human-robot" data-gallery-mode="Mixed" data-full-image="runs/all_cases_motion_v1/recordings/V23__task45/motion/shots/T45_F004750_004834/F4750.jpg" aria-label="Preview V23, Mixed" aria-haspopup="dialog"><img src="media/case-gallery/V23.webp" width="360" height="204" loading="lazy" decoding="async" alt=""><span class="case-gallery-code">V23</span></a></li>
+      <li><a class="case-gallery-card" href="#robotic-assembly/V24" data-case-preview="V24" data-mode="robotic-assembly" data-gallery-mode="Robot-led" data-full-image="runs/all_cases_motion_v1/recordings/V24__task34/motion/shots/T34_F000384_000402/F384.jpg" aria-label="Preview V24, Robot-led" aria-haspopup="dialog"><img src="media/case-gallery/V24.webp" width="360" height="204" loading="lazy" decoding="async" alt=""><span class="case-gallery-code">V24</span></a></li>
+      <li><a class="case-gallery-card" href="#robotic-assembly/V26" data-case-preview="V26" data-mode="robotic-assembly" data-gallery-mode="Robot-led" data-full-image="runs/all_cases_motion_v1/recordings/V26__task26/motion/shots/T26_F000178_000239/F178.jpg" aria-label="Preview V26, Robot-led" aria-haspopup="dialog"><img src="media/case-gallery/V26.webp" width="360" height="204" loading="lazy" decoding="async" alt=""><span class="case-gallery-code">V26</span></a></li>
+      <li><a class="case-gallery-card" href="#human-robot/V27" data-case-preview="V27" data-mode="human-robot" data-gallery-mode="Mixed" data-full-image="runs/all_cases_motion_v1/recordings/V27__caa/motion/shots/T27_F000474_000509/F000508.jpg" aria-label="Preview V27, Mixed" aria-haspopup="dialog"><img src="media/case-gallery/V27.webp" width="360" height="204" loading="lazy" decoding="async" alt=""><span class="case-gallery-code">V27</span></a></li>
+      <li><a class="case-gallery-card" href="#robotic-assembly/V28" data-case-preview="V28" data-mode="robotic-assembly" data-gallery-mode="Robot-led" data-full-image="runs/all_cases_motion_v1/recordings/V28__task28/motion/shots/T28_F000630_000720/F630.jpg" aria-label="Preview V28, Robot-led" aria-haspopup="dialog"><img src="media/case-gallery/V28.webp" width="360" height="204" loading="lazy" decoding="async" alt=""><span class="case-gallery-code">V28</span></a></li>
+      <li><a class="case-gallery-card" href="#human-robot/V29" data-case-preview="V29" data-mode="human-robot" data-gallery-mode="Mixed" data-full-image="runs/all_cases_motion_v1/recordings/V29__task43/motion/shots/T43_F001906_001955/F1906.jpg" aria-label="Preview V29, Mixed" aria-haspopup="dialog"><img src="media/case-gallery/V29.webp" width="360" height="204" loading="lazy" decoding="async" alt=""><span class="case-gallery-code">V29</span></a></li>
+      <li><a class="case-gallery-card" href="#robotic-assembly/V30" data-case-preview="V30" data-mode="robotic-assembly" data-gallery-mode="Robot-led" data-full-image="runs/all_cases_motion_v1/recordings/V30__task44/motion/shots/T44_F003200_003250/F3200.jpg" aria-label="Preview V30, Robot-led" aria-haspopup="dialog"><img src="media/case-gallery/V30.webp" width="360" height="204" loading="lazy" decoding="async" alt=""><span class="case-gallery-code">V30</span></a></li>
+    </ol>
+    <dialog class="case-gallery-dialog" aria-labelledby="case-preview-title">
+      <div class="case-preview-header">
+        <h2 id="case-preview-title"></h2>
+        <button type="button" class="case-preview-close" aria-label="Close preview">×</button>
+      </div>
+      <a class="case-preview-link" href="#overview">
+        <img alt="">
+        <span>Open case sheet ↗</span>
       </a>
-      <figcaption><a href="media/name-pair/diagram.svg">Full-size diagram</a> · <a href="https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2">Model details</a></figcaption>
-    </figure>
-    <figure>
-      <h3>Worked example</h3>
-      <video controls playsinline preload="none" width="960" height="540" poster="media/name-pair/name-pair-poster.jpg" aria-label="How a name pair is made, with timber transport in V21 and V04" aria-describedby="name-pair-example">
-        <source src="media/name-pair/name-pair-explainer.mp4" type="video/mp4">
-        <a href="media/name-pair/name-pair-explainer.mp4">Open the short video</a>
-      </video>
-      <figcaption id="name-pair-example">V21 <i>Transport held timber</i> and V04 <i>Transport and rotate timber</i> score <strong id="path-score">0.822</strong>. The <a href="analysis/index.html#pair-6">recorded comparison</a> shows drawings for the same names from V28 and V04.</figcaption>
-    </figure>
-  </div>
-</details></section>
+    </dialog>
+  </section>
+
+  <section class="start-module" aria-labelledby="action-module-title">
+    <div class="start-module-sidebar">
+      <h2 id="action-module-title">Action &amp; Relationship</h2>
+      <nav class="start-module-menu" aria-label="Action and Relationship">
+        <button type="button" data-study-panel aria-controls="action-video" aria-pressed="true">Video</button>
+        <button type="button" data-study-panel aria-controls="v22-method" aria-pressed="false">Workflow</button>
+        <a href="#overview">Fifteen assembly cases ↗</a>
+        <div class="start-module-group">
+          <h3>Assembly Space</h3>
+          <a href="spatial/index.html">Atlas of Assembly Space ↗</a>
+          <a href="spatial/compare.html">Compare two cases ↗</a>
+        </div>
+      </nav>
+    </div>
+    <div class="start-module-content">
+      <div id="action-video" class="start-study-panel">
+        <figure class="start-media">
+          <video controls playsinline preload="none" width="1280" height="640"
+            poster="video-to-top-view/assets/33_v22_workshop_video_poster.jpg"
+            aria-label="V22 S01 video tracking, local top view and workshop plan placement">
+            <source src="video-to-top-view/assets/32_v22_video_to_workshop_plan.mp4" type="video/mp4">
+          </video>
+          <figcaption>V22 · From video to workshop plan</figcaption>
+        </figure>
+      </div>
+      <div id="v22-method" class="start-study-panel" hidden>
+        <h3>From video to top view</h3>
+        <p>The V22 shot shows a robot holding a timber panel. Tracking a point on the robot connects the movement in the film to its path on the workshop plan.</p>
+        <figure class="start-workflow">
+          <a href="video-to-top-view/assets/14_visual_pipeline.svg" aria-label="Open the full-size V22 processing diagram">
+            <img src="video-to-top-view/assets/14_visual_pipeline.png" width="2400" height="1308" loading="lazy" decoding="async"
+              alt="V22 video frames processed with SAM2.1, feature tracking and Depth Pro, then projected onto the workshop plan">
+          </a>
+          <figcaption><a href="video-to-top-view/">Video to Top View ↗</a> · <a href="video-to-top-view/technical.html#networks">SAM2.1 and Depth Pro ↗</a></figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="start-module" aria-labelledby="sentence-module-title">
+    <div class="start-module-sidebar">
+      <h2 id="sentence-module-title">Sentence Transformer</h2>
+      <nav class="start-module-menu" aria-label="Sentence Transformer">
+        <button type="button" data-study-panel aria-controls="sentence-video" aria-pressed="true">Video</button>
+        <button type="button" data-study-panel aria-controls="study-method" aria-pressed="false">Workflow</button>
+        <a href="#action-connections">Action-name connections ↗</a>
+        <a href="action-pair-summary/index.html">Pair summary ↗</a>
+      </nav>
+    </div>
+    <div class="start-module-content">
+      <div id="sentence-video" class="start-study-panel">
+        <figure class="start-media">
+          <video controls playsinline preload="none" width="960" height="540" poster="media/name-pair/name-pair-poster.jpg"
+            aria-label="How a name pair is made, with timber transport in V21 and V04" aria-describedby="name-pair-example">
+            <source src="media/name-pair/name-pair-explainer.mp4" type="video/mp4">
+            <a href="media/name-pair/name-pair-explainer.mp4">Open the short video</a>
+          </video>
+          <figcaption id="name-pair-example">V21 <i>Transport held timber</i> and V04 <i>Transport and rotate timber</i> score <strong id="path-score">0.822</strong>. The <a href="analysis/index.html#pair-6">recorded comparison</a> shows drawings for the same names from V28 and V04.</figcaption>
+        </figure>
+      </div>
+      <div id="study-method" class="start-study-panel" hidden>
+        <h3>How a name pair is made</h3>
+        <p id="dataset-meta"></p>
+        <p>Label Studio connects each English action name to annotated spans in the source films. Each unique name has one stored vector.</p>
+        <figure class="start-workflow start-workflow-names">
+          <a href="media/name-pair/diagram.svg" aria-label="Open the pairing diagram at full size">
+            <img src="media/name-pair/diagram.svg" width="640" height="536" loading="lazy" decoding="async"
+              alt="English action names enter a MiniLM encoder. Cosine similarity and display filters select pairs for comparison with source drawings.">
+          </a>
+          <figcaption><a href="media/name-pair/diagram.svg">Full-size diagram ↗</a> · <a href="https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2">Model details ↗</a></figcaption>
+        </figure>
+        <details class="start-example">
+          <summary>When similar names describe different assembly conditions</summary>
+          <p>“Hold timber at joint” and “Position timber at joint” score <b>0.897</b>. Their recorded axes change in opposite directions.</p>
+          <div class="duo">
+            <figure><img src="plates/click_rest/071_Robot_V28_Hold_timber_at_joint_b.jpg" loading="lazy" decoding="async" alt="V28 reference still showing timber held at a joint"><figcaption>V28 · Hold timber at joint · +27.5°</figcaption></figure>
+            <figure><img src="plates/click_rest/001_Mixed_V21_Position_timber_at_joint_b.jpg" loading="lazy" decoding="async" alt="V21 reference still showing timber positioned at a joint"><figcaption>V21 · Position timber at joint · −2.9°</figcaption></figure>
+          </div>
+          <p><a href="analysis/index.html#pair-3">Compare the two recorded events ↗</a></p>
+        </details>
+      </div>
+    </div>
+  </section>
+</section>
 <div id="explorer-body" hidden>
 <div class="study-panel">Pairs link similar action names with drawings on both sides. <span id="drawing-status" role="status"></span></div><section class="toolbar" aria-label="Filters"><label class="field">Search action names<input id="q" type="search" placeholder="Try hold, insert or gripper…" autocomplete="off"></label><label class="field"><span class="range-heading">Minimum cosine <output id="threshold-label">0.50</output></span><span class="range-wrap"><small>0.50</small><input aria-label="Minimum cosine" id="threshold" type="range" min="0.50" max="0.95" step="0.01" value="0.50"><small>0.95</small></span></label><label class="field">Name-pair scope<select id="scope"><option value="cross">No shared case</option><option value="all">All name pairs</option><option value="same">At least one shared case</option></select></label><button id="clear">Reset filters</button></section>
 <nav class="filter-bottom" aria-label="Filter by case"><span>CASE</span><div id="vlist" class="cases"></div></nav>
@@ -3698,13 +3766,17 @@ function walkEdge() {
     return names.includes('Transport held timber') && names.includes('Transport and rotate timber')
   })
 }
-window.addEventListener('hashchange',()=>{if(/^#(overview|human-led|human-robot|robotic-assembly)/.test(location.hash))showPage('cases');else if(location.hash==='#study-method'){showPage('path');document.getElementById('study-method').open=true}else if(location.hash==='#v22-method'){showPage('path');document.getElementById('v22-method').scrollIntoView({block:'start'})}});
-if(location.hash==='#study-method')document.getElementById('study-method').open=true;
+window.addEventListener('hashchange', () => {
+  const hash = location.hash
+  if (/^#(overview|human-led|human-robot|robotic-assembly)/.test(hash)) showPage('cases')
+  else if (['#study-method', '#v22-method', '#study-start'].includes(hash)) showPage('path')
+})
 let pageTab = 'path'
 function showPage(name) {
   if (name !== 'path' && name !== 'explorer' && name !== 'cases') return
   pageTab = name
   $('path-page').hidden = name !== 'path'
+  if (name !== 'path') $('path-page').querySelectorAll('video').forEach(video => video.pause())
   $('explorer-body').hidden = name !== 'explorer'
   const cases = $('cases-page')
   if (cases) cases.hidden = name !== 'cases'
@@ -3808,8 +3880,6 @@ $('open-pairs').onclick=()=>{view='pairs';page=0;render()}
 $('export').onclick=exportSvg
 $('diagram').addEventListener('click',()=>{clearDetail();render()})
 document.querySelectorAll('.page-tabs [data-page]').forEach(button => button.addEventListener('click', () => showPage(button.dataset.page)))
-const methodPanel=document.getElementById('study-method');
-methodPanel.addEventListener('toggle',()=>{if(methodPanel.open && location.hash==='#study-method')methodPanel.scrollIntoView({block:'start'})});
 renderPath()
 window.addEventListener('hashchange', openRelationshipRoute)
 openRelationshipRoute()
