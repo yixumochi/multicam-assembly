@@ -218,6 +218,26 @@ button, input, select { accent-color: var(--blue); }
 .pair-plot { overflow-x: auto; border: 1px solid var(--line); background: #fff; }
 .pair-plot svg { display: block; width: 100%; min-width: 450px; height: auto; font-size: 13px; }
 .pair-value { paint-order: stroke; stroke: #fff; stroke-width: 3px; stroke-linejoin: round; }
+.pair-stage-comparison { margin-top: 16px; border: 1px solid var(--line); background: #fff; }
+.pair-stage-comparison > h3 { margin: 0; padding: 9px 14px; background: #BAF492; color: var(--ink); font-size: 18px; }
+.pair-stage-legend { display: flex; flex-wrap: wrap; gap: 6px 24px; margin: 10px 14px 4px; padding: 0; list-style: none; font-size: 14px; }
+.pair-stage-legend li { display: flex; align-items: baseline; gap: 7px; }
+.pair-stage-swatch { flex: 0 0 12px; width: 12px; height: 12px; border: 1px solid #516769; border-radius: 2px; background: var(--stage-color); }
+.pair-stage-panels { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; padding: 8px 14px 0; }
+.pair-stage-panel { min-width: 0; }
+.pair-stage-panel h4 { margin: 0; color: var(--ink); font-size: 15px; font-weight: 650; }
+.pair-stage-panel svg { display: block; width: 100%; max-height: 245px; height: auto; color: var(--ink); font-size: 13px; font-variant-numeric: tabular-nums; }
+.pair-stage-panel text { fill: currentColor; }
+.pair-stage-panel .pair-stage-tick { fill: var(--muted); }
+.pair-stage-value { font-weight: 700; paint-order: stroke; stroke: #fff; stroke-width: 3px; stroke-linejoin: round; }
+.pair-stage-grid { stroke: var(--line); }
+.pair-stage-zero { stroke: #738886; }
+.pair-stage-bar { stroke: #516769; stroke-width: .55; }
+.pair-stage-note { margin: 2px 14px 10px; }
+@media (max-width: 640px) {
+  .pair-stage-panels { grid-template-columns: minmax(0, 1fr); }
+  .pair-stage-panel svg { max-height: none; }
+}
 .pair-measurements { margin-top: 16px; border: 1px solid var(--line); padding: 9px 12px 12px; }
 .pair-measurements summary { cursor: pointer; font-size: 16px; font-weight: 650; }
 .pair-measurement img { height: clamp(124px, 18vw, 210px); object-fit: contain; }
@@ -3341,6 +3361,124 @@ function angleChart(left, right) {
   return wrap
 }
 
+const PAIR_STAGE_COLORS = ['#6AC2E7', '#EE751C']
+
+function stageComparison(left, right) {
+  const pairs = [left, right]
+  const intervals = [['a', 'b'], ['b', 'c']]
+  const series = pairs.map(plate => {
+    const frames = new Map(plate?.frames.map(frame => [frame.mark, frame]))
+    return {
+      angles: intervals.map(([from, to]) => {
+        const start = angleNumber(frames.get(from)?.theta)
+        const end = angleNumber(frames.get(to)?.theta)
+        if (start === null || end === null) return null
+        // The drawn member axis represents the same orientation every 180°.
+        const change = (end - start) % 180
+        return change > 90 ? change - 180 : change < -90 ? change + 180 : change
+      }),
+      shifts: intervals.map(([from, to]) => {
+        if (!plate || !frames.has(from) || !frames.has(to)) return null
+        if (plate.ref === from) return angleNumber(frames.get(to).shift)
+        if (plate.ref === to) return angleNumber(frames.get(from).shift)
+        return null
+      }),
+    }
+  })
+
+  const section = document.createElement('section')
+  section.className = 'pair-stage-comparison'
+  const title = document.createElement('h3')
+  title.textContent = 'Movement between keyframes'
+  const legend = document.createElement('ul')
+  legend.className = 'pair-stage-legend'
+  pairs.forEach((plate, index) => {
+    if (!plate) return
+    const item = document.createElement('li')
+    const swatch = document.createElement('span')
+    swatch.className = 'pair-stage-swatch'
+    swatch.style.setProperty('--stage-color', PAIR_STAGE_COLORS[index])
+    swatch.setAttribute('aria-hidden', 'true')
+    item.append(swatch, plate.home + ' · ' + plate.name)
+    legend.appendChild(item)
+  })
+  const panels = document.createElement('div')
+  panels.className = 'pair-stage-panels'
+  panels.append(
+    stageChart('Member angle change (°)', series.map(item => item.angles), pairs, angle => angleText(angle, true), 2),
+    stageChart('Grip displacement (d/H)', series.map(item => item.shifts), pairs, shift => shift.toFixed(2), .1)
+  )
+  const note = document.createElement('p')
+  note.className = 'pair-angle-note pair-stage-note'
+  note.textContent = 'Angles show the shortest signed change of the member axis in the image. Grip displacement is the image distance to the reference frame divided by the case’s scale H, shown when the reference is one of the two frames.'
+  section.append(title, legend, panels, note)
+  return section
+}
+
+function stageChart(label, series, plates, format, minimumStep) {
+  const stages = ['Start → Middle', 'Middle → End']
+  const panel = document.createElement('section')
+  panel.className = 'pair-stage-panel'
+  const title = document.createElement('h4')
+  title.textContent = label
+  panel.appendChild(title)
+  const values = series.flat().filter(value => value !== null)
+  if (!values.length) {
+    const note = document.createElement('p')
+    note.className = 'pair-angle-note'
+    note.textContent = 'No measurements available for these intervals.'
+    panel.appendChild(note)
+    return panel
+  }
+
+  const width = 400, height = 200
+  const left = 42, right = 388, top = 20, bottom = 159
+  const min = Math.min(0, ...values), max = Math.max(0, ...values)
+  const rawStep = (max - min) / 4
+  const magnitude = rawStep ? 10 ** Math.floor(Math.log10(rawStep)) : minimumStep
+  const step = Math.max(minimumStep, ([1, 2, 5, 10].find(n => n * magnitude >= rawStep) || 10) * magnitude)
+  const firstTick = Math.floor(min / step)
+  const lastTick = Math.max(firstTick + 1, Math.ceil(max / step))
+  const yAt = value => bottom - (value / step - firstTick) / (lastTick - firstTick) * (bottom - top)
+  const description = plates.map((plate, index) => plate && (plate.home + ', ' + plate.name + '. ' +
+    series[index].map((value, stage) => stages[stage] + ' ' + (value === null ? 'unavailable' : format(value))).join(', ')))
+    .filter(Boolean).join('. ')
+  const svg = el('svg', {viewBox: `0 0 ${width} ${height}`, role: 'img', 'aria-label': label + '. ' + description})
+  function textAt(value, x, y, attrs = {}) {
+    const item = el('text', {x, y, 'text-anchor': 'middle', ...attrs})
+    item.textContent = value
+    svg.appendChild(item)
+  }
+  for (let tick = firstTick; tick <= lastTick; tick++) {
+    const y = yAt(tick * step)
+    svg.appendChild(el('line', {x1: left, x2: right, y1: y, y2: y, class: tick === 0 ? 'pair-stage-zero' : 'pair-stage-grid'}))
+    textAt(String(Number((tick * step).toFixed(2))).replace('-', '−'), left - 8, y + 4, {'text-anchor': 'end', class: 'pair-stage-tick'})
+  }
+  stages.forEach((stage, interval) => {
+    const center = left + (right - left) * (interval + .5) / stages.length
+    textAt(stage, center, 185)
+    series.forEach((items, index) => {
+      if (!plates[index]) return
+      const value = items[interval]
+      const x = center + (index === 0 ? -27 : 27)
+      const baseline = yAt(0)
+      if (value === null) {
+        textAt('—', x, baseline > top + 18 ? baseline - 8 : baseline + 16, {class: 'pair-stage-tick'})
+        return
+      }
+      const y = yAt(value)
+      svg.appendChild(el('rect', {
+        x: x - 16, y: Math.min(y, baseline) - (value === 0 ? 1 : 0),
+        width: 32, height: Math.max(2, Math.abs(y - baseline)),
+        fill: PAIR_STAGE_COLORS[index], class: 'pair-stage-bar',
+      }))
+      textAt(format(value), x, value < 0 ? y + 15 : y - 7, {class: 'pair-stage-value'})
+    })
+  })
+  panel.appendChild(svg)
+  return panel
+}
+
 function pairMeasurements(left, right) {
   const details = document.createElement('details')
   details.className = 'pair-measurements'
@@ -3425,7 +3563,8 @@ function openPairPop(edge) {
   const guide = document.createElement('p')
   guide.className = 'pair-angle-note pair-image-guide'
   guide.textContent = 'Open an outline or film still to view it at full size.'
-  sheet.append(head, cases, guide, angleChart(leftPlate, rightPlate), pairMeasurements(leftPlate, rightPlate))
+  sheet.append(head, cases, guide, stageComparison(leftPlate, rightPlate),
+    angleChart(leftPlate, rightPlate), pairMeasurements(leftPlate, rightPlate))
   host.replaceChildren(sheet)
   close.focus()
 }
