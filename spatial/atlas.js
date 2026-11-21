@@ -379,7 +379,6 @@
 
   function readAtlas({rows, modes}) {
     const byId = new Map(rows.map(row => [row.case, row]));
-    const compareTab = document.getElementById("compare-tab-link");
     let selected = [];
     const relations = initializeCaseRelations({
       rows, modes, hasMetres, areaValue, calibration, readableArea, canCompare,
@@ -397,17 +396,13 @@
         } else {
           selected = [id];
         }
-        updateSelection();
+        relations.update(selected);
       }
     });
-    function updateSelection() {
-      relations.update(selected);
-      compareTab.href = compareUrl(selected).href;
-    }
     function openLinkedCase() {
       const id = location.hash.slice(1);
       selected = byId.has(id) && canCompare(byId.get(id)) ? [id] : [];
-      updateSelection();
+      relations.update(selected);
     }
     openLinkedCase();
     window.addEventListener("hashchange", openLinkedCase);
