@@ -121,18 +121,21 @@
 .start-study-panel { max-width: 960px; scroll-margin-top: 12px; }
 .start-study-panel h3 { margin: 0; font-size: 18px; }
 .start-study-panel p { max-width: 75ch; margin: 5px 0 10px; }
-.start-media, .start-workflow, .start-example figure { margin: 0; }
+.start-workflow, .start-example figure { margin: 0; }
+#action-video, #sentence-video { max-width: none; }
+.start-media { width: min(100%, 880px); margin: 0 auto; }
 .start-media video {
   display: block;
   width: 100%;
   height: auto;
-  max-height: min(63vh, 540px);
+  aspect-ratio: 16 / 9;
   border: 1px solid var(--line);
   border-radius: 6px;
   background: #13282c;
   object-fit: contain;
 }
 .start-module figcaption { margin-top: 5px; color: var(--muted); font-size: 13px; }
+.start-music-credit { margin: -10px 0 0; color: var(--muted); font-size: 12px; text-align: right; }
 .start-workflow img, .start-example img { display: block; width: 100%; height: auto; border: 1px solid var(--line); background: white; }
 .start-workflow-names { max-width: 560px; }
 .start-example { margin-top: 14px; }
