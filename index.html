@@ -287,7 +287,7 @@ html[data-view="case-area"] #cases-page .page[data-page="overview"] > :not(.surv
 html[data-view="case-area"] .workspace,
 html[data-view="case-area"] #cases-page main { width:100%; max-width:none; margin:0; padding:0; }
 html[data-view="case-area"] body { margin:0; }
-</style><link rel="stylesheet" href="site-header.css?v=96bd1538">
+</style><link rel="stylesheet" href="site-header.css?v=nav-groups-1">
 </head>
 <body class="site-page assembly-home">
 <header class="site-header" id="research-heading" hidden>
@@ -296,12 +296,12 @@ html[data-view="case-area"] body { margin:0; }
 </header>
 <nav class="page-tabs site-nav" aria-label="Pages">
   <button type="button" data-page="path" aria-pressed="true">Start here / Methods</button>
-  <button type="button" data-page="explorer" aria-pressed="false">Action Relationships</button>
-  <a href="action-pair-summary/scatter.html">Action Names and Turning</a>
-  <button type="button" data-page="cases" aria-pressed="false">Fifteen assembly cases</button>
-  <a href="spatial/index.html">Atlas of Assembly Space</a>
-  <a href="spatial/compare.html">Compare two cases</a>
-  <a href="observation/index.html">Relative position</a>
+  <button type="button" data-page="cases" aria-pressed="false" data-nav-group="case">Fifteen assembly cases</button>
+  <button type="button" data-page="explorer" aria-pressed="false" data-nav-group="action">Action Relationships</button>
+  <a href="action-pair-summary/scatter.html" data-nav-group="action">Action Names and Turning</a>
+  <a href="spatial/index.html" data-nav-group="case">Atlas of Assembly Space</a>
+  <a href="spatial/compare.html" data-nav-group="case">Compare two cases</a>
+  <a href="observation/index.html" data-nav-group="case">Relative position</a>
 </nav>
 <main class="workspace site-workspace">
 <section id="path-page" class="start-layout" aria-label="Start here / Methods">

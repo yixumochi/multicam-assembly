@@ -9,7 +9,7 @@
 <link rel="stylesheet" href="compare-cases.css?v=b6eb3e93">
 <script src="area-calibration.js" defer></script>
 <script src="atlas.js?v=standalone-compare1" defer></script>
-<link rel="stylesheet" href="../site-header.css?v=96bd1538">
+<link rel="stylesheet" href="../site-header.css?v=nav-groups-1">
 </head>
 <body class="site-page assembly-atlas">
 <header class="site-header">
@@ -18,12 +18,12 @@
 </header>
 <nav class="site-nav" aria-label="Pages">
   <a href="../index.html">Start here / Methods</a>
-  <a href="../index.html#action-connections">Action Relationships</a>
-  <a href="../action-pair-summary/scatter.html">Action Names and Turning</a>
-  <a href="../index.html#overview">Fifteen assembly cases</a>
-  <a href="../spatial/index.html">Atlas of Assembly Space</a>
-  <a href="../spatial/compare.html" aria-current="page">Compare two cases</a>
-  <a href="../observation/index.html">Relative position</a>
+  <a href="../index.html#overview" data-nav-group="case">Fifteen assembly cases</a>
+  <a href="../index.html#action-connections" data-nav-group="action">Action Relationships</a>
+  <a href="../action-pair-summary/scatter.html" data-nav-group="action">Action Names and Turning</a>
+  <a href="../spatial/index.html" data-nav-group="case">Atlas of Assembly Space</a>
+  <a href="../spatial/compare.html" aria-current="page" data-nav-group="case">Compare two cases</a>
+  <a href="../observation/index.html" data-nav-group="case">Relative position</a>
 </nav>
 <main id="atlas" class="assembly-atlas-main case-area site-workspace" data-compare-page>
   <p id="atlas-status" role="status">Loading the 15 case measurements…</p>

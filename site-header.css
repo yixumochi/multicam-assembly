@@ -216,3 +216,32 @@ body.site-page {
   .site-page .content.show-plates .detail.is-empty { display: none; }
   .site-page #explorer-body .network-scroll { overflow-x: auto; }
 }
+
+.site-page .site-nav > [data-nav-group="case"] {
+  --nav-group-accent: var(--site-sky, #6ac2e7);
+}
+
+.site-page .site-nav > [data-nav-group="action"] {
+  --nav-group-accent: var(--site-lime, #baf492);
+}
+
+.site-page .site-nav > [data-nav-group] {
+  padding-inline: clamp(8px, .85vw, 12px);
+  border-radius: var(--site-radius, 4px) var(--site-radius, 4px) 0 0;
+  background: color-mix(in srgb, var(--nav-group-accent) 38%, white);
+  color: var(--site-ink, #17363b);
+}
+
+.site-page .site-nav > [data-nav-group]:hover {
+  background: color-mix(in srgb, var(--nav-group-accent) 60%, white);
+}
+
+.site-page .site-nav > [data-nav-group]:is([aria-current="page"], [aria-pressed="true"]) {
+  border-bottom-color: var(--site-ink, #17363b);
+  background: var(--nav-group-accent);
+}
+
+.site-page .site-nav > [data-nav-group]:focus-visible {
+  outline: 2px solid var(--site-ink, #17363b);
+  outline-offset: -3px;
+}

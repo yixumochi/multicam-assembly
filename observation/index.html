@@ -48,7 +48,7 @@ figcaption { display: flex; align-items: center; gap: 6px; margin-top: 4px; font
 @media (max-width: 640px) { .row, .columns, .frames, .masks, .angle-card { grid-template-columns: 1fr; } main { padding-left: 12px; padding-right: 12px; } .sheet-head { display: block; } }
 </style>
 
-<link rel="stylesheet" href="../site-header.css?v=96bd1538">
+<link rel="stylesheet" href="../site-header.css?v=nav-groups-1">
 </head>
 <body class="site-page relative-groups">
 <header class="site-header">
@@ -57,12 +57,12 @@ figcaption { display: flex; align-items: center; gap: 6px; margin-top: 4px; font
 </header>
 <nav class="site-nav" aria-label="Pages">
   <a href="../index.html">Start here / Methods</a>
-  <a href="../index.html#action-connections">Action Relationships</a>
-  <a href="../action-pair-summary/scatter.html">Action Names and Turning</a>
-  <a href="../index.html#overview">Fifteen assembly cases</a>
-  <a href="../spatial/index.html">Atlas of Assembly Space</a>
-  <a href="../spatial/compare.html">Compare two cases</a>
-  <a href="../observation/index.html" aria-current="page">Relative position</a>
+  <a href="../index.html#overview" data-nav-group="case">Fifteen assembly cases</a>
+  <a href="../index.html#action-connections" data-nav-group="action">Action Relationships</a>
+  <a href="../action-pair-summary/scatter.html" data-nav-group="action">Action Names and Turning</a>
+  <a href="../spatial/index.html" data-nav-group="case">Atlas of Assembly Space</a>
+  <a href="../spatial/compare.html" data-nav-group="case">Compare two cases</a>
+  <a href="../observation/index.html" aria-current="page" data-nav-group="case">Relative position</a>
 </nav>
 <main class="site-workspace">
   <p class="note">The cases use the same three groups as the explorer: Manual, Mixed, and Robot. A sheet is shown only where one was recorded. The blue, green, and orange marks are the three sample times in that sheet. They are not the case-group labels.</p>
