@@ -15,6 +15,7 @@
   const tabs = [...document.querySelectorAll('.summary-view-tabs [role="tab"]')]
   const scatter = document.querySelector('#pair-scatter')
   const scatterNotes = document.querySelector('#scatter-notes')
+  const scatterFinding = document.querySelector('#scatter-finding')
   let ready = false
   let activeView = 'table'
   let pairs = []
@@ -157,6 +158,7 @@
   function renderScatter(total) {
     const count = window.renderActionPairScatter(scatter, displayed, gap)
     scatterNotes.hidden = count === 0
+    scatterFinding.hidden = scopeFilter.value !== 'cross' || caseFilter.value !== '' || search.value.trim() !== ''
     if (!total) {
       status.textContent = 'No action pairs match these filters.'
       return

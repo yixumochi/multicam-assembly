@@ -68,3 +68,6 @@ a { color: var(--blue); }
 .summary-view-tabs button { padding: 5px 12px; border: 0; border-radius: 4px; background: transparent; color: var(--ink); font-size: 14px; cursor: pointer; }
 .summary-view-tabs button:hover { background: #eaf7df; }
 .summary-view-tabs button[aria-selected="true"] { background: var(--green); font-weight: 650; }
+.scatter-reading { margin-top: 10px; padding: 10px 13px; border: 1px solid var(--line); border-inline-start: 3px solid var(--green); background: #fff; color: var(--ink); font-size: 14px; }
+.scatter-reading p { margin: 0; }
+.scatter-reading p:not([hidden]) + p { margin-top: 4px; }

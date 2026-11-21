@@ -5,10 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Action Pair Summary · MultiCam</title>
   <link rel="stylesheet" href="../site-header.css?v=1">
-  <link rel="stylesheet" href="summary.css?v=2">
+  <link rel="stylesheet" href="summary.css?v=3">
   <link rel="stylesheet" href="scatter.css">
   <script src="scatter.js" defer></script>
-  <script src="summary.js?v=2" defer></script>
+  <script src="summary.js?v=3" defer></script>
 </head>
 <body>
   <header class="site-header">
@@ -83,7 +83,10 @@
     </section>
     <section id="view-scatter" role="tabpanel" aria-labelledby="tab-scatter" hidden>
       <div id="pair-scatter"></div>
-      <p class="summary-notes" id="scatter-notes" hidden>Each dot is one action pair. The gap compares the magnitudes of the two start-to-end angle changes measured in their images. Select a dot to open its comparison.</p>
+      <div class="scatter-reading" id="scatter-notes" hidden>
+        <p id="scatter-finding" hidden><strong>Default view.</strong> Across the 249 plotted pairs, name similarity and angle gap have a weak positive association (Spearman ρ = +0.16).</p>
+        <p>Higher cosine means more similar action names. A smaller angle gap means the two members turned by more similar amounts in their images.</p>
+      </div>
     </section>
   </main>
 </body>
