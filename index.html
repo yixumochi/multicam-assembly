@@ -272,7 +272,7 @@ button, input, select { accent-color: var(--blue); }
   .name-pair-media { grid-template-columns: minmax(0, 1fr); }
 }
 
-</style><link rel="stylesheet" href="research.css?v=835c55c1"><link rel="stylesheet" href="start-page.css?v=3"><link rel="stylesheet" href="wheel-intro.css"><script src="start-page.js?v=1" defer></script><script src="wheel-intro.js" defer></script><script>
+</style><link rel="stylesheet" href="research.css?v=835c55c1"><link rel="stylesheet" href="start-page.css?v=4"><link rel="stylesheet" href="wheel-intro.css"><script src="start-page.js?v=1" defer></script><script src="wheel-intro.js" defer></script><script>
 if (window.parent !== window && new URLSearchParams(location.search).get('view') === 'case-area') {
   document.documentElement.dataset.view = 'case-area';
 }
@@ -417,13 +417,77 @@ html[data-view="case-area"] body { margin:0; }
       </div>
       <div id="v22-method" class="start-study-panel" hidden>
         <h3>From video to top view</h3>
-        <p>The V22 shot shows a robot holding a timber panel. Tracking a point on the robot connects the movement in the film to its path on the workshop plan.</p>
-        <figure class="start-workflow">
-          <a href="video-to-top-view/assets/14_visual_pipeline.svg" aria-label="Open the full-size V22 processing diagram">
-            <img src="video-to-top-view/assets/14_visual_pipeline.png" width="2400" height="1308" loading="lazy" decoding="async"
-              alt="V22 video frames processed with SAM2.1, feature tracking and Depth Pro, then projected onto the workshop plan">
-          </a>
-          <figcaption><a href="video-to-top-view/">Video to Top View ↗</a> · <a href="video-to-top-view/technical.html#networks">SAM2.1 and Depth Pro ↗</a></figcaption>
+        <p>V22 S01 follows surface features through the film to produce a local top view and a schematic overlay on the workshop plan.</p>
+        <figure class="start-workflow start-workflow-names">
+          <div class="v22-workflow-card" role="group" aria-label="V22 workflow from video to two top views">
+            <ol class="v22-workflow-stages" aria-label="Video tracking stages">
+              <li class="v22-workflow-step v22-workflow-step--source">
+                <h4>Source frame</h4>
+                <div class="v22-workflow-image">
+                  <img src="media/v22-workflow/source.png" alt="Robots and timber in the V22 workshop at frame F1950" width="342" height="192" loading="lazy" decoding="async">
+                </div>
+                <p>V22 · Shot S01</p>
+              </li>
+              <li class="v22-workflow-step v22-workflow-step--mask">
+                <h4>Segment</h4>
+                <div class="v22-workflow-image">
+                  <img src="media/v22-workflow/mask.png" alt="SAM2.1 mask overlays on selected objects in the same workshop frame" width="342" height="192" loading="lazy" decoding="async">
+                </div>
+                <p>SAM2.1 masks</p>
+              </li>
+              <li class="v22-workflow-step v22-workflow-step--track">
+                <h4>Track features</h4>
+                <div class="v22-workflow-image v22-workflow-image--tracking">
+                  <img src="media/v22-workflow/source.png" alt="" width="342" height="192" loading="lazy" decoding="async">
+                  <svg viewBox="0 0 960 540" role="img" aria-label="Feature 80’s recorded path in image pixels over the shot">
+                    <!-- Cached image points for V22 S01 feature 80. -->
+                    <path class="v22-workflow-track-halo" d="M458.2 199.0L469.9 196.2L488.0 195.0L493.7 194.7L526.6 194.8L571.2 196.4L619.8 193.3L662.4 185.3L715.9 174.0L766.6 171.6L825.9 169.8L873.7 173.7L902.7 181.6L899.2 187.2L887.5 191.5L857.6 194.8L824.9 198.3L789.6 202.0L753.6 205.7L720.5 208.6L702.6 214.4L704.3 215.8"/>
+                    <path class="v22-workflow-track-line" d="M458.2 199.0L469.9 196.2L488.0 195.0L493.7 194.7L526.6 194.8L571.2 196.4L619.8 193.3L662.4 185.3L715.9 174.0L766.6 171.6L825.9 169.8L873.7 173.7L902.7 181.6L899.2 187.2L887.5 191.5L857.6 194.8L824.9 198.3L789.6 202.0L753.6 205.7L720.5 208.6L702.6 214.4L704.3 215.8"/>
+                    <circle cx="458.2" cy="199" r="15" fill="#baf492" stroke="#17363b" stroke-width="6"/>
+                    <circle cx="704.3" cy="215.8" r="15" fill="#fffef8" stroke="#17363b" stroke-width="6"/>
+                  </svg>
+                </div>
+                <p>Bidirectional LK</p>
+              </li>
+            </ol>
+            <div class="v22-workflow-drop" aria-hidden="true"></div>
+            <div class="v22-workflow-outputs">
+              <h4>Two top-view routes</h4>
+              <div class="v22-workflow-fork" aria-hidden="true"><span></span><span></span></div>
+              <div class="v22-workflow-routes">
+                <section class="v22-workflow-route v22-workflow-route--local" aria-label="Local top view">
+                  <h5>Local top view</h5>
+                  <div class="v22-workflow-evidence v22-workflow-evidence--local">
+                    <div class="v22-workflow-depth">
+                      <img src="media/v22-workflow/depth.png" alt="Depth Pro color map for frame F1950" width="342" height="192" loading="lazy" decoding="async">
+                      <span>Depth Pro</span>
+                    </div>
+                    <span class="v22-workflow-lift" aria-hidden="true">→</span>
+                    <div class="v22-workflow-local-track">
+                      <svg viewBox="0 0 111 91" role="img" aria-label="Feature 80’s path in the shot’s local ground plane, with an unsupported interval left blank">
+                        <!-- F2112 has image coordinates and no supported local coordinates. -->
+                        <path d="M8 9v75h95M8 27h95M8 46h95M8 65h95M27 9v75M46 9v75M65 9v75M84 9v75M103 9v75" fill="none" stroke="#d2e6dd" stroke-width="1"/>
+                        <path d="M17.0 15.3L20.4 17.9L24.6 28.8L25.7 29.5L31.8 40.4L41.2 37.2L44.9 56.2L49.8 60.5L56.3 63.4L60.4 68.0L71.4 63.9L88.9 51.9L96.0 49.7L80.4 65.5L77.1 67.5L76.7 62.7L68.0 68.0L55.6 79.0L52.5 77.8M45.9 79.9L46.3 79.7L44.6 83.0" fill="none" stroke="#267185" stroke-width="2.7" stroke-linecap="round" stroke-linejoin="round"/>
+                        <circle cx="17" cy="15.3" r="3" fill="#baf492" stroke="#267185" stroke-width="1"/>
+                        <circle cx="44.6" cy="83" r="2.7" fill="#fffef8" stroke="#267185" stroke-width="1.2"/>
+                      </svg>
+                      <span>Local path</span>
+                    </div>
+                  </div>
+                  <p>Camera pose and ground-plane projection</p>
+                </section>
+                <section class="v22-workflow-route v22-workflow-route--workshop" aria-label="Workshop plan">
+                  <h5>Workshop plan</h5>
+                  <div class="v22-workflow-evidence v22-workflow-evidence--workshop">
+                    <img src="video-to-top-view/assets/31_v22_published_plan.png" alt="Published workshop plan with the V22 S01 footprint highlighted" width="1800" height="895" loading="lazy" decoding="async">
+                    <span>Schematic overlay</span>
+                  </div>
+                  <p>Fixed-depth lifting and Rhino placement</p>
+                </section>
+              </div>
+            </div>
+          </div>
+          <figcaption><a href="video-to-top-view/">Video to Top View ↗</a> · <a href="video-to-top-view/technical.html#networks">SAM2.1 and Depth Pro ↗</a> · <a href="video-to-top-view/assets/14_visual_pipeline.svg">Detailed pipeline ↗</a></figcaption>
         </figure>
       </div>
     </div>

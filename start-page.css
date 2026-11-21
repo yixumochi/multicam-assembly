@@ -220,3 +220,305 @@
   #study-start .case-gallery-all { grid-area: 2 / 1; justify-self: start; padding-inline: 0; }
   #study-start .case-gallery-key { grid-area: 3 / 1 / 4 / -1; }
 }
+
+.v22-workflow-card {
+  --v22-ink: #17363b;
+  --v22-muted: #45625f;
+  --v22-flow: #517676;
+  --v22-gap: 18px;
+  box-sizing: border-box;
+  max-inline-size: 560px;
+  container: v22-workflow / inline-size;
+  padding: 12px;
+  border: 1px solid #d7e4db;
+  border-radius: 13px;
+  background: #fffef8;
+  color: var(--v22-ink);
+  font-family: "Segoe UI", system-ui, sans-serif;
+}
+
+.v22-workflow-card .v22-workflow-stages {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--v22-gap);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.v22-workflow-card .v22-workflow-step,
+.v22-workflow-card .v22-workflow-route {
+  min-inline-size: 0;
+  padding: 9px;
+  border: 1px solid var(--v22-tile-line);
+  border-radius: 9px;
+  background: var(--v22-tile-wash);
+}
+
+.v22-workflow-card .v22-workflow-step {
+  position: relative;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: 6px;
+}
+
+.v22-workflow-step--source {
+  --v22-tile-wash: #f7f3e9;
+  --v22-tile-line: #e4ddce;
+}
+
+.v22-workflow-step--mask,
+.v22-workflow-route--local {
+  --v22-tile-wash: #eef7ef;
+  --v22-tile-line: #cfe2d4;
+}
+
+.v22-workflow-step--track,
+.v22-workflow-route--workshop {
+  --v22-tile-wash: #edf5f9;
+  --v22-tile-line: #d1e3ea;
+}
+
+.v22-workflow-card :is(h4, h5, p) { margin: 0; }
+
+.v22-workflow-card :is(h4, h5) {
+  color: var(--v22-ink);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -.012em;
+  line-height: 1.2;
+}
+
+.v22-workflow-card .v22-workflow-step h4 { font-size: clamp(11px, 2.8cqw, 15px); }
+
+.v22-workflow-card :is(.v22-workflow-step, .v22-workflow-route) > p {
+  color: var(--v22-muted);
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.v22-workflow-card .v22-workflow-step > p { font-size: clamp(10px, 2.2cqw, 12px); }
+
+.v22-workflow-card .v22-workflow-image {
+  position: relative;
+  align-self: start;
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+  border: 1px solid var(--v22-tile-line);
+  border-radius: 4px;
+  background: #fffcf3;
+}
+
+.v22-workflow-card .v22-workflow-image img,
+.v22-workflow-card .v22-workflow-evidence img {
+  display: block;
+  box-sizing: border-box;
+  inline-size: 100%;
+  block-size: 100%;
+  border: 0;
+  border-radius: 0;
+  object-fit: cover;
+}
+
+.v22-workflow-card :is(.v22-workflow-image, .v22-workflow-depth) img {
+  /* The source SVG applies a vertical flip to these embedded rasters. */
+  transform: scaleY(-1);
+}
+
+.v22-workflow-card .v22-workflow-image--tracking img { filter: brightness(.83); }
+
+.v22-workflow-card .v22-workflow-image--tracking svg {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  pointer-events: none;
+}
+
+.v22-workflow-card :is(.v22-workflow-track-halo, .v22-workflow-track-line) {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.v22-workflow-card .v22-workflow-track-halo { stroke: #17363b; stroke-width: 22px; }
+.v22-workflow-card .v22-workflow-track-line { stroke: #baf492; stroke-width: 12px; }
+
+.v22-workflow-card .v22-workflow-step:not(:last-child)::before,
+.v22-workflow-card .v22-workflow-step:not(:last-child)::after {
+  position: absolute;
+  inset-block-start: 53%;
+  color: var(--v22-flow);
+  content: "";
+}
+
+.v22-workflow-card .v22-workflow-step:not(:last-child)::before {
+  inset-inline-start: calc(100% + 2px);
+  inline-size: calc(var(--v22-gap) - 5px);
+  border-block-start: 1.5px solid;
+}
+
+.v22-workflow-card .v22-workflow-step:not(:last-child)::after {
+  inset-inline-start: calc(100% + var(--v22-gap) - 7px);
+  border-block: 3px solid transparent;
+  border-inline-start: 4px solid;
+  transform: translateY(-2.5px);
+}
+
+.v22-workflow-card .v22-workflow-drop {
+  position: relative;
+  block-size: 17px;
+}
+
+.v22-workflow-card .v22-workflow-drop::before,
+.v22-workflow-card .v22-workflow-drop::after {
+  position: absolute;
+  inset-inline-start: calc(83.333% + var(--v22-gap) / 3);
+  color: var(--v22-flow);
+  content: "";
+}
+
+.v22-workflow-card .v22-workflow-drop::before {
+  inset-block: 1px 4px;
+  border-inline-start: 1.5px solid;
+}
+
+.v22-workflow-card .v22-workflow-drop::after {
+  inset-block-end: 1px;
+  border-inline: 3px solid transparent;
+  border-block-start: 4px solid;
+  transform: translateX(-2.25px);
+}
+
+.v22-workflow-card .v22-workflow-outputs {
+  padding: 10px;
+  border: 1px solid #d7e5dc;
+  border-radius: 10px;
+  background: #f4f8f3;
+}
+
+.v22-workflow-card .v22-workflow-outputs > h4 { text-align: center; }
+
+.v22-workflow-card .v22-workflow-fork {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  justify-items: center;
+  gap: 10px;
+  block-size: 17px;
+  color: var(--v22-flow);
+}
+
+.v22-workflow-card .v22-workflow-fork::before,
+.v22-workflow-card .v22-workflow-fork::after,
+.v22-workflow-card .v22-workflow-fork span::after,
+.v22-workflow-card .v22-workflow-fork span::before {
+  position: absolute;
+  content: "";
+}
+
+.v22-workflow-card .v22-workflow-fork::before {
+  inset-block-start: 2px;
+  inset-inline-start: 50%;
+  block-size: 6px;
+  border-inline-start: 1.5px solid;
+}
+
+.v22-workflow-card .v22-workflow-fork::after {
+  inset-block-start: 8px;
+  inset-inline: calc(25% - 2.5px);
+  border-block-start: 1.5px solid;
+}
+
+.v22-workflow-card .v22-workflow-fork span { position: relative; inline-size: 1px; }
+
+.v22-workflow-card .v22-workflow-fork span::before {
+  inset-block: 8px 1px;
+  inset-inline-start: 0;
+  border-inline-start: 1.5px solid;
+}
+
+.v22-workflow-card .v22-workflow-fork span::after {
+  inset-block-end: 0;
+  inset-inline-start: -2px;
+  border-inline: 3px solid transparent;
+  border-block-start: 4px solid;
+}
+
+.v22-workflow-card .v22-workflow-routes {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.v22-workflow-card .v22-workflow-route {
+  display: grid;
+  align-content: start;
+  gap: 7px;
+}
+
+.v22-workflow-card .v22-workflow-evidence--local {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: start;
+  gap: 3px;
+}
+
+.v22-workflow-card .v22-workflow-evidence :is(img, svg) {
+  display: block;
+  inline-size: 100%;
+  block-size: clamp(52px, 13.8cqw, 82px);
+  border: 1px solid var(--v22-tile-line);
+  border-radius: 4px;
+  background: #fff;
+}
+
+.v22-workflow-card .v22-workflow-evidence--workshop img { object-fit: cover; object-position: center; }
+
+.v22-workflow-card .v22-workflow-evidence span {
+  display: block;
+  margin-block-start: 3px;
+  color: var(--v22-muted);
+  font-size: 11px;
+  line-height: 1.15;
+  text-align: center;
+}
+
+.v22-workflow-card .v22-workflow-evidence .v22-workflow-lift {
+  align-self: center;
+  margin-block-start: 0;
+  padding-block-end: 13px;
+  color: var(--v22-flow);
+  font-size: 15px;
+}
+
+@container v22-workflow (max-width: 420px) {
+  .v22-workflow-card :is(.v22-workflow-stages, .v22-workflow-drop) {
+    --v22-gap: 12px;
+  }
+
+  .v22-workflow-card .v22-workflow-step { padding: 6px; gap: 5px; }
+  .v22-workflow-card .v22-workflow-drop { block-size: 14px; }
+  .v22-workflow-card .v22-workflow-fork { display: none; }
+  .v22-workflow-card .v22-workflow-routes {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 7px;
+    margin-block-start: 8px;
+    padding-inline-start: 9px;
+    border-inline-start: 1px solid #8caaa4;
+  }
+
+  .v22-workflow-card .v22-workflow-route { position: relative; }
+  .v22-workflow-card .v22-workflow-route::before {
+    position: absolute;
+    inset-block-start: 15px;
+    inset-inline-end: 100%;
+    inline-size: 10px;
+    border-block-start: 1px solid #8caaa4;
+    content: "";
+  }
+
+  .v22-workflow-card .v22-workflow-evidence :is(img, svg) {
+    block-size: clamp(64px, 24cqw, 91px);
+  }
+}
