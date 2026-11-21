@@ -33,13 +33,47 @@
 }
 .pair-scatter-highlight,
 .pair-scatter-point:focus-visible .pair-scatter-dot {
-  fill: var(--side-b);
+  fill: var(--scatter-annotation-color, var(--side-b));
   stroke: var(--ink);
   stroke-width: 2;
   opacity: 1;
   r: 5;
   pointer-events: none;
 }
+.pair-scatter-highlight[data-annotation="small-gap"],
+.pair-scatter-point[data-annotation="small-gap"] {
+  --scatter-annotation-color: var(--green);
+  --scatter-annotation-paper: #f2fbe9;
+}
+.pair-scatter-highlight[data-annotation="large-gap"],
+.pair-scatter-point[data-annotation="large-gap"] {
+  --scatter-annotation-color: var(--side-b);
+  --scatter-annotation-paper: #fff2e8;
+}
+.pair-scatter-point[data-annotation] .pair-scatter-dot,
+.pair-scatter-highlight:is([data-annotation="small-gap"], [data-annotation="large-gap"]) {
+  fill: var(--scatter-annotation-color);
+  stroke: var(--ink);
+  stroke-width: 1.6;
+  opacity: 1;
+  r: 6;
+}
+.pair-scatter-annotation {
+  fill: var(--ink);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+.pair-scatter-annotation-leader { stroke: var(--ink); stroke-opacity: .62; pointer-events: none; }
+.pair-scatter-annotation-box { fill: var(--scatter-annotation-paper); stroke: var(--line); }
+.pair-scatter-annotation-stripe {
+  stroke: var(--scatter-annotation-color);
+  stroke-width: 3;
+  stroke-linecap: round;
+  pointer-events: none;
+}
+.pair-scatter-annotation text { pointer-events: none; }
+.pair-scatter-annotation-title { font-size: 12px; font-weight: 700; }
+.pair-scatter-point[data-annotation]:is(:hover, :focus-visible) .pair-scatter-annotation-box { stroke: var(--ink); }
 .pair-scatter-tooltip {
   position: absolute;
   z-index: 1;

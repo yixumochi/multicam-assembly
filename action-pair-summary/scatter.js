@@ -7,6 +7,12 @@
   const maxScore = 1
   const maxGap = 90
   const hitRadius = 8
+  const annotationTones = new Map([
+    ['69:72', 'small-gap'],
+    ['217:221', 'large-gap'],
+  ])
+  const annotationWidth = 146
+  const annotationHeight = 39
 
   function svgElement(tag, attributes = {}, text) {
     const node = document.createElementNS(svgNamespace, tag)
@@ -28,6 +34,56 @@
     const label = actions.join(' paired with ') + '. Name similarity ' + pair.score.toFixed(3) +
       '. Angle change gap ' + gap.toFixed(1) + ' degrees.'
     return {actions, values, label}
+  }
+
+  function addAnnotation(point, tone) {
+    const {pair, gap, link} = point
+    const group = svgElement('g', {class: 'pair-scatter-annotation', 'aria-hidden': 'true'})
+    const leader = svgElement('line', {class: 'pair-scatter-annotation-leader', x1: 0, y1: 0})
+    const label = svgElement('g', {class: 'pair-scatter-annotation-label'})
+    label.append(
+      svgElement('rect', {class: 'pair-scatter-annotation-box', width: annotationWidth, height: annotationHeight, rx: 5}),
+      svgElement('line', {class: 'pair-scatter-annotation-stripe', x1: 5, y1: 7, x2: 5, y2: annotationHeight - 7}),
+      svgElement('text', {class: 'pair-scatter-annotation-title', x: 13, y: 16}, pair.cases.join(' × ')),
+      svgElement('text', {x: 13, y: 30}, pair.score.toFixed(3) + ' cosine · ' + gap.toFixed(1) + '° gap')
+    )
+    group.append(leader, label)
+    link.dataset.annotation = tone
+    link.appendChild(group)
+    point.annotation = {leader, label}
+  }
+
+  function layoutAnnotations(points, left, right, top, bottom) {
+    const placed = []
+    const clamp = (value, min, max) => Math.max(min, Math.min(value, max))
+    points.filter(point => point.annotation).forEach(point => {
+      const {x, y, annotation} = point
+      const offset = 14
+      const leftChoices = [x + offset, x - annotationWidth - offset, x - annotationWidth / 2, right - annotationWidth]
+      const topChoices = [y - annotationHeight / 2, y + offset, y - annotationHeight - offset,
+        y + offset + 25, y - annotationHeight - offset - 25]
+      let best
+      for (const proposedX of leftChoices) {
+        for (const proposedY of topChoices) {
+          const boxX = clamp(proposedX, left + 3, right - annotationWidth - 3)
+          const boxY = clamp(proposedY, top + 3, bottom - annotationHeight - 3)
+          const endX = clamp(x, boxX, boxX + annotationWidth)
+          const endY = clamp(y, boxY, boxY + annotationHeight)
+          // Prefer short leaders while keeping labels away from dots and other labels.
+          const covered = points.filter(dot =>
+            dot.x >= boxX - hitRadius && dot.x <= boxX + annotationWidth + hitRadius &&
+            dot.y >= boxY - hitRadius && dot.y <= boxY + annotationHeight + hitRadius).length
+          const overlaps = placed.some(box =>
+            Math.abs(box.x - boxX) < annotationWidth + 6 && Math.abs(box.y - boxY) < annotationHeight + 6)
+          const cost = Math.abs(endX - x) + Math.abs(endY - y) + covered * 1000 + (overlaps ? 5000 : 0)
+          if (!best || cost < best.cost) best = {cost, x: boxX, y: boxY, endX, endY}
+        }
+      }
+      placed.push(best)
+      annotation.label.setAttribute('transform', 'translate(' + (best.x - x) + ',' + (best.y - y) + ')')
+      annotation.leader.setAttribute('x2', best.endX - x)
+      annotation.leader.setAttribute('y2', best.endY - y)
+    })
   }
 
   function nearestHitArea(point, points) {
@@ -105,6 +161,7 @@
       tooltip.style.top = (top >= 0 ? top : below) + 'px'
       highlight.setAttribute('cx', point.x)
       highlight.setAttribute('cy', point.y)
+      highlight.setAttribute('data-annotation', point.link.dataset.annotation || '')
     }
 
     function showPreview() {
@@ -136,7 +193,10 @@
       })
       point.hit = svgElement('polygon', {class: 'pair-scatter-hit', 'aria-hidden': 'true'})
       const dot = svgElement('circle', {r: 4, class: 'pair-scatter-dot', 'aria-hidden': 'true'})
-      point.link.append(point.hit, dot)
+      point.link.appendChild(point.hit)
+      const tone = annotationTones.get(pair.id)
+      if (tone) addAnnotation(point, tone)
+      point.link.appendChild(dot)
       point.link.addEventListener('pointerenter', event => {
         if (event.pointerType === 'touch') return
         hoveredPoint = point
@@ -219,6 +279,7 @@
         point.link.setAttribute('transform', 'translate(' + point.x + ',' + point.y + ')')
       })
       points.forEach(point => point.hit.setAttribute('points', nearestHitArea(point, points)))
+      layoutAnnotations(points, left, right, top, bottom)
       if (activePoint) positionTooltip(activePoint)
     }
 
