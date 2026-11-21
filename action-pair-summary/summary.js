@@ -16,6 +16,46 @@
   const scatter = document.querySelector('#pair-scatter')
   const scatterNotes = document.querySelector('#scatter-notes')
   const scatterFinding = document.querySelector('#scatter-finding')
+  const scatterCases = document.querySelector('#scatter-cases')
+  const scatterDistribution = document.querySelector('#scatter-distribution')
+  const caseExamples = {
+    "69:72": {
+      "heading": "Small turns at an occluded joint",
+      "summary": "Both labels describe handling a partly hidden joint. The member axes start at different angles and each changes very little from start to end (2.2° in V01 and 0.0° in V21).",
+      "images": [
+        "002_Manual_V01_Handle_joint_occluded_b.jpg",
+        "044_Mixed_V21_Handle_partly_occluded_joint_b.jpg"
+      ],
+      "tone": "small-gap"
+    },
+    "217:221": {
+      "heading": "Timber transport with a large gap",
+      "summary": "Both labels describe transporting timber. The V04 beam moves from steep to shallow (87.8° of image-plane change). V28's start and end orientations are just 2.2° apart.",
+      "images": [
+        "038_Mixed_V04_Transport_and_rotate_timber_c.jpg",
+        "074_Robot_V28_Transport_held_timber_c.jpg"
+      ],
+      "tone": "large-gap"
+    },
+    "5:178": {
+      "heading": "Similar total turn, different timing",
+      "summary": "The panels turn by 8.1° and 10.3° overall. V06 changes angle most after the middle frame (6.1°). V21 changes most before it (7.6°).",
+      "images": [
+        "012_Manual_V06_Move_and_tilt_held_panel_b.jpg",
+        "070_Mixed_V21_Raise_and_guide_panel_b.jpg"
+      ],
+      "tone": "timing"
+    },
+    "90:171": {
+      "heading": "A change of camera view",
+      "summary": "Both labels describe timber at a joint. V28's largest measured change spans a cut from close-up to wide shot. The change of camera view can affect the measured angle.",
+      "images": [
+        "071_Robot_V28_Hold_timber_at_joint_b.jpg",
+        "001_Mixed_V21_Position_timber_at_joint_b.jpg"
+      ],
+      "tone": "moderate-gap"
+    }
+  }
   let ready = false
   let activeView = 'table'
   let pairs = []
@@ -157,8 +197,11 @@
 
   function renderScatter(total) {
     const count = window.renderActionPairScatter(scatter, displayed, gap)
+    const defaultView = scopeFilter.value === 'cross' && caseFilter.value === '' && search.value.trim() === ''
+    window.renderScatterCases(scatterCases, displayed, caseExamples, gap)
+    window.renderAngleGapDistribution(scatterDistribution, displayed, gap, defaultView)
     scatterNotes.hidden = count === 0
-    scatterFinding.hidden = scopeFilter.value !== 'cross' || caseFilter.value !== '' || search.value.trim() !== ''
+    scatterFinding.hidden = !defaultView
     if (!total) {
       status.textContent = 'No action pairs match these filters.'
       return

@@ -8,7 +8,11 @@
   <link rel="stylesheet" href="summary.css?v=3">
   <link rel="stylesheet" href="scatter.css?v=2">
   <script src="scatter.js?v=2" defer></script>
-  <script src="summary.js?v=3" defer></script>
+  <link rel="stylesheet" href="story.css">
+  <link rel="stylesheet" href="distribution.css">
+  <script src="story.js" defer></script>
+  <script src="distribution.js" defer></script>
+  <script src="summary.js?v=4" defer></script>
 </head>
 <body>
   <header class="site-header">
@@ -82,11 +86,17 @@
       </p>
     </section>
     <section id="view-scatter" role="tabpanel" aria-labelledby="tab-scatter" hidden>
-      <div id="pair-scatter"></div>
-      <div class="scatter-reading" id="scatter-notes" hidden>
-        <p id="scatter-finding" hidden><strong>Default view.</strong> Across the 249 plotted pairs, name similarity and angle gap have a weak positive association (Spearman ρ = +0.16).</p>
-        <p>Higher cosine means more similar action names. A smaller angle gap means the two members turned by more similar amounts in their images.</p>
+      <div class="scatter-study">
+        <div class="scatter-study-main">
+          <div id="pair-scatter"></div>
+          <div class="scatter-reading" id="scatter-notes" hidden>
+            <p id="scatter-finding" hidden><strong>Default view.</strong> Similar names occur with both small and large angle gaps. Across the 249 plotted pairs, the association is weak (Spearman ρ = +0.16).</p>
+            <p>Higher cosine means more similar wording. The angle gap compares the amounts of turning seen in each camera view.</p>
+          </div>
+        </div>
+        <aside id="scatter-cases" hidden></aside>
       </div>
+      <section id="scatter-distribution" hidden></section>
     </section>
   </main>
 </body>
