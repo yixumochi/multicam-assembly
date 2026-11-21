@@ -21,10 +21,34 @@
 .scatter-case[data-tone="small-gap"] { --case-accent: var(--green); }
 .scatter-case[data-tone="large-gap"] { --case-accent: var(--side-b); }
 .scatter-case[data-tone="timing"] { --case-accent: var(--side-a); }
-.scatter-case:hover { box-shadow: 0 1px 5px rgb(23 54 59 / .15); }
-.scatter-case-header { display: flex; justify-content: space-between; align-items: start; gap: 9px; margin-bottom: 7px; }
+.scatter-case[data-tone="moderate-gap"] { --case-accent: #d5e6dd; }
+.scatter-case:is(:hover, :focus-visible, .is-linked) {
+  background: #f3faf7;
+  box-shadow: 0 0 0 1px var(--case-accent);
+}
+.scatter-case-header {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 8px;
+  margin-bottom: 7px;
+}
+.scatter-case-number {
+  display: grid;
+  place-items: center;
+  width: 21px;
+  height: 21px;
+  border: 1px solid var(--ink);
+  border-radius: 50%;
+  background: var(--case-accent);
+  color: var(--ink);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
 .scatter-case-title { margin: 0; font-size: 15px; line-height: 1.2; }
-.scatter-case:is(:hover, :focus-visible) .scatter-case-title { text-decoration: underline; text-underline-offset: 2px; }
+.scatter-case:is(:hover, :focus-visible, .is-linked) .scatter-case-title { text-decoration: underline; text-underline-offset: 2px; }
 .scatter-case-stats { margin: 3px 0 0; color: var(--muted); font-size: 12px; line-height: 1.15; font-variant-numeric: tabular-nums; }
 .scatter-case-arrow { margin-top: -3px; color: var(--blue); font-size: 21px; line-height: 1; }
 .scatter-case-body {

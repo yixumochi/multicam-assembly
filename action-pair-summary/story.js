@@ -19,11 +19,13 @@
     return frame
   }
 
-  function caseCard(pair, story, gap) {
+  function caseCard(pair, story, gap, number) {
     const link = element('a', 'scatter-case')
+    link.dataset.pairId = pair.id
     link.dataset.tone = story.tone
     link.href = '../index.html#action-pair=' + pair.id
 
+    const badge = element('span', 'scatter-case-number', number)
     const title = element('h3', 'scatter-case-title', story.heading)
     const stats = element('p', 'scatter-case-stats', pair.score.toFixed(3) + ' cosine · ' + gap.toFixed(1) + '° gap')
     const titleBlock = element('div')
@@ -31,7 +33,7 @@
     const arrow = element('span', 'scatter-case-arrow', '→')
     arrow.setAttribute('aria-hidden', 'true')
     const header = element('div', 'scatter-case-header')
-    header.append(titleBlock, arrow)
+    header.append(badge, titleBlock, arrow)
 
     const evidence = element('div', 'scatter-case-evidence')
     story.images.forEach((filename, index) => {
@@ -46,11 +48,11 @@
   window.renderScatterCases = function renderScatterCases(container, displayedPairs, details, getGap) {
     const shown = new Map(displayedPairs.map(pair => [pair.id, pair]))
     const cards = []
-    for (const [id, story] of Object.entries(details)) {
+    for (const [index, [id, story]] of Object.entries(details).entries()) {
       const pair = shown.get(id)
       if (!pair) continue
       const gap = getGap(pair)
-      if (gap !== null) cards.push(caseCard(pair, story, gap))
+      if (gap !== null) cards.push(caseCard(pair, story, gap, index + 1))
     }
     container.hidden = cards.length === 0
     if (container.hidden) {
@@ -58,7 +60,7 @@
       return
     }
 
-    const heading = element('h2', 'scatter-cases-title', 'Case examples')
+    const heading = element('h2', 'scatter-cases-title', 'Pairs in focus')
     heading.id = container.id + '-title'
     container.setAttribute('aria-labelledby', heading.id)
     const list = element('div', 'scatter-case-list')

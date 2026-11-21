@@ -43,37 +43,48 @@
 .pair-scatter-highlight[data-annotation="small-gap"],
 .pair-scatter-point[data-annotation="small-gap"] {
   --scatter-annotation-color: var(--green);
-  --scatter-annotation-paper: #f2fbe9;
 }
 .pair-scatter-highlight[data-annotation="large-gap"],
 .pair-scatter-point[data-annotation="large-gap"] {
   --scatter-annotation-color: var(--side-b);
-  --scatter-annotation-paper: #fff2e8;
+}
+.pair-scatter-highlight[data-annotation="timing"],
+.pair-scatter-point[data-annotation="timing"] {
+  --scatter-annotation-color: var(--side-a);
+}
+.pair-scatter-highlight[data-annotation="moderate-gap"],
+.pair-scatter-point[data-annotation="moderate-gap"] {
+  --scatter-annotation-color: #d5e6dd;
 }
 .pair-scatter-point[data-annotation] .pair-scatter-dot,
-.pair-scatter-highlight:is([data-annotation="small-gap"], [data-annotation="large-gap"]) {
-  fill: var(--scatter-annotation-color);
+.pair-scatter-highlight:is([data-annotation="small-gap"], [data-annotation="large-gap"], [data-annotation="timing"], [data-annotation="moderate-gap"]) {
+  fill: var(--scatter-annotation-color, var(--green));
   stroke: var(--ink);
   stroke-width: 1.6;
   opacity: 1;
-  r: 6;
+  r: 5;
 }
 .pair-scatter-annotation {
   fill: var(--ink);
   font-size: 11px;
-  font-variant-numeric: tabular-nums;
+  font-weight: 750;
 }
-.pair-scatter-annotation-leader { stroke: var(--ink); stroke-opacity: .62; pointer-events: none; }
-.pair-scatter-annotation-box { fill: var(--scatter-annotation-paper); stroke: var(--line); }
-.pair-scatter-annotation-stripe {
-  stroke: var(--scatter-annotation-color);
-  stroke-width: 3;
-  stroke-linecap: round;
-  pointer-events: none;
+.pair-scatter-annotation-hit { fill: transparent; }
+.pair-scatter-annotation-leader { stroke: var(--ink); stroke-opacity: .6; pointer-events: none; }
+.pair-scatter-annotation-badge {
+  fill: var(--scatter-annotation-color, var(--green));
+  stroke: var(--ink);
+  stroke-width: 1;
 }
 .pair-scatter-annotation text { pointer-events: none; }
-.pair-scatter-annotation-title { font-size: 12px; font-weight: 700; }
-.pair-scatter-point[data-annotation]:is(:hover, :focus-visible) .pair-scatter-annotation-box { stroke: var(--ink); }
+.pair-scatter-point[data-annotation]:is(:hover, :focus-visible, .is-linked) .pair-scatter-annotation-badge {
+  stroke-width: 2.5;
+}
+.pair-scatter-point[data-annotation]:is(:hover, :focus-visible, .is-linked) .pair-scatter-annotation-leader {
+  stroke-opacity: .95;
+  stroke-width: 1.75;
+}
+.pair-scatter-point[data-annotation].is-linked .pair-scatter-dot { r: 6.5; stroke-width: 2; }
 .pair-scatter-tooltip {
   position: absolute;
   z-index: 1;

@@ -19,6 +19,8 @@
   const scatterFinding = document.querySelector('#scatter-finding')
   const scatterCases = document.querySelector('#scatter-cases')
   const scatterDistribution = document.querySelector('#scatter-distribution')
+  const focusPairsNote = document.querySelector('#focus-pairs-note')
+  const resetPairPreview = scatter ? connectPairHighlights(scatter, scatterCases) : null
   const caseExamples = {
     "69:72": {
       "heading": "Small turns at an occluded joint",
@@ -163,10 +165,42 @@
     })
   }
 
+  function connectPairHighlights(chart, cards) {
+    const panels = [chart, cards]
+    let hovered = null
+    let focused = null
+    let active = null
+
+    function pairAt(element) {
+      const target = element instanceof Element ? element.closest('[data-pair-id]') : null
+      return target && panels.some(panel => panel.contains(target)) ? target.dataset.pairId : null
+    }
+
+    function refresh() {
+      const next = hovered || focused
+      if (next === active) return
+      for (const panel of panels) {
+        panel.querySelector('.is-linked')?.classList.remove('is-linked')
+        if (next) panel.querySelector('[data-pair-id="' + next + '"]')?.classList.add('is-linked')
+      }
+      active = next
+    }
+
+    for (const panel of panels) {
+      panel.addEventListener('pointerover', event => { hovered = pairAt(event.target); refresh() })
+      panel.addEventListener('pointerout', event => { hovered = pairAt(event.relatedTarget); refresh() })
+      panel.addEventListener('focusin', event => { focused = pairAt(event.target); refresh() })
+      panel.addEventListener('focusout', event => { focused = pairAt(event.relatedTarget); refresh() })
+    }
+    return () => { hovered = null; focused = null; refresh() }
+  }
+
   function renderScatter(total) {
-    const count = window.renderActionPairScatter(scatter, displayed, gap)
+    resetPairPreview()
+    const count = window.renderActionPairScatter(scatter, displayed, gap, caseExamples)
     const defaultView = scopeFilter.value === 'cross' && caseFilter.value === '' && search.value.trim() === ''
     window.renderScatterCases(scatterCases, displayed, caseExamples, gap)
+    focusPairsNote.hidden = scatterCases.hidden
     window.renderAngleGapDistribution(scatterDistribution, displayed, gap, defaultView)
     scatterNotes.hidden = count === 0
     scatterFinding.hidden = !defaultView

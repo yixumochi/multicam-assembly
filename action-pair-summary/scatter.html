@@ -3,28 +3,28 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Scatter Plot · MultiCam</title>
+  <title>Action Names and Turning · MultiCam</title>
   <link rel="stylesheet" href="../site-header.css?v=1">
   <link rel="stylesheet" href="summary.css?v=4">
-  <link rel="stylesheet" href="scatter.css?v=2">
-  <script src="scatter.js?v=2" defer></script>
-  <link rel="stylesheet" href="story.css">
+  <link rel="stylesheet" href="scatter.css?v=3">
+  <script src="scatter.js?v=3" defer></script>
+  <link rel="stylesheet" href="story.css?v=2">
   <link rel="stylesheet" href="distribution.css">
-  <script src="story.js" defer></script>
+  <script src="story.js?v=2" defer></script>
   <script src="distribution.js" defer></script>
-  <script src="summary.js?v=5" defer></script>
+  <script src="summary.js?v=6" defer></script>
 </head>
 <body>
   <header class="site-header">
     <div>
       <p class="site-header-series">MultiCam</p>
-      <h1>Scatter Plot</h1>
+      <h1>Action Names and Turning</h1>
     </div>
   </header>
   <nav class="site-nav" aria-label="Pages">
     <a href="../index.html">Start here / Methods</a>
     <a href="../index.html#action-connections">Action Relationships</a>
-    <a href="scatter.html" aria-current="page">Scatter Plot</a>
+    <a href="scatter.html" aria-current="page">Action Names and Turning</a>
     <a href="../index.html#overview">Fifteen assembly cases</a>
     <a href="../spatial/index.html">Atlas of Assembly Space</a>
     <a href="../spatial/compare.html">Compare two cases</a>
@@ -55,13 +55,14 @@
       <div class="summary-status" id="status" role="status">Loading action pairs…</div>
       <a id="pair-data-link" href="index.html">View pair data →</a>
     </div>
-    <section id="view-scatter" aria-label="Scatter plot analysis">
+    <section id="view-scatter" aria-label="Name similarity and turning analysis">
       <div class="scatter-study">
         <div class="scatter-study-main">
           <div id="pair-scatter"></div>
           <div class="scatter-reading" id="scatter-notes" hidden>
             <p id="scatter-finding" hidden><strong>Default view.</strong> Similar names occur with both small and large angle gaps. Across the 249 plotted pairs, the association is weak (Spearman ρ = +0.16).</p>
             <p>Higher cosine means more similar wording. The angle gap compares the amounts of turning seen in each camera view.</p>
+            <p id="focus-pairs-note" hidden>Numbered points match the pairs in focus. Select a point or its card to open the original comparison.</p>
           </div>
         </div>
         <aside id="scatter-cases" hidden></aside>

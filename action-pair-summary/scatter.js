@@ -7,12 +7,10 @@
   const maxScore = 1
   const maxGap = 90
   const hitRadius = 8
-  const annotationTones = new Map([
-    ['69:72', 'small-gap'],
-    ['217:221', 'large-gap'],
-  ])
-  const annotationWidth = 146
-  const annotationHeight = 39
+  const badgeRadius = 10
+  const badgeHitRadius = 13
+  const badgeDirections = [0, -45, -90, -135, 180, 135, 90, 45]
+    .map(angle => [Math.cos(angle * Math.PI / 180), Math.sin(angle * Math.PI / 180)])
 
   function svgElement(tag, attributes = {}, text) {
     const node = document.createElementNS(svgNamespace, tag)
@@ -36,53 +34,60 @@
     return {actions, values, label}
   }
 
-  function addAnnotation(point, tone) {
-    const {pair, gap, link} = point
+  function addAnnotation(point, {tone, number}) {
+    const {pair, link} = point
     const group = svgElement('g', {class: 'pair-scatter-annotation', 'aria-hidden': 'true'})
     const leader = svgElement('line', {class: 'pair-scatter-annotation-leader', x1: 0, y1: 0})
     const label = svgElement('g', {class: 'pair-scatter-annotation-label'})
     label.append(
-      svgElement('rect', {class: 'pair-scatter-annotation-box', width: annotationWidth, height: annotationHeight, rx: 5}),
-      svgElement('line', {class: 'pair-scatter-annotation-stripe', x1: 5, y1: 7, x2: 5, y2: annotationHeight - 7}),
-      svgElement('text', {class: 'pair-scatter-annotation-title', x: 13, y: 16}, pair.cases.join(' × ')),
-      svgElement('text', {x: 13, y: 30}, pair.score.toFixed(3) + ' cosine · ' + gap.toFixed(1) + '° gap')
+      svgElement('circle', {class: 'pair-scatter-annotation-hit', r: badgeHitRadius}),
+      svgElement('circle', {class: 'pair-scatter-annotation-badge', r: badgeRadius}),
+      svgElement('text', {'text-anchor': 'middle', y: 4}, number)
     )
     group.append(leader, label)
     link.dataset.annotation = tone
+    link.dataset.pairId = pair.id
+    link.dataset.caseNumber = number
+    link.setAttribute('aria-label', 'Pair ' + number + '. ' + point.info.label)
     link.appendChild(group)
     point.annotation = {leader, label}
   }
 
-  function layoutAnnotations(points, left, right, top, bottom) {
+  function layoutAnnotations(points, {left, right, top, bottom, tickPositions}) {
     const placed = []
     const clamp = (value, min, max) => Math.max(min, Math.min(value, max))
     points.filter(point => point.annotation).forEach(point => {
       const {x, y, annotation} = point
-      const offset = 14
-      const leftChoices = [x + offset, x - annotationWidth - offset, x - annotationWidth / 2, right - annotationWidth]
-      const topChoices = [y - annotationHeight / 2, y + offset, y - annotationHeight - offset,
-        y + offset + 25, y - annotationHeight - offset - 25]
-      let best
-      for (const proposedX of leftChoices) {
-        for (const proposedY of topChoices) {
-          const boxX = clamp(proposedX, left + 3, right - annotationWidth - 3)
-          const boxY = clamp(proposedY, top + 3, bottom - annotationHeight - 3)
-          const endX = clamp(x, boxX, boxX + annotationWidth)
-          const endY = clamp(y, boxY, boxY + annotationHeight)
-          // Prefer short leaders while keeping labels away from dots and other labels.
-          const covered = points.filter(dot =>
-            dot.x >= boxX - hitRadius && dot.x <= boxX + annotationWidth + hitRadius &&
-            dot.y >= boxY - hitRadius && dot.y <= boxY + annotationHeight + hitRadius).length
-          const overlaps = placed.some(box =>
-            Math.abs(box.x - boxX) < annotationWidth + 6 && Math.abs(box.y - boxY) < annotationHeight + 6)
-          const cost = Math.abs(endX - x) + Math.abs(endY - y) + covered * 1000 + (overlaps ? 5000 : 0)
-          if (!best || cost < best.cost) best = {cost, x: boxX, y: boxY, endX, endY}
+      const margin = badgeHitRadius + 2
+      const candidates = [23, 32, 45, 61].flatMap(distance =>
+        badgeDirections.map(([dx, dy]) => [
+          clamp(x + dx * distance, left + margin, right - margin),
+          clamp(y + dy * distance, top + margin, bottom - margin),
+        ])
+      )
+      // Use the left gutter when the lower-left cluster leaves no room inside the axes.
+      const gutterX = badgeHitRadius + 2
+      for (const offset of [-26, -40, -58, 24]) {
+        const gutterY = clamp(y + offset, top + margin, bottom - margin)
+        const leaderY = y + (gutterY - y) * ((left - 15 - x) / (gutterX - x))
+        if (tickPositions.every(tick => Math.abs(tick - leaderY) > 9)) {
+          candidates.push([gutterX, gutterY])
         }
+      }
+      let best
+      for (const [centerX, centerY] of candidates) {
+        const distance = Math.hypot(centerX - x, centerY - y)
+        const covered = points.filter(dot =>
+          (dot.x - centerX) ** 2 + (dot.y - centerY) ** 2 < (badgeHitRadius + 5) ** 2).length
+        const overlaps = placed.some(badge =>
+          (badge.x - centerX) ** 2 + (badge.y - centerY) ** 2 < (badgeHitRadius * 2 + 3) ** 2)
+        const cost = distance + (centerX < left ? 14 : 0) + covered * 250 + (overlaps ? 5000 : 0)
+        if (!best || cost < best.cost) best = {cost, x: centerX, y: centerY}
       }
       placed.push(best)
       annotation.label.setAttribute('transform', 'translate(' + (best.x - x) + ',' + (best.y - y) + ')')
-      annotation.leader.setAttribute('x2', best.endX - x)
-      annotation.leader.setAttribute('y2', best.endY - y)
+      annotation.leader.setAttribute('x2', best.x - x)
+      annotation.leader.setAttribute('y2', best.y - y)
     })
   }
 
@@ -114,7 +119,7 @@
     return polygon.map(vertex => vertex.join(',')).join(' ')
   }
 
-  window.renderActionPairScatter = function renderActionPairScatter(container, pairs, getGap) {
+  window.renderActionPairScatter = function renderActionPairScatter(container, pairs, getGap, examples = {}) {
     layouts.get(container)?.disconnect()
     layouts.delete(container)
     const points = pairs.map(pair => ({pair, gap: getGap(pair)}))
@@ -125,7 +130,9 @@
       return 0
     }
 
-    const title = htmlElement('h2', 'pair-scatter-title', 'Name similarity vs. angle change gap')
+    const annotations = new Map(Object.entries(examples).map(([id, example], index) =>
+      [id, {tone: example.tone, number: index + 1}]))
+    const title = htmlElement('h2', 'pair-scatter-title', 'Name similarity and turn-angle difference')
     const frame = htmlElement('div', 'pair-scatter-frame')
     const plot = svgElement('svg', {
       class: 'pair-scatter-svg',
@@ -182,6 +189,7 @@
       tabStop.link.setAttribute('tabindex', '0')
     }
 
+    const annotatedLinks = []
     points.forEach((point, index) => {
       const {pair} = point
       point.info = labelPoint(pair, point.gap)
@@ -194,8 +202,8 @@
       point.hit = svgElement('polygon', {class: 'pair-scatter-hit', 'aria-hidden': 'true'})
       const dot = svgElement('circle', {r: 4, class: 'pair-scatter-dot', 'aria-hidden': 'true'})
       point.link.appendChild(point.hit)
-      const tone = annotationTones.get(pair.id)
-      if (tone) addAnnotation(point, tone)
+      const annotation = annotations.get(pair.id)
+      if (annotation) addAnnotation(point, annotation)
       point.link.appendChild(dot)
       point.link.addEventListener('pointerenter', event => {
         if (event.pointerType === 'touch') return
@@ -235,8 +243,10 @@
         event.preventDefault()
         points[nextIndex].link.focus({preventScroll: true})
       })
-      marks.appendChild(point.link)
+      if (annotation) annotatedLinks.push(point.link)
+      else marks.appendChild(point.link)
     })
+    marks.append(...annotatedLinks)
     setTabStop(points[0])
 
     function layout() {
@@ -245,7 +255,7 @@
       frameWidth = width
       frameHeight = Math.max(290, Math.min(430, Math.round(width * .44)))
       plot.setAttribute('viewBox', '0 0 ' + width + ' ' + frameHeight)
-      const left = 45
+      const left = annotatedLinks.length ? 53 : 45
       const right = width - 16
       const top = 38
       const bottom = frameHeight - 52
@@ -257,8 +267,10 @@
         svgElement('text', {x: (left + right) / 2, y: frameHeight - 10, class: 'pair-scatter-axis-title', 'text-anchor': 'middle'},
           'Action-name similarity (cosine)')
       )
+      const tickPositions = []
       for (let tick = 0; tick <= maxGap; tick += width < 460 ? 30 : 15) {
         const y = yAt(tick)
+        tickPositions.push(y)
         grid.append(
           svgElement('line', {x1: left, x2: right, y1: y, y2: y, class: tick === 0 ? 'pair-scatter-baseline' : ''}),
           svgElement('text', {x: left - 9, y: y + 4, 'text-anchor': 'end'}, tick)
@@ -279,7 +291,7 @@
         point.link.setAttribute('transform', 'translate(' + point.x + ',' + point.y + ')')
       })
       points.forEach(point => point.hit.setAttribute('points', nearestHitArea(point, points)))
-      layoutAnnotations(points, left, right, top, bottom)
+      layoutAnnotations(points, {left, right, top, bottom, tickPositions})
       if (activePoint) positionTooltip(activePoint)
     }
 
