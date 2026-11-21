@@ -12,6 +12,11 @@
   const results = document.querySelector('#results')
   const download = document.querySelector('#download')
   const sortButtons = [...document.querySelectorAll('[data-sort]')]
+  const tabs = [...document.querySelectorAll('.summary-view-tabs [role="tab"]')]
+  const scatter = document.querySelector('#pair-scatter')
+  const scatterNotes = document.querySelector('#scatter-notes')
+  let ready = false
+  let activeView = 'table'
   let pairs = []
   let displayed = []
   let sortKey = 'score'
@@ -84,6 +89,42 @@
     return (ascending ? first - second : second - first) || b.score - a.score
   }
 
+  function selectView(view) {
+    activeView = view
+    for (const tab of tabs) {
+      const selected = tab.id === 'tab-' + view
+      tab.setAttribute('aria-selected', String(selected))
+      tab.tabIndex = selected ? 0 : -1
+      document.getElementById(tab.getAttribute('aria-controls')).hidden = !selected
+    }
+    if (ready) render()
+  }
+
+  function openView(tab) {
+    const view = tab.id === 'tab-scatter' ? 'scatter' : 'table'
+    const url = new URL(window.location.href)
+    url.hash = view === 'scatter' ? 'scatter' : ''
+    history.replaceState(history.state, '', url)
+    selectView(view)
+  }
+
+  tabs.forEach((tab, index) => {
+    tab.addEventListener('click', () => openView(tab))
+    tab.addEventListener('keydown', event => {
+      const next = {ArrowLeft: (index + tabs.length - 1) % tabs.length, ArrowRight: (index + 1) % tabs.length,
+        Home: 0, End: tabs.length - 1}[event.key]
+      if (next === undefined) return
+      event.preventDefault()
+      openView(tabs[next])
+      tabs[next].focus()
+    })
+  })
+  function viewFromHash() {
+    selectView(window.location.hash === '#scatter' ? 'scatter' : 'table')
+  }
+  window.addEventListener('hashchange', viewFromHash)
+  viewFromHash()
+
   function render() {
     const criteria = search.value.trim().toLowerCase().split(/\s+/).filter(Boolean)
     const drawingCase = caseFilter.value
@@ -95,10 +136,14 @@
       return criteria.every(word => target.includes(word))
     }).sort(comparePairs)
     const count = displayed.length
+    download.disabled = count === 0
+    if (activeView === 'scatter') {
+      renderScatter(count)
+      return
+    }
     status.textContent = count ? count + (count === 1 ? ' action pair' : ' action pairs') + ' · cosine ≥ 0.50' : 'No action pairs match these filters.'
     grid.hidden = count === 0
     scrollHint.hidden = count === 0
-    download.disabled = count === 0
     results.replaceChildren(...displayed.map(showPair))
     sortButtons.forEach(button => {
       const header = button.closest('th')
@@ -107,6 +152,17 @@
       else header.removeAttribute('aria-sort')
       button.lastElementChild.textContent = active ? (ascending ? '↑' : '↓') : '↕'
     })
+  }
+
+  function renderScatter(total) {
+    const count = window.renderActionPairScatter(scatter, displayed, gap)
+    scatterNotes.hidden = count === 0
+    if (!total) {
+      status.textContent = 'No action pairs match these filters.'
+      return
+    }
+    status.textContent = count + ' of ' + total + (total === 1 ? ' pair plotted' : ' pairs plotted') +
+      (count < total ? ' · ' + (total - count) + ' missing a start or end angle' : '')
   }
 
   const columns = [
@@ -166,6 +222,7 @@
     })
     .then(data => {
       pairs = data.rows.filter(row => row.score >= .5)
+      ready = true
       const cases = [...new Set(pairs.flatMap(pair => pair.cases))].sort()
       cases.forEach(id => caseFilter.add(new Option(id, id)))
       search.addEventListener('input', render)

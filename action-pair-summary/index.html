@@ -5,8 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Action Pair Summary · MultiCam</title>
   <link rel="stylesheet" href="../site-header.css?v=1">
-  <link rel="stylesheet" href="summary.css">
-  <script src="summary.js" defer></script>
+  <link rel="stylesheet" href="summary.css?v=2">
+  <link rel="stylesheet" href="scatter.css">
+  <script src="scatter.js" defer></script>
+  <script src="summary.js?v=2" defer></script>
 </head>
 <body>
   <header class="site-header">
@@ -39,38 +41,50 @@
       </label>
       <button type="button" id="download" disabled>Download CSV</button>
     </div>
-    <div class="summary-status" id="status" role="status">Loading action pairs…</div>
-    <p class="summary-scroll-hint" hidden>Scroll across to see more columns →</p>
-    <div class="summary-grid" role="region" aria-label="Action pair results" tabindex="0" hidden>
-      <table aria-describedby="summary-notes">
-        <caption class="screen-reader-only">Action pair measurements</caption>
-        <colgroup>
-          <col class="summary-action-cols">
-          <col class="summary-numeric-col">
-          <col class="summary-net-col">
-          <col class="summary-stage-col">
-          <col class="summary-numeric-col">
-        </colgroup>
-        <thead>
-          <tr>
-            <th scope="col">Action pair</th>
-            <th scope="col" aria-sort="descending">
-              <button type="button" data-sort="score">Name similarity <span aria-hidden="true">↓</span></button>
-            </th>
-            <th scope="col">Start-to-end angle change</th>
-            <th scope="col">Largest angle change</th>
-            <th scope="col">
-              <button type="button" data-sort="gap">Angle change gap <span aria-hidden="true">↕</span></button>
-            </th>
-          </tr>
-        </thead>
-        <tbody id="results"></tbody>
-      </table>
+    <div class="summary-viewbar">
+      <div class="summary-view-tabs" role="tablist" aria-label="Summary view">
+        <button type="button" id="tab-table" role="tab" aria-controls="view-table" aria-selected="true">Table</button>
+        <button type="button" id="tab-scatter" role="tab" aria-controls="view-scatter" aria-selected="false" tabindex="-1">Scatter plot</button>
+      </div>
+      <div class="summary-status" id="status" role="status">Loading action pairs…</div>
     </div>
-    <p class="summary-notes" id="summary-notes">
-      Angles are signed shortest changes of the member axis in each image. The gap compares the magnitudes of the two start-to-end changes.
-      The largest stage requires both intervals. “No shared case” uses every case associated with each action name.
-    </p>
+    <section id="view-table" role="tabpanel" aria-labelledby="tab-table">
+      <p class="summary-scroll-hint" hidden>Scroll across to see more columns →</p>
+      <div class="summary-grid" role="region" aria-label="Action pair results" tabindex="0" hidden>
+        <table aria-describedby="summary-notes">
+          <caption class="screen-reader-only">Action pair measurements</caption>
+          <colgroup>
+            <col class="summary-action-cols">
+            <col class="summary-numeric-col">
+            <col class="summary-net-col">
+            <col class="summary-stage-col">
+            <col class="summary-numeric-col">
+          </colgroup>
+          <thead>
+            <tr>
+              <th scope="col">Action pair</th>
+              <th scope="col" aria-sort="descending">
+                <button type="button" data-sort="score">Name similarity <span aria-hidden="true">↓</span></button>
+              </th>
+              <th scope="col">Start-to-end angle change</th>
+              <th scope="col">Largest angle change</th>
+              <th scope="col">
+                <button type="button" data-sort="gap">Angle change gap <span aria-hidden="true">↕</span></button>
+              </th>
+            </tr>
+          </thead>
+          <tbody id="results"></tbody>
+        </table>
+      </div>
+      <p class="summary-notes" id="summary-notes">
+        Angles are signed shortest changes of the member axis in each image. The gap compares the magnitudes of the two start-to-end changes.
+        The largest stage requires both intervals. “No shared case” uses every case associated with each action name.
+      </p>
+    </section>
+    <section id="view-scatter" role="tabpanel" aria-labelledby="tab-scatter" hidden>
+      <div id="pair-scatter"></div>
+      <p class="summary-notes" id="scatter-notes" hidden>Each dot is one action pair. The gap compares the magnitudes of the two start-to-end angle changes measured in their images. Select a dot to open its comparison.</p>
+    </section>
   </main>
 </body>
 </html>
