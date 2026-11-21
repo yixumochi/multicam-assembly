@@ -272,7 +272,7 @@ button, input, select { accent-color: var(--blue); }
   .name-pair-media { grid-template-columns: minmax(0, 1fr); }
 }
 
-</style><link rel="stylesheet" href="research.css?v=835c55c1"><link rel="stylesheet" href="start-page.css?v=2"><link rel="stylesheet" href="wheel-intro.css"><script src="start-page.js?v=1" defer></script><script src="wheel-intro.js" defer></script><script>
+</style><link rel="stylesheet" href="research.css?v=835c55c1"><link rel="stylesheet" href="start-page.css?v=3"><link rel="stylesheet" href="wheel-intro.css"><script src="start-page.js?v=1" defer></script><script src="wheel-intro.js" defer></script><script>
 if (window.parent !== window && new URLSearchParams(location.search).get('view') === 'case-area') {
   document.documentElement.dataset.view = 'case-area';
 }
@@ -305,14 +305,15 @@ html[data-view="case-area"] body { margin:0; }
 </nav>
 <main class="workspace site-workspace">
 <section id="path-page" class="start-layout" aria-label="Start here / Methods">
-  <section id="study-start" class="case-gallery" aria-labelledby="case-gallery-title">
+  <section id="study-start" class="case-gallery" data-nav-group="case" aria-labelledby="case-gallery-title">
     <div class="case-gallery-header">
-      <h1 id="case-gallery-title">Case gallery</h1>
+      <h1 id="case-gallery-title">Fifteen assembly cases</h1>
       <div class="case-gallery-key" aria-label="Assembly modes">
         <span data-mode="human-led">Human-led</span>
         <span data-mode="robotic-assembly">Robot-led</span>
         <span data-mode="human-robot">Mixed</span>
       </div>
+      <a class="case-gallery-all" href="#overview">View all cases <span aria-hidden="true">↗</span></a>
       <div class="case-gallery-controls">
         <button type="button" data-gallery-direction="-1" aria-label="Scroll to earlier cases" aria-controls="case-gallery-track">←</button>
         <button type="button" data-gallery-direction="1" aria-label="Scroll to later cases" aria-controls="case-gallery-track">→</button>
@@ -347,52 +348,13 @@ html[data-view="case-area"] body { margin:0; }
     </dialog>
   </section>
 
-  <section class="start-module" aria-labelledby="action-module-title">
+  <section class="start-module" data-nav-group="action" aria-labelledby="action-module-title">
     <div class="start-module-sidebar">
-      <h2 id="action-module-title">Action &amp; Relationship</h2>
-      <nav class="start-module-menu" aria-label="Action and Relationship">
-        <button type="button" data-study-panel aria-controls="action-video" aria-pressed="true">Video</button>
-        <button type="button" data-study-panel aria-controls="v22-method" aria-pressed="false">Workflow</button>
-        <a href="#overview">Fifteen assembly cases ↗</a>
-        <div class="start-module-group">
-          <h3>Assembly Space</h3>
-          <a href="spatial/index.html">Atlas of Assembly Space ↗</a>
-          <a href="spatial/compare.html">Compare two cases ↗</a>
-        </div>
-      </nav>
-    </div>
-    <div class="start-module-content">
-      <div id="action-video" class="start-study-panel">
-        <figure class="start-media">
-          <video controls playsinline preload="none" width="960" height="540"
-            poster="media/methods/v22-top-view.jpg"
-            aria-label="V22 S01 video tracking, local top view and workshop plan placement">
-            <source src="media/methods/v22-top-view.mp4" type="video/mp4">
-          </video>
-          <figcaption>V22 · From video to workshop plan</figcaption>
-        </figure>
-      </div>
-      <div id="v22-method" class="start-study-panel" hidden>
-        <h3>From video to top view</h3>
-        <p>The V22 shot shows a robot holding a timber panel. Tracking a point on the robot connects the movement in the film to its path on the workshop plan.</p>
-        <figure class="start-workflow">
-          <a href="video-to-top-view/assets/14_visual_pipeline.svg" aria-label="Open the full-size V22 processing diagram">
-            <img src="video-to-top-view/assets/14_visual_pipeline.png" width="2400" height="1308" loading="lazy" decoding="async"
-              alt="V22 video frames processed with SAM2.1, feature tracking and Depth Pro, then projected onto the workshop plan">
-          </a>
-          <figcaption><a href="video-to-top-view/">Video to Top View ↗</a> · <a href="video-to-top-view/technical.html#networks">SAM2.1 and Depth Pro ↗</a></figcaption>
-        </figure>
-      </div>
-    </div>
-  </section>
-
-  <section class="start-module" aria-labelledby="sentence-module-title">
-    <div class="start-module-sidebar">
-      <h2 id="sentence-module-title">Sentence Transformer</h2>
-      <nav class="start-module-menu" aria-label="Sentence Transformer">
-        <button type="button" data-study-panel aria-controls="sentence-video" aria-pressed="true">Video</button>
-        <button type="button" data-study-panel aria-controls="study-method" aria-pressed="false">Workflow</button>
-        <a href="#action-connections">Action-name connections ↗</a>
+      <h2 id="action-module-title">Action Relationships</h2>
+      <nav class="start-module-menu" aria-label="Action Relationships">
+        <button type="button" data-study-panel aria-controls="sentence-video" aria-pressed="true">Name-pair video</button>
+        <button type="button" data-study-panel aria-controls="study-method" aria-pressed="false">Pairing workflow</button>
+        <a href="#action-connections">Open the wheel ↗</a>
         <a href="action-pair-summary/scatter.html">Action Names and Turning ↗</a>
       </nav>
     </div>
@@ -427,6 +389,42 @@ html[data-view="case-area"] body { margin:0; }
           </div>
           <p><a href="#action-pair=90:171">Compare the two recorded events ↗</a></p>
         </details>
+      </div>
+    </div>
+  </section>
+
+  <section class="start-module" data-nav-group="case" aria-labelledby="space-module-title">
+    <div class="start-module-sidebar">
+      <h2 id="space-module-title">Assembly Space</h2>
+      <nav class="start-module-menu" aria-label="Assembly Space">
+        <button type="button" data-study-panel aria-controls="action-video" aria-pressed="true">V22 video</button>
+        <button type="button" data-study-panel aria-controls="v22-method" aria-pressed="false">Top-view workflow</button>
+        <a href="spatial/index.html">Atlas of Assembly Space ↗</a>
+        <a href="spatial/compare.html">Compare two cases ↗</a>
+        <a href="observation/index.html">Relative position ↗</a>
+      </nav>
+    </div>
+    <div class="start-module-content">
+      <div id="action-video" class="start-study-panel">
+        <figure class="start-media">
+          <video controls playsinline preload="none" width="960" height="540"
+            poster="media/methods/v22-top-view.jpg"
+            aria-label="V22 S01 video tracking, local top view and workshop plan placement">
+            <source src="media/methods/v22-top-view.mp4" type="video/mp4">
+          </video>
+          <figcaption>V22 · From video to workshop plan</figcaption>
+        </figure>
+      </div>
+      <div id="v22-method" class="start-study-panel" hidden>
+        <h3>From video to top view</h3>
+        <p>The V22 shot shows a robot holding a timber panel. Tracking a point on the robot connects the movement in the film to its path on the workshop plan.</p>
+        <figure class="start-workflow">
+          <a href="video-to-top-view/assets/14_visual_pipeline.svg" aria-label="Open the full-size V22 processing diagram">
+            <img src="video-to-top-view/assets/14_visual_pipeline.png" width="2400" height="1308" loading="lazy" decoding="async"
+              alt="V22 video frames processed with SAM2.1, feature tracking and Depth Pro, then projected onto the workshop plan">
+          </a>
+          <figcaption><a href="video-to-top-view/">Video to Top View ↗</a> · <a href="video-to-top-view/technical.html#networks">SAM2.1 and Depth Pro ↗</a></figcaption>
+        </figure>
       </div>
     </div>
   </section>

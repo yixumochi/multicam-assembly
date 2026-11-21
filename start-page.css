@@ -156,3 +156,67 @@
 @media (prefers-reduced-motion: reduce) {
   .case-gallery-card img { transition: none; }
 }
+
+#path-page [data-nav-group="case"] {
+  --home-group-accent: var(--site-sky, #6ac2e7);
+  --home-group-wash: var(--site-sky-wash, #e7f5fb);
+}
+
+#path-page [data-nav-group="action"] {
+  --home-group-accent: var(--site-lime, #baf492);
+  --home-group-wash: var(--site-lime-wash, #effce5);
+}
+
+#study-start[data-nav-group] .case-gallery-header {
+  gap: 7px 14px;
+  padding: 7px 10px;
+  border-block-start: 3px solid var(--home-group-accent);
+  background: var(--home-group-wash);
+}
+
+#study-start .case-gallery-all {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 3px 6px;
+  color: var(--site-link, #12627d);
+  font-size: 13px;
+  font-weight: 650;
+  white-space: nowrap;
+  text-underline-offset: 3px;
+}
+
+#path-page .start-module[data-nav-group] {
+  border-block-start: 3px solid var(--home-group-accent);
+}
+
+#path-page .start-module[data-nav-group] .start-module-sidebar {
+  align-self: start;
+  padding: clamp(9px, 1.2vw, 15px);
+  background: var(--home-group-wash);
+}
+
+#path-page .start-module[data-nav-group] .start-module-menu > button[aria-pressed="true"] {
+  border-color: transparent;
+  background: var(--home-group-accent);
+  color: var(--site-ink, #17363b);
+}
+
+@media (max-width: 620px) {
+  #study-start[data-nav-group] .case-gallery-header {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 5px 8px;
+  }
+
+  #study-start .case-gallery-header h1 { grid-area: 1 / 1; }
+  #study-start .case-gallery-all { grid-area: 1 / 2; justify-self: end; }
+  #study-start .case-gallery-key { grid-area: 2 / 1; }
+  #study-start .case-gallery-controls { grid-area: 2 / 2; justify-self: end; }
+}
+
+@media (max-width: 430px) {
+  #study-start .case-gallery-header h1 { grid-area: 1 / 1 / 2 / -1; }
+  #study-start .case-gallery-all { grid-area: 2 / 1; justify-self: start; padding-inline: 0; }
+  #study-start .case-gallery-key { grid-area: 3 / 1 / 4 / -1; }
+}
