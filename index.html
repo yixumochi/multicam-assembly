@@ -35,6 +35,9 @@ button, input, select { accent-color: var(--blue); }
 .main-panel, .detail { border-color: #bfd2c9; border-radius: 8px; }
 .panel-head { background: #f7fcf1; }
 .panel-head h2 { font-size: 28px; }
+.relationship-nav { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.pair-summary-link { display: inline-flex; align-items: center; min-height: 36px; padding: 7px 12px; border: 1px solid #bad9df; border-radius: 7px; background: #fff; color: var(--ink); font-size: 15px; font-weight: 650; text-decoration: none; }
+.pair-summary-link:hover { background: var(--lime-wash); text-decoration: underline; }
 .counts, .contextline, .view-guide, .field, .tabs button, .cases button, .feather-legend, .map-legend, .small-note, .pair-meta, .pair-name { font-size: 17px; }
 .tabs button, .cases button { padding: 8px 14px; }
 .tabs { border: 1px solid #bad9df; background: var(--soft); }
@@ -238,8 +241,11 @@ button, input, select { accent-color: var(--blue); }
   .pair-stage-panels { grid-template-columns: minmax(0, 1fr); }
   .pair-stage-panel svg { max-height: none; }
 }
-.pair-measurements { margin-top: 16px; border: 1px solid var(--line); padding: 9px 12px 12px; }
-.pair-measurements summary { cursor: pointer; font-size: 16px; font-weight: 650; }
+.pair-stage-finding { margin: 12px 14px 8px; color: var(--ink); font-size: 15px; line-height: 1.45; }
+.pair-details { margin-top: 16px; border: 1px solid var(--line); padding: 10px 12px; }
+.pair-details > summary { cursor: pointer; font-size: 16px; font-weight: 650; }
+.pair-measurements { margin: 16px 0 2px; }
+.pair-measurements > h3 { margin: 0 0 4px; font-size: 18px; font-weight: 650; }
 .pair-measurement img { height: clamp(124px, 18vw, 210px); object-fit: contain; }
 .pair-measure-table { width: 100%; border-collapse: collapse; color: var(--ink); margin: 8px 0 6px; font-size: 14px; font-variant-numeric: tabular-nums; }
 .pair-measure-table th, .pair-measure-table td { border-bottom: 1px solid var(--line); padding: 5px; text-align: center; }
@@ -342,7 +348,7 @@ html[data-view="case-area"] body { margin:0; }
 <div id="explorer-body" hidden>
 <div class="study-panel">Pairs link similar action names with drawings on both sides. <span id="drawing-status" role="status"></span></div><section class="toolbar" aria-label="Filters"><label class="field">Search action names<input id="q" type="search" placeholder="Try hold, insert or gripper…" autocomplete="off"></label><label class="field"><span class="range-heading">Minimum cosine <output id="threshold-label">0.50</output></span><span class="range-wrap"><small>0.50</small><input aria-label="Minimum cosine" id="threshold" type="range" min="0.50" max="0.95" step="0.01" value="0.50"><small>0.95</small></span></label><label class="field">Name-pair scope<select id="scope"><option value="cross">No shared case</option><option value="all">All name pairs</option><option value="same">At least one shared case</option></select></label><button id="clear">Reset filters</button></section>
 <nav class="filter-bottom" aria-label="Filter by case"><span>CASE</span><div id="vlist" class="cases"></div></nav>
-<div class="content"><section class="main-panel"><div class="panel-head"><div><h2 id="view-title">Action-name connections</h2><div id="counts" class="counts" aria-live="polite"></div></div><nav class="tabs" aria-label="Action relationship views"><button data-view="network" aria-pressed="true">Connections</button><button data-view="pairs" aria-pressed="false">Pairs</button><button data-view="map" aria-pressed="false">Case map</button></nav></div><div class="contextline"><span id="context-note"></span><span id="pair-chip" class="pair-chip" hidden></span></div>
+<div class="content"><section class="main-panel"><div class="panel-head"><div><h2 id="view-title">Action-name connections</h2><div id="counts" class="counts" aria-live="polite"></div></div><div class="relationship-nav"><nav class="tabs" aria-label="Action relationship views"><button data-view="network" aria-pressed="true">Connections</button><button data-view="pairs" aria-pressed="false">Pairs</button><button data-view="map" aria-pressed="false">Case map</button></nav><a class="pair-summary-link" href="action-pair-summary/index.html">Action Pair Summary</a></div></div><div class="contextline"><span id="context-note"></span><span id="pair-chip" class="pair-chip" hidden></span></div>
 <div id="pairs-view" hidden><div class="pair-head"><span>Action A / cases</span><span>Cosine</span><span>Action B / cases</span></div><div id="pair-list"></div><div class="pager"><span id="page-status"></span><div><select id="page-size" aria-label="Pairs per page"><option value="20">20 / page</option><option value="50">50 / page</option><option value="all">Show all</option></select><button id="prev" aria-label="Previous page">←</button><button id="next" aria-label="Next page">→</button></div></div></div>
 <div id="map-view" class="view-content" hidden>
   <div class="map-legend" aria-label="Case map legend">
@@ -3164,7 +3170,12 @@ function pairHost() {
       return
     }
     if (event.key !== 'Tab') return
-    const stops = [...host.querySelectorAll('button, a[href], summary')].filter(control => control.getClientRects().length)
+    const stops = [...host.querySelectorAll('button, a[href], summary')].filter(control => {
+      const collapsed = control.closest('details:not([open])')
+      const hidden = collapsed && (collapsed.firstElementChild !== control ||
+        collapsed.parentElement.closest('details:not([open])'))
+      return !hidden && control.getClientRects().length
+    })
     const first = stops[0]
     const last = stops[stops.length - 1]
     const boundary = event.shiftKey ? first : last
@@ -3177,6 +3188,9 @@ function pairHost() {
 function closePairPop() {
   const host = document.getElementById('pair-pop')
   if (!host) return
+  if (location.hash === '#action-pair=' + host.dataset.edge) {
+    history.replaceState(history.state, '', '#action-connections')
+  }
   host.hidden = true
   host.dataset.edge = ''
 }
@@ -3272,7 +3286,7 @@ function pairAngleLegend(series) {
     const [start, , end] = angles
     summary.textContent = start === null || end === null
       ? 'End − start unavailable'
-      : angleText(start) + ' → ' + angleText(end) + ' · End − start ' + angleText(end - start, true)
+      : angleText(start) + ' → ' + angleText(end) + ' · Net change ' + angleText(memberAngleChange(start, end), true)
     item.append(title, summary)
     legend.appendChild(item)
   })
@@ -3363,28 +3377,76 @@ function angleChart(left, right) {
 
 const PAIR_STAGE_COLORS = ['#6AC2E7', '#EE751C']
 
+function memberAngleChange(start, end) {
+  const first = angleNumber(start)
+  const last = angleNumber(end)
+  if (first === null || last === null) return null
+  // The drawn member axis represents the same orientation every 180°.
+  const change = (last - first) % 180
+  return change > 90 ? change - 180 : change < -90 ? change + 180 : change
+}
+
+function pairStageMetrics(plate) {
+  const frames = new Map(plate?.frames?.map(frame => [frame.mark, frame]))
+  const intervals = [['a', 'b'], ['b', 'c']]
+  const angleChange = (from, to) => memberAngleChange(frames.get(from)?.theta, frames.get(to)?.theta)
+  const gripChange = (from, to) => {
+    if (!frames.has(from) || !frames.has(to)) return null
+    if (plate.ref === from) return angleNumber(frames.get(to).shift)
+    if (plate.ref === to) return angleNumber(frames.get(from).shift)
+    return null
+  }
+  return {
+    angles: intervals.map(([from, to]) => angleChange(from, to)),
+    shifts: intervals.map(([from, to]) => gripChange(from, to)),
+    net: angleChange('a', 'c'),
+  }
+}
+
+function pairStageFinding(plates, series) {
+  const phases = ['from start to middle', 'from middle to end']
+  function largestOfBoth(values, precision) {
+    if (values.some(value => value === null)) return null
+    const magnitudes = values.map(value => Number(Math.abs(value).toFixed(precision)))
+    const [first, second] = magnitudes
+    return {
+      phase: first === second ? null : first > second ? 0 : 1,
+      amount: Math.max(first, second),
+    }
+  }
+
+  const comparisons = plates.flatMap((plate, index) => {
+    if (!plate) return []
+    const label = plates[1 - index]?.home === plate.home ? plate.home + ' · ' + plate.name : plate.home
+    const {angles, shifts} = series[index]
+    const angle = largestOfBoth(angles, 1)
+    const grip = largestOfBoth(shifts, 2)
+    const amount = angle && angleText(angle.amount)
+    let finding = ''
+    if (angle?.amount === 0) {
+      finding = label + ' shows no measured angle change in either interval'
+    } else if (angle?.phase === null) {
+      finding = label + ' changes angle by ' + amount + ' in both intervals'
+    } else if (angle) {
+      finding = label + ' changes angle most ' + phases[angle.phase] + ' (' + amount + ')'
+    } else {
+      const phase = angles.findIndex(value => value !== null)
+      if (phase >= 0) {
+        finding = label + ' shows a ' + angleText(Math.abs(angles[phase])) + ' angle change ' + phases[phase]
+      }
+    }
+    if (grip && grip.amount > 0 && grip.phase !== null && grip.phase !== angle?.phase) {
+      const move = 'grip shifts most ' + phases[grip.phase] + ' (' + grip.amount.toFixed(2) + 'H)'
+      finding += finding ? ', while its ' + move : label + '’s ' + move
+    }
+    return finding ? [finding + '.'] : []
+  })
+  return comparisons.join(' ')
+}
+
 function stageComparison(left, right) {
   const pairs = [left, right]
-  const intervals = [['a', 'b'], ['b', 'c']]
-  const series = pairs.map(plate => {
-    const frames = new Map(plate?.frames.map(frame => [frame.mark, frame]))
-    return {
-      angles: intervals.map(([from, to]) => {
-        const start = angleNumber(frames.get(from)?.theta)
-        const end = angleNumber(frames.get(to)?.theta)
-        if (start === null || end === null) return null
-        // The drawn member axis represents the same orientation every 180°.
-        const change = (end - start) % 180
-        return change > 90 ? change - 180 : change < -90 ? change + 180 : change
-      }),
-      shifts: intervals.map(([from, to]) => {
-        if (!plate || !frames.has(from) || !frames.has(to)) return null
-        if (plate.ref === from) return angleNumber(frames.get(to).shift)
-        if (plate.ref === to) return angleNumber(frames.get(from).shift)
-        return null
-      }),
-    }
-  })
+  const series = pairs.map(pairStageMetrics)
 
   const section = document.createElement('section')
   section.className = 'pair-stage-comparison'
@@ -3411,7 +3473,15 @@ function stageComparison(left, right) {
   const note = document.createElement('p')
   note.className = 'pair-angle-note pair-stage-note'
   note.textContent = 'Angles show the shortest signed change of the member axis in the image. Grip displacement is the image distance to the reference frame divided by the case’s scale H, shown when the reference is one of the two frames.'
-  section.append(title, legend, panels, note)
+  const finding = pairStageFinding(pairs, series)
+  section.appendChild(title)
+  if (finding) {
+    const summary = document.createElement('p')
+    summary.className = 'pair-stage-finding'
+    summary.textContent = finding
+    section.appendChild(summary)
+  }
+  section.append(legend, panels, note)
   return section
 }
 
@@ -3479,11 +3549,20 @@ function stageChart(label, series, plates, format, minimumStep) {
   return panel
 }
 
-function pairMeasurements(left, right) {
+function pairDetails(left, right) {
   const details = document.createElement('details')
-  details.className = 'pair-measurements'
-  const summary = document.createElement('summary')
-  summary.textContent = 'Grip-aligned overlays and measurements'
+  details.className = 'pair-details'
+  const toggle = document.createElement('summary')
+  toggle.textContent = 'Details'
+  details.append(toggle, angleChart(left, right), pairMeasurements(left, right))
+  return details
+}
+
+function pairMeasurements(left, right) {
+  const section = document.createElement('section')
+  section.className = 'pair-measurements'
+  const heading = document.createElement('h3')
+  heading.textContent = 'Grip-aligned overlays and measurements'
   const note = document.createElement('p')
   note.className = 'pair-angle-note'
   note.textContent = 'Angle difference is the absolute difference from the marked reference. Grip shift (d/H) and visible leftward reach (ℓ/H) use each case’s own image scale H.'
@@ -3522,8 +3601,8 @@ function pairMeasurements(left, right) {
     }
     cases.appendChild(item)
   })
-  details.append(summary, note, cases)
-  return details
+  section.append(heading, note, cases)
+  return section
 }
 
 function openPairPop(edge) {
@@ -3564,7 +3643,7 @@ function openPairPop(edge) {
   guide.className = 'pair-angle-note pair-image-guide'
   guide.textContent = 'Open an outline or film still to view it at full size.'
   sheet.append(head, cases, guide, stageComparison(leftPlate, rightPlate),
-    angleChart(leftPlate, rightPlate), pairMeasurements(leftPlate, rightPlate))
+    pairDetails(leftPlate, rightPlate))
   host.replaceChildren(sheet)
   close.focus()
 }
@@ -3633,6 +3712,39 @@ function showPage(name) {
   if (name === 'explorer') render()
   if (name === 'cases') requestAnimationFrame(() => window.dispatchEvent(new Event('resize')))
 }
+function resetRelationshipFilters(scope = 'cross') {
+  clearDetail()
+  state.selectedV = null
+  state.selectedPair = null
+  state.query = ''
+  state.threshold = .50
+  state.scope = scope
+  state.collapsed.clear()
+  $('q').value = ''
+  $('threshold').value = '.50'
+  $('scope').value = scope
+  page = 0
+}
+function openRelationshipRoute() {
+  const pair = /^#action-pair=(\d+):(\d+)$/.exec(location.hash)
+  if (!pair && location.hash !== '#action-connections') return false
+  view = 'network'
+  if (pair && REST_READY) {
+    const edge = EDGES.find(({source, target}) => source === Number(pair[1]) && target === Number(pair[2]))
+    if (edge && edge.cosine >= .50 && [edge.source, edge.target].every(index => pairDrawingFor(NODES[index]))) {
+      const shared = sharesV(NODES[edge.source], NODES[edge.target])
+      resetRelationshipFilters(shared ? 'all' : 'cross')
+      state.selectedEdge = edge
+    } else {
+      clearDetail()
+      history.replaceState(history.state, '', '#action-connections')
+    }
+  } else {
+    clearDetail()
+  }
+  showPage('explorer')
+  return true
+}
 function renderRest() {
   const root = $('rest-plates')
   if (!root || root.dataset.ready === '1') return
@@ -3688,7 +3800,7 @@ $('q').oninput=e=>{state.query=e.target.value;page=0;clearDetail();render()}
 $('threshold').oninput=()=>{state.threshold=thresholdValue();page=0;clearDetail();render()}
 $('scope').onchange=e=>{state.scope=e.target.value;page=0;clearDetail();render()}
 $('sort').onchange=e=>{state.sort=e.target.value;state.collapsed.clear();render()}
-$('clear').onclick=()=>{clearDetail();state.selectedV=null;state.selectedPair=null;state.query='';state.threshold=.50;state.scope='cross';state.collapsed.clear();$('q').value='';$('threshold').value='.50';$('scope').value='cross';page=0;render()}
+$('clear').onclick=()=>{resetRelationshipFilters();render()}
 document.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>{view=b.dataset.view;render()})
 $('prev').onclick=()=>{page--;render()};$('next').onclick=()=>{page++;render()}
 $('page-size').onchange=e=>{pageSize=e.target.value==='all'?'all':Number(e.target.value);page=0;render()}
@@ -3699,6 +3811,10 @@ document.querySelectorAll('.page-tabs [data-page]').forEach(button => button.add
 const methodPanel=document.getElementById('study-method');
 methodPanel.addEventListener('toggle',()=>{if(methodPanel.open && location.hash==='#study-method')methodPanel.scrollIntoView({block:'start'})});
 renderPath()
-loadRest(render)
+window.addEventListener('hashchange', openRelationshipRoute)
+openRelationshipRoute()
+loadRest(() => {
+  if (!openRelationshipRoute()) render()
+})
 
 </script><script>if (/^#(overview|human-led|human-robot|robotic-assembly)/.test(location.hash)) showPage('cases');</script></body></html>

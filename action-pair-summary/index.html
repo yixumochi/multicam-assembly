@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Action Pair Summary · MultiCam</title>
+  <link rel="stylesheet" href="../site-header.css?v=1">
+  <link rel="stylesheet" href="summary.css">
+  <script src="summary.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <div>
+      <p class="site-header-series">MultiCam</p>
+      <h1>Action Pair Summary</h1>
+    </div>
+  </header>
+  <nav class="site-nav" aria-label="Action comparison">
+    <a href="../index.html#action-connections">Action Relationships</a>
+    <a href="./index.html" aria-current="page">Action Pair Summary</a>
+  </nav>
+  <main class="summary-workspace">
+    <div class="summary-toolbar" aria-label="Filter action pairs">
+      <label class="summary-search">
+        Search action names
+        <input type="search" id="search" placeholder="Try panel, grip, or V06" autocomplete="off">
+      </label>
+      <label>
+        Drawing case
+        <select id="case"><option value="">All cases</option></select>
+      </label>
+      <label>
+        Pair scope
+        <select id="scope">
+          <option value="cross">No shared case</option>
+          <option value="all">All name pairs</option>
+          <option value="same">At least one shared case</option>
+        </select>
+      </label>
+      <button type="button" id="download" disabled>Download CSV</button>
+    </div>
+    <div class="summary-status" id="status" role="status">Loading action pairs…</div>
+    <p class="summary-scroll-hint" hidden>Scroll across to see more columns →</p>
+    <div class="summary-grid" role="region" aria-label="Action pair results" tabindex="0" hidden>
+      <table aria-describedby="summary-notes">
+        <caption class="screen-reader-only">Action pair measurements</caption>
+        <colgroup>
+          <col class="summary-action-cols">
+          <col class="summary-numeric-col">
+          <col class="summary-net-col">
+          <col class="summary-stage-col">
+          <col class="summary-numeric-col">
+        </colgroup>
+        <thead>
+          <tr>
+            <th scope="col">Action pair</th>
+            <th scope="col" aria-sort="descending">
+              <button type="button" data-sort="score">Name similarity <span aria-hidden="true">↓</span></button>
+            </th>
+            <th scope="col">Start-to-end angle change</th>
+            <th scope="col">Largest angle change</th>
+            <th scope="col">
+              <button type="button" data-sort="gap">Angle change gap <span aria-hidden="true">↕</span></button>
+            </th>
+          </tr>
+        </thead>
+        <tbody id="results"></tbody>
+      </table>
+    </div>
+    <p class="summary-notes" id="summary-notes">
+      Angles are signed shortest changes of the member axis in each image. The gap compares the magnitudes of the two start-to-end changes.
+      The largest stage requires both intervals. “No shared case” uses every case associated with each action name.
+    </p>
+  </main>
+</body>
+</html>
