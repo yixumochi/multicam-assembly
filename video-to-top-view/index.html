@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>From video to top view</title>
 <style>
-  :root{color-scheme:light;color:#172e2b;background:#f4f6f0;font:16px/1.55 system-ui,sans-serif}
+  :root{color-scheme:light;color:var(--site-ink);background:var(--site-paper);font:15px/1.45 var(--site-font)}
   *{box-sizing:border-box}
   body{margin:0}
   main{max-width:1160px;margin:auto;padding:clamp(24px,5vw,64px) clamp(15px,4vw,46px) 32px}
@@ -20,11 +20,25 @@
   #pipeline img{display:block;width:100%;height:auto;background:white;border:1px solid #d2ded4;border-radius:12px}
   #pipeline p{font-size:.9rem;margin:10px 0 0}
 </style>
+<link rel="stylesheet" href="../site-header.css?v=96bd1538">
 </head>
-<body>
-<main>
-  <p class="case"><a href="../index.html#v22-method">Start here / Methods</a> · V22 · Shot S01</p>
+<body class="site-page">
+<header class="site-header">
+  <p class="site-header-series">MultiCam</p>
   <h1>From video to top view</h1>
+</header>
+<nav class="site-nav" aria-label="Pages">
+  <a href="../index.html" aria-current="page">Start here / Methods</a>
+  <a href="../index.html#action-connections">Action Relationships</a>
+  <a href="../action-pair-summary/scatter.html">Action Names and Turning</a>
+  <a href="../index.html#overview">Fifteen assembly cases</a>
+  <a href="../spatial/index.html">Atlas of Assembly Space</a>
+  <a href="../spatial/compare.html">Compare two cases</a>
+  <a href="../observation/index.html">Relative position</a>
+  <a href="../analysis/index.html">Recorded comparison</a>
+</nav>
+<main class="site-workspace">
+  <p class="case"><a href="../index.html#v22-method">Start here / Methods</a> · V22 · Shot S01</p>
   <figure id="workshop-plan">
     <video id="intro-video" controls muted playsinline preload="metadata"
       poster="assets/33_v22_workshop_video_poster.jpg" src="assets/32_v22_video_to_workshop_plan.mp4"

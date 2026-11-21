@@ -47,26 +47,34 @@ figcaption { display: flex; align-items: center; gap: 6px; margin-top: 4px; font
 @media (max-width: 980px) { .columns, .angle-card, .row { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 640px) { .row, .columns, .frames, .masks, .angle-card { grid-template-columns: 1fr; } main { padding-left: 12px; padding-right: 12px; } .sheet-head { display: block; } }
 </style>
-<link rel="stylesheet" href="../site-header.css?v=1">
+
+<link rel="stylesheet" href="../site-header.css?v=96bd1538">
 </head>
-<body>
+<body class="site-page relative-groups">
 <header class="site-header">
-  <div>
-    <p class="site-header-series">Fifteen assembly cases</p>
-    <h1>Relative position and angle</h1>
-  </div>
-  <a href="../index.html#explorer" class="site-header-back" aria-label="Back to the assembly pages">Back</a>
+  <p class="site-header-series">MultiCam</p>
+  <h1>Relative position and angle</h1>
 </header>
-<main>
+<nav class="site-nav" aria-label="Pages">
+  <a href="../index.html">Start here / Methods</a>
+  <a href="../index.html#action-connections">Action Relationships</a>
+  <a href="../action-pair-summary/scatter.html">Action Names and Turning</a>
+  <a href="../index.html#overview">Fifteen assembly cases</a>
+  <a href="../spatial/index.html">Atlas of Assembly Space</a>
+  <a href="../spatial/compare.html">Compare two cases</a>
+  <a href="../observation/index.html" aria-current="page">Relative position</a>
+  <a href="../analysis/index.html">Recorded comparison</a>
+</nav>
+<main class="site-workspace">
   <p class="note">The cases use the same three groups as the explorer: Manual, Mixed, and Robot. A sheet is shown only where one was recorded. The blue, green, and orange marks are the three sample times in that sheet. They are not the case-group labels.</p>
   <div id="groups"></div>
   <section id="detail" class="sheet"></section>
 </main>
 <script>
 const GROUPS = [
-  { name: "Manual", edge: "#12627d", cases: ["V01", "V06", "V07", "V11", "V20"] },
-  { name: "Mixed", edge: "#3d7a45", cases: ["V04", "V21", "V22", "V27", "V29"] },
-  { name: "Robot", edge: "#97420e", cases: ["V23", "V24", "V26", "V28", "V30"] }
+  { name: "Manual", edge: "#EE751C", cases: ["V01", "V06", "V07", "V11", "V20"] },
+  { name: "Mixed", edge: "#BAF492", cases: ["V04", "V21", "V22", "V27", "V29"] },
+  { name: "Robot", edge: "#6AC2E7", cases: ["V23", "V24", "V26", "V28", "V30"] }
 ]
 const state = { sheets: [], caseId: "V01", clip: "A" }
 
@@ -210,7 +218,7 @@ function overlay(sheet) {
   const [l, t, r, b] = sheet.bounds
   const [cx, cy] = sheet.common
   svg.append(el("rect", { x: l, y: t, width: r - l, height: b - t, fill: "none", stroke: "#4e6665", "stroke-dasharray": "4 3" }))
-  svg.append(el("circle", { cx, cy, r: 5, fill: "#996118", stroke: "#fff", "stroke-width": 1.5 }))
+  svg.append(el("circle", { cx, cy, r: 5, fill: "#EE751C", stroke: "#17363b", "stroke-width": 1.5 }))
   const placeLeft = cx < l || cx > 430
   svg.append(el("text", { x: placeLeft ? cx - 10 : cx + 10, y: Math.max(16, cy - 8), "text-anchor": placeLeft ? "end" : "start", "font-size": 13, fill: "#996118" }, "Common point"))
   stage.append(image, svg)
@@ -271,7 +279,7 @@ function angleCard(sheet) {
     svg.append(el("line", { x1: origin[0], y1: origin[1], x2: end[0], y2: end[1], stroke: sample.color, "stroke-width": 2.4 }))
     svg.append(el("circle", { cx: end[0], cy: end[1], r: 3.2, fill: sample.color }))
   })
-  svg.append(el("circle", { cx: origin[0], cy: origin[1], r: 3.2, fill: "#996118" }))
+  svg.append(el("circle", { cx: origin[0], cy: origin[1], r: 3.2, fill: "#EE751C" }))
   const table = document.createElement("table")
   table.innerHTML = "<tr><td>Time</td><td>Smaller angle</td></tr>"
   sheet.samples.forEach(sample => {

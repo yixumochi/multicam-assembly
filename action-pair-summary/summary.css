@@ -1,12 +1,12 @@
 :root {
-  --ink: #17363b;
-  --muted: #4f6567;
-  --line: #d8e5de;
-  --paper: #fffdf7;
-  --blue: #12627d;
-  --side-a: #6ac2e7;
-  --side-b: #ee751c;
-  --green: #baf492;
+  --ink: var(--site-ink);
+  --muted: var(--site-muted);
+  --line: var(--site-line);
+  --paper: var(--site-paper);
+  --blue: var(--site-link);
+  --side-a: var(--site-sky);
+  --side-b: var(--site-orange);
+  --green: var(--site-lime);
 }
 * { box-sizing: border-box; }
 body { margin: 0; background: var(--paper); color: var(--ink); font: 15px/1.45 "Segoe UI", system-ui, sans-serif; }

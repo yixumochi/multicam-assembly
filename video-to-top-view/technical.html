@@ -1,5 +1,7 @@
-<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Video to top view · code and cached evidence</title>
-<style>body{margin:0;background:#f3f6f4;color:#233e40;font:17px/1.7 system-ui,'Microsoft YaHei',sans-serif}main{max-width:1320px;margin:auto;padding:30px}h1{font-size:34px;margin:10px 0}h2{font-size:25px;margin-top:42px}p{max-width:1120px}img{display:block;max-width:100%;height:auto;background:white}figure{margin:20px 0}a{color:#216d94}header small{letter-spacing:.1em;color:#4e706d}.notice{border-left:4px solid #d87535;padding:14px 20px;background:#fff5e8}.tabs{display:flex;gap:8px;flex-wrap:wrap}button{font:inherit;cursor:pointer;padding:8px 14px;border:1px solid #aabbb4;border-radius:6px;background:white;color:#233e40}button[aria-pressed=true]{background:#233e40;color:white}.stage{padding:22px;background:white;margin-top:15px}#stepimg{width:100%;max-height:880px;object-fit:contain}#stage-caption{min-height:72px}.row{display:flex;gap:16px;align-items:center;flex-wrap:wrap}input[type=range]{flex:1;min-width:180px}.two{display:grid;grid-template-columns:1fr 1fr;gap:20px}table{border-collapse:collapse;width:100%;font-size:14px}td,th{text-align:left;padding:9px;border-bottom:1px solid #ccd8d1}pre{white-space:pre-wrap}.scroll{overflow-x:auto}small{color:#5c7071}details{background:white;padding:16px;margin:18px 0}footer{margin:35px 0;color:#58716e}@media(max-width:700px){main{padding:16px}h1{font-size:27px}.two{grid-template-columns:1fr}.stage{padding:10px}}.decision-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px}.decision{min-width:0;background:white;border:1px solid #dae3df;border-radius:12px;padding:24px}.decision h3{font-size:21px;line-height:1.35;margin:15px 0}.decision p{font-size:16px}.decision-result{border-left:3px solid #a8bbb1;padding-left:14px}.badge{font-size:11px;letter-spacing:.07em;font-weight:700;padding:5px 8px;border-radius:4px}.used{background:#dcefe8;color:#256554}.caution{background:#faf0d4;color:#795b1b}.excluded{background:#eee8f3;color:#71578b}#networks img{margin-top:24px}#networks details{border:1px solid #d7e0db}@media(max-width:1000px){.decision-grid{grid-template-columns:1fr}}
+<!doctype html><html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Video to top view · code and cached evidence</title>
+<style>body{margin:0;background:#f3f6f4;color:#233e40;font:17px/1.7 system-ui,'Microsoft YaHei',sans-serif}main{max-width:1320px;margin:auto;padding:30px}h1{font-size:34px;margin:10px 0}h2{font-size:25px;margin-top:42px}p{max-width:1120px}img{display:block;max-width:100%;height:auto;background:white}figure{margin:20px 0}a{color:#216d94}header small{letter-spacing:.1em;color:#4e706d}.notice{border-left:3px solid var(--site-orange);padding:14px 20px;background:#fff5e8}.tabs{display:flex;gap:8px;flex-wrap:wrap}button{font:inherit;cursor:pointer;padding:8px 14px;border:1px solid #aabbb4;border-radius:6px;background:white;color:#233e40}button[aria-pressed=true]{background:#233e40;color:white}.stage{padding:22px;background:white;margin-top:15px}#stepimg{width:100%;max-height:880px;object-fit:contain}#stage-caption{min-height:72px}.row{display:flex;gap:16px;align-items:center;flex-wrap:wrap}input[type=range]{flex:1;min-width:180px}.two{display:grid;grid-template-columns:1fr 1fr;gap:20px}table{border-collapse:collapse;width:100%;font-size:14px}td,th{text-align:left;padding:9px;border-bottom:1px solid #ccd8d1}pre{white-space:pre-wrap}.scroll{overflow-x:auto}small{color:#5c7071}details{background:white;padding:16px;margin:18px 0}footer{margin:35px 0;color:#58716e}@media(max-width:700px){main{padding:16px}h1{font-size:27px}.two{grid-template-columns:1fr}.stage{padding:10px}}.decision-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px}.decision{min-width:0;background:white;border:1px solid #dae3df;border-radius:12px;padding:24px}.decision h3{font-size:21px;line-height:1.35;margin:15px 0}.decision p{font-size:16px}.decision-result{border-left:3px solid #a8bbb1;padding-left:14px}.badge{font-size:11px;letter-spacing:.07em;font-weight:700;padding:5px 8px;border-radius:4px}.used{background:var(--site-lime);color:var(--site-ink)}.caution{background:var(--site-orange-wash);color:var(--site-ink)}.excluded{background:var(--site-sky-wash);color:var(--site-ink)}#networks img{margin-top:24px}#networks details{border:1px solid #d7e0db}@media(max-width:1000px){.decision-grid{grid-template-columns:1fr}}
 #architecture figure{margin:16px 0}
 #architecture img{width:100%;max-height:65vh;object-fit:contain}
 #architecture p{margin:8px 0 24px}
@@ -15,13 +17,31 @@
 #v29{margin-top:24px}
 @media(max-width:700px){.results{grid-template-columns:minmax(0,1fr)}}
 </style>
-<main><header><p><a href="index.html">From video to top view</a></p><h1>How video becomes a top view</h1><p>Follow a V22 video shot through segmentation and point tracking to the local spatial track and the Rhino case-sheet overlay.</p></header>
+
+<link rel="stylesheet" href="../site-header.css?v=96bd1538">
+</head>
+<body class="site-page">
+<header class="site-header">
+  <p class="site-header-series">MultiCam</p>
+  <h1>How video becomes a top view</h1>
+</header>
+<nav class="site-nav" aria-label="Pages">
+  <a href="../index.html" aria-current="page">Start here / Methods</a>
+  <a href="../index.html#action-connections">Action Relationships</a>
+  <a href="../action-pair-summary/scatter.html">Action Names and Turning</a>
+  <a href="../index.html#overview">Fifteen assembly cases</a>
+  <a href="../spatial/index.html">Atlas of Assembly Space</a>
+  <a href="../spatial/compare.html">Compare two cases</a>
+  <a href="../observation/index.html">Relative position</a>
+  <a href="../analysis/index.html">Recorded comparison</a>
+</nav>
+<main class="site-workspace"><header><p><a href="index.html">From video to top view</a></p><p>Follow a V22 video shot through segmentation and point tracking to the local spatial track and the Rhino case-sheet overlay.</p></header>
 <nav class="row"><a href="#architecture">Pipeline</a><a href="#walk">Walkthrough</a><a href="#branch-results">Top-view comparison</a><a href="#robot-update">Robot mask review</a><a href="#networks">Inside the networks</a><a href="#v29">V29 comparison</a><a href="#animation">Point replay</a><a href="#decisions">Design choices</a><a href="#sources">Diagrams and data</a></nav>
 <section id="architecture">
 <figure><a href="assets/14_visual_pipeline.png"><img src="assets/14_visual_pipeline.png" alt="V22 source frames, masks and feature tracks feeding two separate top-view routes"></a></figure>
 <p>V22 S01 follows surface features from video into two outputs with different coordinate assumptions. The local spatial track uses camera and depth checks. The case-sheet overlay uses simplified depth and placement on a Rhino plan.</p>
 </section>
-<section id="walk"><h2>Follow V22 S01 from source frame to output</h2><div class="tabs" id="tabs"></div><div class="stage"><h3 id="stage-title"></h3><img id="stepimg" alt="Annotated cached evidence for the selected stage"><p id="stage-caption"></p><p id="stage-code"></p><p id="compare-routes" hidden><a href="#branch-results">Compare both top-view routes</a></p><div id="robot-update" class="stage-detail" hidden>
+<section id="walk"><h2>Follow V22 S01 from source frame to output</h2><div class="tabs" id="tabs"></div><div class="stage technical-stage"><h3 id="stage-title"></h3><img id="stepimg" alt="Annotated cached evidence for the selected stage"><p id="stage-caption"></p><p id="stage-code"></p><p id="compare-routes" hidden><a href="#branch-results">Compare both top-view routes</a></p><div id="robot-update" class="stage-detail" hidden>
 <h4>V22 S01 · second robot from the left</h4>
 <p>SAM2.1 propagates the reviewed F2032 mask through all 211 frames. Yellow points in the video belong to the supplemental robot.</p>
 <video id="robot-video" controls preload="metadata" style="width:100%;max-height:65vh;background:#18292b" poster="assets/25_robot_video_poster.jpg" src="assets/21_robot_full_segment.mp4"></video>
@@ -84,4 +104,5 @@ show(0);
 openLinkedStage();
 window.addEventListener('hashchange',openLinkedStage);
 document.querySelector('nav a[href="#robot-update"]').addEventListener('click',()=>show(1));
-let timer=null;const slider=document.getElementById('frame');function frame(){const i=Number(slider.value);document.getElementById('animimg').src='assets/frame_'+String(i).padStart(2,'0')+'.jpg';document.getElementById('framelabel').textContent=(i+1)+' / 23';}slider.oninput=frame;window.addEventListener('pageshow',frame);frame();document.getElementById('play').onclick=()=>{if(timer){clearInterval(timer);timer=null;}else{timer=setInterval(()=>{slider.value=(Number(slider.value)+1)%23;frame()},400);}document.getElementById('play').textContent=timer?'Pause point replay':'Play point replay';};</script></html>
+let timer=null;const slider=document.getElementById('frame');function frame(){const i=Number(slider.value);document.getElementById('animimg').src='assets/frame_'+String(i).padStart(2,'0')+'.jpg';document.getElementById('framelabel').textContent=(i+1)+' / 23';}slider.oninput=frame;window.addEventListener('pageshow',frame);frame();document.getElementById('play').onclick=()=>{if(timer){clearInterval(timer);timer=null;}else{timer=setInterval(()=>{slider.value=(Number(slider.value)+1)%23;frame()},400);}document.getElementById('play').textContent=timer?'Pause point replay':'Play point replay';};</script></body>
+</html>

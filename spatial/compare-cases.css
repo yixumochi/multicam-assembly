@@ -41,7 +41,7 @@
 }
 .compare-badge-mark { font-size: 17px; line-height: 1; }
 .compare-badge[data-similar="true"] { background: var(--plate-footprint); border-color: #6aa46a; color: var(--plate-ink); }
-.compare-badge[data-similar="false"] { background: var(--plate-blue); color: white; }
+.compare-badge[data-similar="false"] { background: var(--site-orange); color: var(--site-ink); }
 
 .compare-plan, .compare-model-card { width: min(94%, 274px); justify-self: center; align-self: start; }
 .compare-plan .atlas-coverage-canvas {
@@ -66,9 +66,9 @@
   stroke-width: 1.25px;
   stroke-dasharray: 3 2;
 }
-.compare-plan [data-coverage-layer="activity"] { fill: #a9c5c4; }
+.compare-plan [data-coverage-layer="activity"] { fill: var(--site-sky); }
 .compare-plan [data-emphasis="activity"] .atlas-object-outline,
-.compare-plan [data-emphasis="object"] .atlas-footprint-frame { stroke: #337747; stroke-width: 2.4px; }
+.compare-plan [data-emphasis="object"] .atlas-footprint-frame { stroke: var(--site-ink); stroke-width: 2.4px; }
 .compare-plan [data-emphasis="human"] [data-coverage-layer="machine"],
 .compare-plan [data-emphasis="machine"] [data-coverage-layer="human"],
 .compare-plan :is([data-emphasis="human"], [data-emphasis="machine"]) [data-coverage-layer="overlap"] { visibility: hidden; }
