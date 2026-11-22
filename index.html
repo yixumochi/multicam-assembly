@@ -287,6 +287,7 @@ html[data-view="case-area"] #cases-page .page[data-page="summary"] > :not(.surve
 html[data-view="case-area"] .workspace,
 html[data-view="case-area"] #cases-page main { width:100%; max-width:none; margin:0; padding:0; }
 html[data-view="case-area"] body { margin:0; }
+#space-observation-note { margin-block-start: 16px; }
 </style><link rel="stylesheet" href="site-header.css?v=nav-groups-1">
 </head>
 <body class="site-page assembly-home">
@@ -301,7 +302,6 @@ html[data-view="case-area"] body { margin:0; }
   <a href="action-pair-summary/scatter.html" data-nav-group="action">Action Names and Turning</a>
   <a href="spatial/index.html" data-nav-group="case">Atlas of Assembly Space</a>
   <a href="spatial/compare.html" data-nav-group="case">Compare two cases</a>
-  <a href="observation/index.html" data-nav-group="case">Assembly in Motion</a>
 </nav>
 <main class="workspace site-workspace">
 <section id="path-page" class="start-layout" aria-label="Start here / Methods">
@@ -401,6 +401,7 @@ html[data-view="case-area"] body { margin:0; }
         <button type="button" data-study-panel aria-controls="v22-method" aria-pressed="false">Top-view workflow</button>
         <a href="spatial/index.html">Atlas of Assembly Space ↗</a>
         <a href="spatial/compare.html">Compare two cases ↗</a>
+        <a href="observation/index.html">Observation boards ↗</a>
       </nav>
     </div>
     <div class="start-module-content">
@@ -489,17 +490,7 @@ html[data-view="case-area"] body { margin:0; }
           <figcaption><a href="video-to-top-view/">Video to Top View ↗</a> · <a href="video-to-top-view/technical.html#networks">SAM2.1 and Depth Pro ↗</a> · <a href="video-to-top-view/assets/14_visual_pipeline.svg">Detailed pipeline ↗</a></figcaption>
         </figure>
       </div>
-    </div>
-  </section>
-  <section class="start-module" data-nav-group="case" aria-labelledby="motion-module-title">
-    <div class="start-module-sidebar">
-      <h2 id="motion-module-title">Reading Assembly in Motion</h2>
-      <nav class="start-module-menu" aria-label="Reading Assembly in Motion">
-        <a href="observation/index.html">Explore the boards ↗</a>
-      </nav>
-    </div>
-    <div class="start-module-content">
-      <div class="start-study-panel">
+      <div class="start-study-panel" id="space-observation-note">
         <p>A tool approaches a joint, a grip shifts, and a piece of timber is guided into place. We align three moments from the footage to see how adjustments like these unfold.</p>
         <p>Select a highlighted interval on a case timeline to open its board.</p>
       </div>
@@ -923,7 +914,7 @@ function addObservationRail(article, observations, start, end, sourceLabel) {
   const key = document.createElement("p");
   key.className = "observation-key";
   const heading = document.createElement("b");
-  heading.textContent = "Assembly in Motion";
+  heading.textContent = "Observation boards";
   key.append(heading, sourceLabel
     ? sourceLabel + " (" + observations[0].source + "). Select a thick segment to open its board."
     : "Select a thick segment to open its board.");
