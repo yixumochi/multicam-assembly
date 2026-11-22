@@ -6,6 +6,24 @@
 <title>Assembly in Motion | MultiCam</title>
 <link rel="stylesheet" href="../site-header.css?v=nav-groups-1">
 <style>
+.opening-comparison { margin: 0 0 20px; }
+.opening-comparison h2 { margin: 0 0 4px; font-size: 21px; }
+.opening-comparison p { margin: 0 0 12px; color: var(--site-muted); }
+.comparison-boards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.comparison-board {
+  display: block;
+  overflow: hidden;
+  border: 1px solid var(--site-line);
+  border-radius: var(--site-radius);
+  background: var(--site-surface);
+  text-decoration: none;
+}
+.comparison-board img { display: block; width: 100%; height: auto; border-bottom: 1px solid var(--site-line); }
+.comparison-board span { display: block; padding: 8px 12px; font-weight: 650; }
+.comparison-board:is(:hover, :focus-visible) span { text-decoration: underline; }
+@media (max-width: 600px) {
+  .comparison-boards { grid-template-columns: 1fr; gap: 10px; }
+}
 #case-groups {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -73,7 +91,7 @@
   .board-controls select { width: 100%; min-width: 0; }
 }
 </style>
-<script src="boards.js" defer></script>
+<script src="boards.js?v=v04-opening" defer></script>
 </head>
 <body class="site-page">
 <header class="site-header">
@@ -90,6 +108,20 @@
   <a href="../observation/index.html" aria-current="page" data-nav-group="case">Assembly in Motion</a>
 </nav>
 <main class="site-workspace">
+  <section class="opening-comparison" id="opening-comparison" aria-labelledby="comparison-title">
+    <h2 id="comparison-title">V04 · 17.48–25.60 s</h2>
+    <p>As the left robot guides the diagonal timber toward the joint, the right robot holds the other timber in place.</p>
+    <div class="comparison-boards">
+      <a class="comparison-board" href="#V04/04">
+        <img src="boards/V04/04.webp" width="1450" height="1026" alt="Observation board showing the left robot guiding the diagonal timber">
+        <span>04 · Left robot</span>
+      </a>
+      <a class="comparison-board" href="#V04/05">
+        <img src="boards/V04/05.webp" width="1450" height="1026" alt="Observation board showing the right robot holding the other timber">
+        <span>05 · Right robot</span>
+      </a>
+    </div>
+  </section>
   <p class="board-intro">Follow a single assembly action across three aligned moments. The outlines and arrows draw attention to what moves, what stays in place, and how one part is brought toward another.</p>
   <nav id="case-groups" aria-label="Assembly cases"></nav>
   <p class="board-status" id="board-status" role="status">Loading observations…</p>

@@ -60,7 +60,8 @@ async function initialize() {
     const [requestedCase, requestedEvent] = location.hash.slice(1).split("/");
     const caseId = caseLinks.has(requestedCase) ? requestedCase : "V01";
     const entries = cases[caseId];
-    const index = Math.max(0, entries.findIndex(entry => entry.id === requestedEvent));
+    const requestedIndex = entries.findIndex(entry => entry.id === requestedEvent);
+    const index = Math.max(0, requestedIndex);
     const entry = entries[index];
 
     if (currentCase !== caseId) {
@@ -83,6 +84,7 @@ async function initialize() {
     image.height = entry.height;
     image.alt = caseId + " " + entry.id + " " + entry.title + ", with three aligned masks and working directions";
     image.src = source;
+    return requestedCase === caseId && requestedIndex !== -1;
   }
 
   function advance(delta) {
@@ -94,9 +96,16 @@ async function initialize() {
   previous.addEventListener("click", () => advance(-1));
   next.addEventListener("click", () => advance(1));
   window.addEventListener("hashchange", render);
-  render();
+  document.getElementById("opening-comparison")?.addEventListener("click", event => {
+    if (event.target.closest("a") && event.button === 0 &&
+        !event.ctrlKey && !event.metaKey && !event.shiftKey && !event.altKey) {
+      requestAnimationFrame(() => board.scrollIntoView());
+    }
+  });
+  const openedFromBoardLink = render();
   statusMessage.hidden = true;
   board.hidden = false;
+  if (openedFromBoardLink) board.scrollIntoView();
 }
 
 initialize().catch(error => {
