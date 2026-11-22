@@ -44,19 +44,6 @@
   dialog.addEventListener("click", event => { if (event.target === dialog) dialog.close(); });
   preview.addEventListener("click", event => { if (simpleClick(event)) dialog.close(); });
 
-  const observationFrame = document.getElementById("assembly-observation-frame");
-  let observationResize;
-  observationFrame?.addEventListener("load", () => {
-    observationResize?.disconnect();
-    const content = observationFrame.contentDocument?.querySelector("main");
-    if (!content) return;
-    observationResize = new observationFrame.contentWindow.ResizeObserver(() => {
-      const height = Math.ceil(content.getBoundingClientRect().height);
-      if (height > 0) observationFrame.style.height = height + "px";
-    });
-    observationResize.observe(content);
-  });
-
   function showPanel(button) {
     const menu = button.closest(".start-module-menu");
     for (const choice of menu.querySelectorAll("[data-study-panel]")) {
@@ -64,9 +51,6 @@
       const active = choice === button;
       choice.setAttribute("aria-pressed", String(active));
       panel.hidden = !active;
-      if (active && observationFrame && panel.contains(observationFrame) && !observationFrame.hasAttribute("src")) {
-        observationFrame.src = observationFrame.dataset.src;
-      }
       if (!active) panel.querySelector("video")?.pause();
     }
   }

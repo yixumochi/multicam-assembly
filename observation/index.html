@@ -3,17 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Observation Boards | MultiCam</title>
+<title>Assembly in Motion | MultiCam</title>
 <link rel="stylesheet" href="../site-header.css?v=nav-groups-1">
-<script>
-if (window.parent !== window && new URLSearchParams(location.search).get("view") === "assembly-space") {
-  document.documentElement.classList.add("assembly-space-embed");
-}
-</script>
 <style>
-.assembly-space-embed, .assembly-space-embed body.site-page { background: transparent; }
-.assembly-space-embed :is(.site-header, .site-nav, .board-intro) { display: none; }
-.assembly-space-embed body.site-page > main.site-workspace { padding: 0; max-width: none; }
 #case-groups {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -85,14 +77,15 @@ if (window.parent !== window && new URLSearchParams(location.search).get("view")
 </head>
 <body class="site-page">
 <header class="site-header">
-  <p class="site-header-series">MultiCam / <a href="../index.html#space-module-title">Assembly Space</a></p>
-  <h1>Observation Boards</h1>
+  <p class="site-header-series">MultiCam</p>
+  <h1>Assembly in Motion</h1>
 </header>
 <nav class="site-nav" aria-label="Pages">
   <a href="../index.html">Start here / Methods</a>
   <a href="../index.html#overview" data-nav-group="case">Fifteen assembly cases</a>
   <a href="../index.html#action-connections" data-nav-group="action">Action Relationships</a>
   <a href="../action-pair-summary/scatter.html" data-nav-group="action">Action Names and Turning</a>
+  <a href="../observation/index.html" aria-current="page" data-nav-group="case">Assembly in Motion</a>
   <a href="../spatial/index.html" data-nav-group="case">Atlas of Assembly Space</a>
   <a href="../spatial/compare.html" data-nav-group="case">Compare two cases</a>
 </nav>
