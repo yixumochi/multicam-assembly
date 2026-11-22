@@ -301,7 +301,7 @@ html[data-view="case-area"] body { margin:0; }
   <a href="action-pair-summary/scatter.html" data-nav-group="action">Action Names and Turning</a>
   <a href="spatial/index.html" data-nav-group="case">Atlas of Assembly Space</a>
   <a href="spatial/compare.html" data-nav-group="case">Compare two cases</a>
-  <a href="observation/index.html" data-nav-group="case">Masks and Working Directions</a>
+  <a href="observation/index.html" data-nav-group="case">Assembly in Motion</a>
 </nav>
 <main class="workspace site-workspace">
 <section id="path-page" class="start-layout" aria-label="Start here / Methods">
@@ -401,7 +401,6 @@ html[data-view="case-area"] body { margin:0; }
         <button type="button" data-study-panel aria-controls="v22-method" aria-pressed="false">Top-view workflow</button>
         <a href="spatial/index.html">Atlas of Assembly Space ↗</a>
         <a href="spatial/compare.html">Compare two cases ↗</a>
-        <a href="observation/index.html">Masks and Working Directions ↗</a>
       </nav>
     </div>
     <div class="start-module-content">
@@ -492,6 +491,21 @@ html[data-view="case-area"] body { margin:0; }
       </div>
     </div>
   </section>
+  <section class="start-module" data-nav-group="case" aria-labelledby="motion-module-title">
+    <div class="start-module-sidebar">
+      <h2 id="motion-module-title">Reading Assembly in Motion</h2>
+      <nav class="start-module-menu" aria-label="Reading Assembly in Motion">
+        <a href="observation/index.html">Explore the observation boards ↗</a>
+      </nav>
+    </div>
+    <div class="start-module-content">
+      <div class="start-study-panel">
+        <p>A tool approaches a joint, a grip shifts, and a piece of timber is guided into place. We align three moments from the footage to see how adjustments like these unfold.</p>
+        <p>Select a highlighted interval on a case timeline to open its board.</p>
+      </div>
+    </div>
+  </section>
+
   <p class="start-music-credit">Music in both films: <a href="https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1800004">Getting it Done</a> by Kevin MacLeod (<a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>), excerpt with fades.</p>
 </section>
 <div id="explorer-body" hidden>
@@ -909,7 +923,7 @@ function addObservationRail(article, observations, start, end, sourceLabel) {
   const key = document.createElement("p");
   key.className = "observation-key";
   const heading = document.createElement("b");
-  heading.textContent = "Masks and working directions";
+  heading.textContent = "Assembly in Motion";
   key.append(heading, sourceLabel
     ? sourceLabel + " (" + observations[0].source + "). Select a thick segment to open its board."
     : "Select a thick segment to open its board.");
@@ -932,7 +946,7 @@ function addObservationRail(article, observations, start, end, sourceLabel) {
   label.textContent = "Boards";
   const track = document.createElement("nav");
   track.className = "observation-track";
-  track.setAttribute("aria-label", article.id + " masks and working directions by time");
+  track.setAttribute("aria-label", article.id + " assembly observations by time");
   const markers = [...observations].sort((a, b) => a.sourceStart - b.sourceStart).map(observation => {
     const link = document.createElement("a");
     link.className = "observation-marker";
