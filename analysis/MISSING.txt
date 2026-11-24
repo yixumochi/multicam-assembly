@@ -1,6 +1,9 @@
-缺失材料（没有这些，对应结论就不写）
+Evidence gaps in the handoff snapshot
 
-原视频和真实关键帧。对照卡上的证据格保持空位，没有用生成图代替。
-相机、theta 轴线、grip 描述和 left_px 的标定定义。图中数值仍是导出的二维记录。
-耗时、力、碰撞、损伤和执行成功率。因此抓持、支撑、进入和退出仍是设计问题，不是评价结果。
-交接包没有现成网页源码。配色读自当前站点 outputs/multicam_site/index.html 后一个 :root，没有采用包内 palette_reference.json。
+Original video and corresponding keyframes. The comparison cards leave their evidence slots blank where frames are missing.
+
+Calibration for the camera, theta reference axis, grip descriptions, and left_px. The plotted quantities are the exported two-dimensional records.
+
+Timing, force, collisions, damage, and success rates. The snapshot treats gripping, support, entry and withdrawal as design questions.
+
+The handoff package did not contain the website source. Colors were taken from the later :root block in outputs/multicam_site/index.html at the time of integration.

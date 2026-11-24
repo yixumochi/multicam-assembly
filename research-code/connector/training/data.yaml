@@ -1,0 +1,10 @@
+path: ./YOLO_Baseline_Data
+train: images/train
+val: images/val
+test: images/test
+
+names:
+  0: female_interface
+  1: male_connector
+  2: movable_part
+  3: assembled_structure

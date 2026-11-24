@@ -1,0 +1,21 @@
+# Active default dataset for the preprocessing baseline.
+path: data/split_pre0_baseline/YOLO_Data
+train: images/train
+val: images/val
+test: images/test
+
+# Fixed four-class detection names.
+names:
+  0: female_interface
+  1: male_connector
+  2: movable_part
+  3: assembled_structure
+
+# Fixed dataset roots available to train_ablation.py.
+ablation_paths:
+  pre0_baseline: data/split_pre0_baseline/YOLO_Data
+  pre1_median: data/split_pre1_median/YOLO_Data
+  pre2_tophat: data/split_pre2_tophat/YOLO_Data
+  pre3_fusion: data/split_pre3_fusion/YOLO_Data
+  pre4_resize: data/split_pre4_resize/YOLO_Data
+  pre5_all_combined: data/split_pre5_all_combined/YOLO_Data

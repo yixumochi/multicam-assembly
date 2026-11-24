@@ -1,0 +1,28 @@
+{
+  "schema": "multicam-local-evidence-v1",
+  "operation_notes": {
+    "example-event": {
+      "goal": "Position the example member beside the sample fixture.",
+      "phases": [
+        "approach"
+      ],
+      "actor": "Example operator",
+      "physical": "Example timber member",
+      "active": "Example timber member",
+      "target": "Example fixture",
+      "interface": "Example lap joint",
+      "tool": "Example fixture",
+      "axes": [
+        "interface_configuration"
+      ],
+      "source_kind": "video_observed",
+      "observation": "The example member and fixture are visible.",
+      "unknowns": [
+        "Contact is unassessed."
+      ]
+    }
+  },
+  "texts": {
+    "episode_relations:85:21": "Example evidence description."
+  }
+}

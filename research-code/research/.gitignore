@@ -1,0 +1,4 @@
+__pycache__/
+*.pyc
+data/
+historical_evidence.json

@@ -1,9 +1,9 @@
-源码与实现
+Source and implementation notes for the handoff snapshot
 
-复用、只读：analysis_v2/action_pairs_v2.csv（SHA-256 与交接说明一致，本脚本只校验未改写）、pair_dimensions.csv、actions.csv。
-文本消融文件留在 outputs/action_text_ablation_v1，这一页不再读取，也不再运行。
-新写：deliverable/build_research_module.py。它画出综合图、三张卡，并生成 index.html。
-页面交互：案例矩阵替代计数表，并排散点替代原来上下两张图和转盘说明。点格子列出该案例对、该分数带的动作；点动作后，案例编号进入十五个案例页。图三不在这一页。
-接入：outputs/multicam_site/index.html 增加一个到 analysis/index.html 的链接。原有三个页面标签的含义没有改。
-配色读取自该网页当前 :root：蓝色 #12627d，天蓝 #6ac2e7，墨色 #17363b，橙 #ee751c。没有把交接包里的后备色当成品牌色。
-例子：#107。输入是 pair_dimensions.csv 第 107 行，cosine 0.638，两端 raw delta −6.2° 与 −6.1°。处理是 abs(abs(delta_a)−abs(delta_b)) = 0.1°。输出写在 card_107.svg，并注明起始角仍是 16.9° 与 −54.1°，所以幅度接近不是同一接近路径。
+The module reuses analysis_v2/action_pairs_v2.csv, pair_dimensions.csv, and actions.csv as read-only inputs. The action-pair CSV was checked against the handoff SHA-256. The older text ablation output is stored under outputs/action_text_ablation_v1 and is outside this page's workflow.
+
+In the handoff workspace, deliverable/build_research_module.py generated the overview, three comparison cards, and index.html. The case matrix replaced the count table. Side-by-side plots replaced the stacked charts and wheel explanation. Matrix cells list actions for the selected case pair and score band. A case number links to the corresponding case page.
+
+The integration in the handoff workspace added a link from outputs/multicam_site/index.html to analysis/index.html. The existing three page labels kept their meaning. The color values came from the site's :root settings at the time: #12627d, #6ac2e7, #17363b, and #ee751c.
+
+Example: Pair 107 reads row 107 from pair_dimensions.csv, with cosine 0.638 and raw angle changes of -6.2 and -6.1 degrees. The difference between their magnitudes is 0.1 degrees. card_107.svg also records the distinct starting angles of 16.9 and -54.1 degrees.

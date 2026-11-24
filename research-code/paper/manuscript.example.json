@@ -1,0 +1,38 @@
+{
+  "title": "Assembly evidence comparison",
+  "scope": "Example layout for reviewing selected assembly events.",
+  "intro": "Replace this example with the review scope for your own data.",
+  "results": [
+    {
+      "id": "R1",
+      "title": "Example comparison",
+      "pairs": [
+        1
+      ],
+      "paragraphs": [
+        "Describe the visible evidence and any limitations."
+      ],
+      "panels": [
+        [
+          1,
+          0,
+          "full"
+        ],
+        [
+          2,
+          "context",
+          "full"
+        ]
+      ],
+      "cols": 2,
+      "caption": "Example evidence layout."
+    }
+  ],
+  "discussion": [
+    {
+      "title": "Review questions",
+      "text": "Record questions for follow-up review.",
+      "evidence": "List the evidence needed to answer them."
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+__pycache__/
+*.py[cod]
+.venv/
+/training/data/
+/training/runs/
+/training/YOLO_Baseline_Data/
+/training/split_check_log.csv
+/inference/output/
+/inference/video_input/
+weights/
+*.pt

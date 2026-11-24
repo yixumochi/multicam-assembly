@@ -1,0 +1,10 @@
+# Reference configuration only; infer_video.py uses the class-aware wrapper.
+# ByteTrack-style micro connector tracking parameters
+# These values are tuned for tiny male/female contact points.
+tracker_type: bytetrack
+track_high_thresh: 0.35
+track_low_thresh: 0.10
+new_track_thresh: 0.35
+track_buffer: 40
+match_thresh: 0.90
+fuse_score: true
