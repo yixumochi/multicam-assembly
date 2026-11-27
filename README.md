@@ -23,13 +23,15 @@ cd multicam-assembly
 python examples/verify_published_examples.py
 ```
 
-The script prints a **24.6° turning gap** for a pair of named actions and verifies **23 V22 drawing coordinates** from saved image points. It uses the data already in the repository.
+The script prints a **24.6° turning gap** for a pair of named actions and verifies **23 V22 drawing coordinates** calculated from saved image points using a fixed-depth drawing model. It uses the data already in the repository.
 
 ### V22 trajectory preview
 
-The left plot shows feature trajectories in the source image. The middle plot shows the supported trajectories on the shot's local ground plane. The right plot shows how many features pass the checks in each frame.
+Follow **feature 80**, the same robot surface point shown in the top-view clip below. This plot shows its supported positions on the shot's local ground plane, with the start, end, and missing observation kept visible.
 
-[![V22 S01 feature trajectories in image pixels and on the local plane, with frame-by-frame tracking support](video-to-top-view/assets/24_robot_tracks_local.png)](https://yixumochi.github.io/multicam-assembly/video-to-top-view/technical.html)
+[![V22 feature 80 on the local ground plane, with start and end frames and a gap at unsupported frame F2112](media/readme/v22-trajectory-preview.png)](https://yixumochi.github.io/multicam-assembly/video-to-top-view/technical.html#animation)
+
+[All robot feature tracks and support checks](video-to-top-view/assets/24_robot_tracks_local.png) · [Coordinates used in this preview](video-to-top-view/point_lineage.json)
 
 ## 2. Cases and evidence
 
@@ -43,7 +45,9 @@ The left plot shows feature trajectories in the source image. The middle plot sh
 
 ### Actions and movement
 
-Label two moments in the source films. SentenceTransformer encodes each action name as a 384-value vector. The clip compares the vectors by cosine similarity, then returns to the frames to show how the two timber transport actions were performed.
+**Action names → vectors → similarity → review the footage.** SentenceTransformer uses `all-MiniLM-L6-v2` to encode each action name as a 384-value vector. Cosine similarity helps select actions to compare.
+
+The clip follows V21 *Transport held timber* and V04 *Transport and rotate timber*: their name similarity is **0.822**. Returning to the source frames shows how each operation was performed.
 
 [![Animation of two timber transport labels being encoded, compared by cosine similarity, and checked against source frames](media/readme/sentence-transformer.gif)](https://yixumochi.github.io/multicam-assembly/media/methods/sentence-transformer.mp4)
 
@@ -51,7 +55,12 @@ Label two moments in the source films. SentenceTransformer encodes each action n
 
 ### From video to top view
 
-In V22, a mask identifies the robot and a surface point is tracked across frames. Depth and camera pose project supported observations onto the shot's local ground plane. The clip then shows how the track is placed schematically on the workshop plan.
+In V22, a mask selects the robot and surface points are tracked across frames. Those image tracks feed two views:
+
+1. **Local top view:** depth and camera checks give supported coordinates on the shot's ground plane.
+2. **Workshop drawing:** a separate fixed-depth projection is rotated and translated onto the plan as a schematic overlay.
+
+The clip shows both views, each with its own coordinate frame.
 
 [![Animation of V22 from the source video and robot mask through feature tracking and depth to the local path and workshop plan](media/readme/v22-video-to-top-view.gif)](https://yixumochi.github.io/multicam-assembly/video-to-top-view/index.html)
 
@@ -59,15 +68,23 @@ In V22, a mask identifies the robot and a surface point is tracked across frames
 
 ### Local assembly observations
 
-In V04, one robot brings a timber member toward a joint. These two details come from the published *Approach local joint* board.
+In V04, one robot brings a timber member toward a joint. These details come from the published *Approach local joint* board.
 
 **Equipment masks at the start, middle, and end**
 
 [![The V04 mechanical arm highlighted in blue, green, and orange in the three source frames](media/readme/v04-machine-masks.png)](https://yixumochi.github.io/multicam-assembly/observation/index.html#V04/04)
 
+**The three masks aligned to a common point**
+
+<a href="https://yixumochi.github.io/multicam-assembly/observation/index.html#V04/04"><img src="media/readme/v04-mask-overlay.png" width="250" alt="Three translated V04 machine masks overlaid in blue, green and orange, with a shared timber reference point"></a>
+
+Blue, green, and orange show the start, middle, and end masks after translation to the same timber reference point.
+
 **Grip locations and working directions**
 
 [![A and B marked on the V04 gripper photograph with a separate equal-force model diagram](media/readme/v04-grip-directions.png)](https://yixumochi.github.io/multicam-assembly/observation/index.html#V04/04)
+
+A and B mark the visible contacts. R combines two equal projected force vectors in an illustrative model; their physical magnitudes were not measured.
 
 [Open the full V04 observation](https://yixumochi.github.io/multicam-assembly/observation/index.html#V04/04) · [Assembly in Motion](https://yixumochi.github.io/multicam-assembly/observation/index.html)
 
