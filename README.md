@@ -25,6 +25,12 @@ python examples/verify_published_examples.py
 
 The script prints a **24.6° turning gap** for a pair of named actions and verifies **23 V22 drawing coordinates** from saved image points. It uses the data already in the repository.
 
+### V22 trajectory preview
+
+The left plot shows feature trajectories in the source image. The middle plot shows the supported trajectories on the shot's local ground plane. The right plot shows how many features pass the checks in each frame.
+
+[![V22 S01 feature trajectories in image pixels and on the local plane, with frame-by-frame tracking support](video-to-top-view/assets/24_robot_tracks_local.png)](https://yixumochi.github.io/multicam-assembly/video-to-top-view/technical.html)
+
 ## 2. Cases and evidence
 
 1. **Collect the case material.** Link each source film to the available project drawings and references.
@@ -37,29 +43,33 @@ The script prints a **24.6° turning gap** for a pair of named actions and verif
 
 ### Actions and movement
 
-Find related action names, then look at the footage and drawings to compare how each operation was performed. The example below pairs two timber transport actions from V21 and V04.
+Label two moments in the source films. SentenceTransformer encodes each action name as a 384-value vector. The clip compares the vectors by cosine similarity, then returns to the frames to show how the two timber transport actions were performed.
 
-[![Two source frames with the labels Transport held timber and Transport and rotate timber](media/name-pair/name-pair-poster.jpg)](https://yixumochi.github.io/multicam-assembly/#action-connections)
+[![Animation of two timber transport labels being encoded, compared by cosine similarity, and checked against source frames](media/readme/sentence-transformer.gif)](https://yixumochi.github.io/multicam-assembly/media/methods/sentence-transformer.mp4)
 
-[Action Relationships](https://yixumochi.github.io/multicam-assembly/#action-connections) · [Action Names and Turning](https://yixumochi.github.io/multicam-assembly/action-pair-summary/scatter.html)
+[Play the original video](https://yixumochi.github.io/multicam-assembly/media/methods/sentence-transformer.mp4) · [Action Relationships](https://yixumochi.github.io/multicam-assembly/#action-connections) · [Action Names and Turning](https://yixumochi.github.io/multicam-assembly/action-pair-summary/scatter.html)
 
-### Assembly space
+### From video to top view
 
-The V22 replay shows tracked points on a robot across the source frames. The workshop drawing shows a schematic placement of the track. The atlas uses the case plans to compare activity area and finished footprint across the 15 cases.
+In V22, a mask identifies the robot and a surface point is tracked across frames. Depth and camera pose project supported observations onto the shot's local ground plane. The clip then shows how the track is placed schematically on the workshop plan.
 
-| V22 source frames and tracked points | Schematic placement on the workshop plan |
-| :---: | :---: |
-| <a href="https://yixumochi.github.io/multicam-assembly/video-to-top-view/technical.html"><img src="video-to-top-view/assets/23_robot_replay.gif" width="352" alt="Animated V22 S01 replay of robot masks and tracked feature points"></a> | <a href="https://yixumochi.github.io/multicam-assembly/video-to-top-view/index.html"><img src="video-to-top-view/assets/31_v22_published_plan.png" width="352" alt="V22 top view with the S01 observation placed on the workshop plan"></a> |
+[![Animation of V22 from the source video and robot mask through feature tracking and depth to the local path and workshop plan](media/readme/v22-video-to-top-view.gif)](https://yixumochi.github.io/multicam-assembly/video-to-top-view/index.html)
 
-[Video to top view](https://yixumochi.github.io/multicam-assembly/video-to-top-view/index.html) · [Technical walkthrough](https://yixumochi.github.io/multicam-assembly/video-to-top-view/technical.html) · [Atlas of Assembly Space](https://yixumochi.github.io/multicam-assembly/spatial/index.html)
+[Play the full walkthrough](https://yixumochi.github.io/multicam-assembly/video-to-top-view/index.html) · [Open the workshop plan](video-to-top-view/assets/31_v22_published_plan.png) · [Atlas of Assembly Space](https://yixumochi.github.io/multicam-assembly/spatial/index.html)
 
 ### Local assembly observations
 
-In V04, one robot brings a timber member toward a joint. The board aligns the equipment masks on the left and shows the contact points and projected working directions on the right.
+In V04, one robot brings a timber member toward a joint. These two details come from the published *Approach local joint* board.
 
-[![V04 Approach local joint observation with three equipment masks and a contact-direction diagram](observation/boards/V04/04.webp)](https://yixumochi.github.io/multicam-assembly/observation/index.html#V04/04)
+**Equipment masks at the start, middle, and end**
 
-[Open the V04 observation](https://yixumochi.github.io/multicam-assembly/observation/index.html#V04/04) · [Assembly in Motion](https://yixumochi.github.io/multicam-assembly/observation/index.html)
+[![The V04 mechanical arm highlighted in blue, green, and orange in the three source frames](media/readme/v04-machine-masks.png)](https://yixumochi.github.io/multicam-assembly/observation/index.html#V04/04)
+
+**Grip locations and working directions**
+
+[![A and B marked on the V04 gripper photograph with a separate equal-force model diagram](media/readme/v04-grip-directions.png)](https://yixumochi.github.io/multicam-assembly/observation/index.html#V04/04)
+
+[Open the full V04 observation](https://yixumochi.github.io/multicam-assembly/observation/index.html#V04/04) · [Assembly in Motion](https://yixumochi.github.io/multicam-assembly/observation/index.html)
 
 ## 4. Reading order
 
