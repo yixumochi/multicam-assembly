@@ -2,7 +2,11 @@
 
 ## 1. Project overview
 
-**How do people and robots assemble timber, and how much space do they use as they work?** MultiCam studies 15 filmed cases. Each case links the video to action timelines, drawings, and records of how people, machines, and timber parts move.
+A drawing shows where a timber member belongs. Putting it there takes room to move the member, turn it, and hold it at the joint. MultiCam Assembly studies how that work is organised across 15 filmed timber projects assembled by people, robots, or both.
+
+From the footage, we mark when each operation takes place. We use computer vision to identify visible people, equipment, and timber and track selected points across frames. Depth estimates and camera checks help map movement onto a local ground plane. Plans and timelines show where work happens and in what order. Close views of the joint record where equipment grips the member and how it moves into position.
+
+The case comparisons show that assemblies with similar finished footprints can occupy different amounts of space while they are being built. At the joint, actions with similar names can involve different turns. MultiCam brings the construction process into the architectural drawing by linking plans, timelines, and studies of individual joints to the source footage. These records let designers study the space used to move and handle timber alongside the finished form.
 
 | Human-led | Human–robot | Robotic assembly |
 | :---: | :---: | :---: |
@@ -12,12 +16,6 @@
 [Open the project website](https://yixumochi.github.io/multicam-assembly/) · [Browse all 15 cases](cases/README.md) · [Research code](research-code/README.md)
 
 ### Quick Start
-
-**Compare a pair of action names.** V28 *Hold timber at joint* and V21 *Position timber at joint* have a cosine similarity of **0.897**. We use that score to find a pair, then compare the two recorded events. The timber axes turn **+27.5°** in V28 and **−2.9°** in V21. Their net turn magnitudes differ by **24.6°**. [See how the pair was selected](https://yixumochi.github.io/multicam-assembly/#action-name-similarity) · [Open the two-event comparison](https://yixumochi.github.io/multicam-assembly/#action-pair=90:171)
-
-<a href="https://yixumochi.github.io/multicam-assembly/#action-pair=90:171"><img src="media/methods/action-name-similarity-v28-v21.png" width="600" alt="Between the middle and end keyframes, the timber axis turns +24.6 degrees in V28 and −3.2 in V21. A second chart compares grip displacement at both intervals."></a>
-
-The upper plot shows signed timber axis changes in each camera image. The lower plot shows grip displacement relative to the middle frame, divided by the case’s scale H.
 
 **Explore in your browser.** Open V04 and follow the video and timeline together. Select the highlighted interval for *Approach local joint* to see how the three frames, machine masks, and grip directions relate. [V04 case](https://yixumochi.github.io/multicam-assembly/#human-robot/V04) · [Open the observation directly](https://yixumochi.github.io/multicam-assembly/observation/index.html#V04/04)
 
@@ -29,15 +27,7 @@ cd multicam-assembly
 python examples/verify_published_examples.py
 ```
 
-The script prints a **24.6° turning gap** for a pair of named actions and verifies **23 V22 drawing coordinates** calculated from saved image points using a fixed-depth drawing model. It uses the data already in the repository.
-
-### V22 trajectory preview
-
-Follow **feature 80**, the same robot surface point shown in the top-view clip below. This plot shows its supported positions on the shot's local ground plane, with the start, end, and missing observation kept visible.
-
-[![V22 feature 80 on the local ground plane, with start and end frames and a gap at unsupported frame F2112](media/readme/v22-trajectory-preview.png)](https://yixumochi.github.io/multicam-assembly/video-to-top-view/technical.html#animation)
-
-[All robot feature tracks and support checks](video-to-top-view/assets/24_robot_tracks_local.png) · [Coordinates used in this preview](video-to-top-view/point_lineage.json)
+The script checks the turning comparison and verifies 23 V22 drawing coordinates from saved image points using the data in this repository.
 
 ## 2. Cases and evidence
 
@@ -53,9 +43,15 @@ Follow **feature 80**, the same robot surface point shown in the top-view clip b
 
 **Action names → vectors → similarity → review the footage.** SentenceTransformer uses `all-MiniLM-L6-v2` to encode each action name as a 384-value vector. Cosine similarity helps select actions to compare.
 
-The clip follows V21 *Transport held timber* and V04 *Transport and rotate timber*: their name similarity is **0.822**. Returning to the source frames shows how each operation was performed.
+The clip follows V21 *Transport held timber* and V04 *Transport and rotate timber*, whose name similarity is **0.822**. The source frames show how each operation was performed.
 
 [![Animation of two timber transport labels being encoded, compared by cosine similarity, and checked against source frames](media/readme/sentence-transformer.gif)](https://yixumochi.github.io/multicam-assembly/media/methods/sentence-transformer.mp4)
+
+**A second comparison at the joint.** V28 *Hold timber at joint* and V21 *Position timber at joint* have a name similarity of **0.897**. The plot compares how the member turns and how far the grip moves between the three keyframes.
+
+<a href="https://yixumochi.github.io/multicam-assembly/#action-pair=90:171"><img src="media/methods/action-name-similarity-v28-v21.png" width="600" alt="Between the middle and end keyframes, the timber axis turns +24.6 degrees in V28 and −3.2 in V21. A second chart compares grip displacement at both intervals."></a>
+
+From middle to end, the timber axis turns **+24.6°** in V28 and **−3.2°** in V21. Angles are read in each camera image. Grip displacement is measured from the middle keyframe and divided by the case’s scale H. [Open the two-event comparison](https://yixumochi.github.io/multicam-assembly/#action-pair=90:171)
 
 [Play the original video](https://yixumochi.github.io/multicam-assembly/media/methods/sentence-transformer.mp4) · [Action Relationships](https://yixumochi.github.io/multicam-assembly/#action-connections) · [Action Names and Turning](https://yixumochi.github.io/multicam-assembly/action-pair-summary/scatter.html)
 
@@ -69,6 +65,10 @@ In V22, a mask selects the robot and surface points are tracked across frames. T
 The clip shows both views, each with its own coordinate frame.
 
 [![Animation of V22 from the source video and robot mask through feature tracking and depth to the local path and workshop plan](media/readme/v22-video-to-top-view.gif)](https://yixumochi.github.io/multicam-assembly/video-to-top-view/index.html)
+
+[![V22 feature 80 on the local ground plane, with start and end frames and a gap at unsupported frame F2112](media/readme/v22-trajectory-preview.png)](https://yixumochi.github.io/multicam-assembly/video-to-top-view/technical.html#animation)
+
+The plot follows **feature 80**, the same robot surface point shown in the clip. It marks the start and end on the shot’s local ground plane and leaves a gap where the observation is unsupported. [All robot feature tracks and support checks](video-to-top-view/assets/24_robot_tracks_local.png) · [Coordinates used in this preview](video-to-top-view/point_lineage.json)
 
 [Play the full walkthrough](https://yixumochi.github.io/multicam-assembly/video-to-top-view/index.html) · [Open the workshop plan](video-to-top-view/assets/31_v22_published_plan.png) · [Atlas of Assembly Space](https://yixumochi.github.io/multicam-assembly/spatial/index.html)
 
