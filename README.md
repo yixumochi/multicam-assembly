@@ -47,9 +47,9 @@ The clip follows V21 *Transport held timber* and V04 *Transport and rotate timbe
 
 [![Animation of two timber transport labels being encoded, compared by cosine similarity, and checked against source frames](media/readme/sentence-transformer.gif)](https://yixumochi.github.io/multicam-assembly/media/methods/sentence-transformer.mp4)
 
-**A second comparison at the joint.** V28 *Hold timber at joint* and V21 *Position timber at joint* have a name similarity of **0.897**. The plot compares how the member turns and how far the grip moves between the three keyframes.
+**A second comparison at the joint.** V28 *Hold timber at joint* and V21 *Position timber at joint* have a name similarity of **0.897**. The animation starts with matched keyframes, then shows the changes between them, the angle at each frame, and the outlines aligned at the grip.
 
-<a href="https://yixumochi.github.io/multicam-assembly/#action-pair=90:171"><img src="media/methods/action-name-similarity-v28-v21.png" width="600" alt="Between the middle and end keyframes, the timber axis turns +24.6 degrees in V28 and −3.2 in V21. A second chart compares grip displacement at both intervals."></a>
+[![V28 and V21 comparison animation. It shows their paired source keyframes and outlines, followed by movement between keyframes, image-plane angle curves, and grip-aligned overlays.](media/readme/v28-v21-joint-comparison.gif)](https://yixumochi.github.io/multicam-assembly/#action-pair=90:171)
 
 From middle to end, the timber axis turns **+24.6°** in V28 and **−3.2°** in V21. Angles are read in each camera image. Grip displacement is measured from the middle keyframe and divided by the case’s scale H. [Open the two-event comparison](https://yixumochi.github.io/multicam-assembly/#action-pair=90:171)
 
