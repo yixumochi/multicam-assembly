@@ -13,6 +13,8 @@
 
 ### Quick Start
 
+**Compare a pair of action names.** V28 *Hold timber at joint* and V21 *Position timber at joint* have a cosine similarity of **0.897**. We use that score to find a pair, then compare the two recorded events. The timber axes turn **+27.5°** in V28 and **−2.9°** in V21. Their net turn magnitudes differ by **24.6°**. [See how the pair was selected](https://yixumochi.github.io/multicam-assembly/#action-name-similarity) · [Open the two-event comparison](https://yixumochi.github.io/multicam-assembly/#action-pair=90:171)
+
 **Explore in your browser.** Open V04 and follow the video and timeline together. Select the highlighted interval for *Approach local joint* to see how the three frames, machine masks, and grip directions relate. [V04 case](https://yixumochi.github.io/multicam-assembly/#human-robot/V04) · [Open the observation directly](https://yixumochi.github.io/multicam-assembly/observation/index.html#V04/04)
 
 **Run a public example.** With Git and Python 3.11 or newer, run these commands.

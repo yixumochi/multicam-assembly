@@ -121,7 +121,7 @@
 .start-study-panel { max-width: 960px; scroll-margin-top: 12px; }
 .start-study-panel h3 { margin: 0; font-size: 18px; }
 .start-study-panel p { max-width: 75ch; margin: 5px 0 10px; }
-.start-workflow, .start-example figure { margin: 0; }
+.start-workflow { margin: 0; }
 #action-video, #sentence-video { max-width: none; }
 .start-media { width: min(100%, 880px); margin: 0 auto; }
 .start-media video {
@@ -136,10 +136,33 @@
 }
 .start-module figcaption { margin-top: 5px; color: var(--muted); font-size: 13px; }
 .start-music-credit { margin: -10px 0 0; color: var(--muted); font-size: 12px; text-align: right; }
-.start-workflow img, .start-example img { display: block; width: 100%; height: auto; border: 1px solid var(--line); background: white; }
+.start-workflow img { display: block; width: 100%; height: auto; border: 1px solid var(--line); background: white; }
 .start-workflow-names { max-width: 560px; }
-.start-example { margin-top: 14px; }
-.start-example summary { cursor: pointer; color: var(--blue); }
+
+.start-pair-example {
+  margin: 0 0 22px;
+  padding: clamp(13px, 2vw, 22px);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: white;
+  font-size: 16px;
+}
+.start-pair-example .start-pair-score {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 2px 10px;
+  margin: 11px 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+.start-pair-score strong { color: var(--ink); font-size: 26px; font-variant-numeric: tabular-nums; }
+.start-pair-cases { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-bottom: 10px; }
+.start-pair-cases figure { min-width: 0; margin: 0; border: 1px solid var(--line); border-radius: 5px; overflow: hidden; }
+.start-pair-cases img { display: block; width: 100%; height: auto; }
+.start-pair-cases figcaption { display: grid; gap: 2px; margin: 0; padding: 7px 9px; font-size: 14px; }
+.start-pair-cases figcaption strong { color: var(--ink); }
+.start-pair-link { font-size: 15px; font-weight: 650; text-decoration: underline; text-underline-offset: 3px; }
 
 @media (max-width: 620px) {
   .case-gallery-header { gap: 6px 10px; }
