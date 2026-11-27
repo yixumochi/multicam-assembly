@@ -2,6 +2,8 @@
 
 These scripts turn sampled frames, reviewed masks, and manual annotations into event-level PDF boards. The diagrams show image-plane geometry and explicitly marked assumptions about working directions.
 
+For the five V04 events retained on the website, the [verified V04 recipe](../../docs/reproduction.md#regenerate-the-retained-v04-boards) stages their inputs from the local core research ZIP and renders those events in publication order.
+
 ## Setup
 
 Use Python 3.11 or newer. Install the PDF and image dependencies from this directory.
