@@ -163,7 +163,15 @@
 .start-pair-cases figcaption { display: grid; gap: 2px; margin: 0; padding: 7px 9px; font-size: 14px; }
 .start-pair-cases figcaption strong { color: var(--ink); }
 .start-pair-chart { width: min(100%, 640px); margin: 16px 0 12px; }
-.start-pair-chart img { display: block; width: 100%; height: auto; }
+.start-pair-chart video {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 3;
+  background: #f7f9f8;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+}
 .start-pair-chart figcaption { font-size: 14px; }
 .start-pair-link { font-size: 15px; font-weight: 650; text-decoration: underline; text-underline-offset: 3px; }
 
